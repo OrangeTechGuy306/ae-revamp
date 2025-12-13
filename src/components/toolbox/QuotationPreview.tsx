@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './SolarToolbox.css'; // Reuse existing styles
 import { APP_CONFIG } from './SolarToolbox';
