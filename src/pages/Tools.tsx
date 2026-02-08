@@ -1,12 +1,11 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import { Wrench, Zap, Grid, Settings, Box, ArrowRight, Icon } from "lucide-react";
 import SolarToolbox from '../components/toolbox/SolarToolbox';
 import EquipmentKits from '../components/toolbox/EquipmentKits';
 import Certificates from '../components/toolbox/Certificates';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from '@/components/ui/button';
-import { Zap, FileCheck, ClipboardCheck, Shield, Box, Wrench, SignalZero, LucideWrench, PanelBottomDashedIcon, ChartNoAxesGantt, Cable } from "lucide-react";
+import { Zap, Box, Wrench, PanelBottomDashedIcon, ChartNoAxesGantt, Cable } from "lucide-react";
 
 interface ToolCardProps {
     title: string;
@@ -14,7 +13,6 @@ interface ToolCardProps {
     icon: React.ReactNode;
     // action?: () => void;
     action: string;
-    highlight?: boolean;
     color: string;
 }
 
@@ -25,7 +23,7 @@ const colorMap: Record<string, { bg: string, text: string, hsl: string }> = {
     'engineering-red': { bg: 'bg-engineering-red/10', text: 'text-engineering-red', hsl: '0 84% 60%' },
 };
 
-const ToolCard = ({ title, description, icon, action, highlight, color }: ToolCardProps) => {
+const ToolCard = ({ title, description, icon, action, color }: ToolCardProps) => {
     const hsl = colorMap[color]?.hsl || '217 91% 60%';
     return (
         <Link to={action}>
@@ -113,7 +111,6 @@ const tools = [
 ];
 
 export function ToolboxDashboard() {
-    const navigate = useNavigate();
 
     return (
         <div className="min-h-screen  text-white font-sans selection:bg-blue-900/30">
