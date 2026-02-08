@@ -2,10 +2,10 @@
 .solar-toolbox-container {
   box-sizing: border-box;
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-  background: linear-gradient(180deg, #0b0e14, #0d1220 40%, #0b0e14);
+  /* background: linear-gradient(180deg, #0b0e14, #0d1220 40%, #0b0e14); */
   color: #e6edf7;
   min-height: 100vh;
-  padding: 20px;
+  /* padding: 20px; */
   --bg: #0b0e14;
   --card: #111521;
   --muted: #1a2030;
@@ -475,8 +475,8 @@
 
 .solar-toolbox-container .logo-badge {
   position: absolute;
-  left: 36px;
-  top: 28px;
+  left: 10px;
+  top: 5px;
   background: linear-gradient(135deg, #044381, rgba(244, 166, 0, .8));
   color: #fff;
   padding: 16px 20px;
@@ -515,7 +515,7 @@
   display: inline-block;
   padding: 0 20px;
   margin: 0 0 10px 0;
-  font-size: 22px;
+  font-size: 20px;
   background: linear-gradient(90deg, #044381, #f4a600);
   color: white;
 }
@@ -540,7 +540,7 @@
 .solar-toolbox-container table.spec-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .solar-toolbox-container table.spec-table th,
@@ -550,6 +550,8 @@
   text-align: left;
   color: #010a1d;
 }
+
+
 
 .solar-toolbox-container table.spec-table th {
   background: #f7f9fb;

@@ -1,150 +1,188 @@
-
-import { useNavigate } from 'react-router-dom';
-import { Wrench, Zap, Grid, Settings, Box, ArrowRight } from "lucide-react";
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+// import { Wrench, Zap, Grid, Settings, Box, ArrowRight, Icon } from "lucide-react";
 import SolarToolbox from '../components/toolbox/SolarToolbox';
 import EquipmentKits from '../components/toolbox/EquipmentKits';
 import Certificates from '../components/toolbox/Certificates';
-
-// Logo Component
-const AE_Logo = () => (
-    <svg viewBox="0 0 64 40" className="h-12 w-auto" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect x="0" y="8" width="48" height="24" rx="2" fill="#044381" fillOpacity="0.08" />
-        <path d="M6 22c0-1.1.9-2 2-2h30v8H8c-1.1 0-2-.9-2-2v-4z" fill="#044381" fillOpacity="0.1" />
-        <g transform="translate(4,4)">
-            <circle cx="8" cy="6" r="6" fill="#f4a600" />
-            <rect x="18" y="2" width="16" height="10" rx="1" fill="#0aa80f" transform="rotate(-12 26 7)" />
-        </g>
-    </svg>
-);
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from '@/components/ui/button';
+import { Zap, FileCheck, ClipboardCheck, Shield, Box, Wrench, SignalZero, LucideWrench, PanelBottomDashedIcon, ChartNoAxesGantt, Cable } from "lucide-react";
 
 interface ToolCardProps {
     title: string;
     description: string;
     icon: React.ReactNode;
-    action?: () => void;
+    // action?: () => void;
+    action: string;
     highlight?: boolean;
+    color: string;
 }
 
-const ToolCard = ({ title, description, icon, action, highlight }: ToolCardProps) => (
-    <div
-        onClick={action}
-        className={`group relative p-6 rounded-xl border transition-all duration-300 cursor-pointer 
-        ${highlight
-                ? 'bg-[#111521] border-blue-900/40 hover:border-blue-500 hover:shadow-lg hover:shadow-blue-900/20'
-                : 'bg-[#111521] border-gray-800 hover:border-gray-700 hover:bg-[#161b2c]'}`}
-    >
-        <div className={`h-12 w-12 rounded-lg mb-4 flex items-center justify-center 
-            ${highlight ? 'bg-blue-900/20 text-blue-400' : 'bg-gray-800/50 text-gray-400 group-hover:text-gray-200'}`}>
-            {icon}
-        </div>
-        <h3 className="text-xl font-bold text-white mb-2">{title}</h3>
-        <p className="text-sm text-gray-400 mb-6 leading-relaxed">{description}</p>
+const colorMap: Record<string, { bg: string, text: string, hsl: string }> = {
+    'engineering-orange': { bg: 'bg-engineering-orange/10', text: 'text-engineering-orange', hsl: '25 95% 53%' },
+    'engineering-green': { bg: 'bg-engineering-green/10', text: 'text-engineering-green', hsl: '142 76% 36%' },
+    'engineering-blue': { bg: 'bg-engineering-blue/10', text: 'text-engineering-blue', hsl: '217 91% 60%' },
+    'engineering-red': { bg: 'bg-engineering-red/10', text: 'text-engineering-red', hsl: '0 84% 60%' },
+};
 
-        <div className="flex items-center text-sm font-medium text-gray-500 group-hover:text-blue-400 transition-colors">
-            Access Tool <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </div>
-    </div>
-);
+const ToolCard = ({ title, description, icon, action, highlight, color }: ToolCardProps) => {
+    const hsl = colorMap[color]?.hsl || '217 91% 60%';
+    return (
+        <Link to={action}>
+            <Card className="h-full transition-all duration-300 hover:shadow-lg hover:scale-105 cursor-pointer border-[1px] hover:border-primary bg-card/50 backdrop-blur-sm">
+                <CardHeader>
+                    <div
+                        style={{ backgroundColor: `hsl(${hsl} / 0.15)` }}
+                        className="p-3 rounded-lg w-fit mb-3"
+                    >
+                        <div style={{ color: `hsl(${hsl})` }}>
+                            {icon}
+                        </div>
+                    </div>
+                    <CardTitle className="text-xl">{title}</CardTitle>
+                    {/* <CardDescription className="text-sm">{description}</CardDescription> */}
+                    <CardDescription className="text-sm leading-6">
+                        {
+                            description.split('\n').map((line, index) => (
+                                <span key={index}>{line}<br /></span>
+                            ))}
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <button className="w-full group py-2 rounded-sm bg-[#111521] transition-all text-primary-foreground hover:bg-[#044381] group">
+                        Access Tool
+                        <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                    </button>
+                </CardContent>
+            </Card>
+        </Link>
+    );
+};
+const tools = [
+    {
+        title: "Integrated Tool Hub",
+        description: "Your all-in-one smart result",
+        subdescription: "Generator.",
+        icon: Wrench,
+        link: "/toolbox",
+        color: "engineering-orange",
+    },
+    {
+        title: "Panel Sizing Tool",
+        description: "Advanced anylyzer for solar panel ",
+        subdescription: "Capacity and output.",
+        icon: PanelBottomDashedIcon,
+        link: "/panel-sizer",
+        color: "engineering-green",
+    },
+    {
+        title: "Charge Controller Sizer",
+        description: "Easily size and select the right con-",
+        subdescription: "troller of your solar setup.",
+        icon: ChartNoAxesGantt,
+        link: "/charge-controller",
+        color: "engineering-blue",
+    },
+
+    {
+        title: "Breaker Selection Tool",
+        description: "Ensure safety and reliable electrical",
+        subdescription: "installations.",
+        icon: Zap,
+        link: "/breaker-selection",
+        color: "engineering-blue",
+    },
+    {
+        title: "Cable Sizer",
+        description: "Ensure safe and efficient power",
+        subdescription: "delivery with accurate wire sizing.",
+        icon: Cable,
+        link: "/cable-sizer",
+        color: "engineering-green",
+    },
+
+    {
+        title: "Equipment Kits",
+        description: "Standard installation kits and ",
+        subdescription: "inventory",
+        icon: Box,
+        link: "/kit",
+        color: "engineering-red",
+    },
+
+];
 
 export function ToolboxDashboard() {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-[#0b0e14] text-white font-sans selection:bg-blue-900/30">
+        <div className="min-h-screen  text-white font-sans selection:bg-blue-900/30">
             {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  py-5">
 
                 {/* Header */}
                 <div className="text-center mb-20">
-                    <div className="flex justify-center mb-8">
-                        <div className="h-24 w-24 bg-white rounded-full flex items-center justify-center shadow-2xl shadow-blue-900/20">
-                            <AE_Logo />
+                    <div className="flex justify-center mb-4">
+                        <div className="h-40 w-40 bg-white rounded-full flex items-center justify-center shadow-2xl shadow-blue-900/20 overflow-hidden">
+                            <img src="/logo.jpeg" alt="" />
                         </div>
                     </div>
 
-                    <div className="inline-flex items-center px-3 py-1 rounded-full border border-gray-800 bg-gray-900/50 text-xs text-gray-400 mb-6">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full border border-gray-800 bg-gray-900/50 text-sm text-white mb-6">
                         Professional Solar Engineering Tools
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
                         A.E RENEWABLE LTD
                     </h1>
-                    <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-                        Complete suite of professional tools for solar system design, sizing, and installation management.
+                    <p className="text-lg text-white max-w-2xl mx-auto">
+                        Complete suite of professional tools for solar system design, sizing, and <br /> installation management.
                     </p>
                 </div>
 
                 {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-24">
-                    <ToolCard
-                        title="Integrated Tool Hub"
-                        description="Your all-in-one smart result Generator."
-                        icon={<Wrench className="h-6 w-6" />}
-                        highlight={true}
-                        action={() => navigate('/toolbox')}
-                    />
-                    <ToolCard
-                        title="Panel Sizing Tool"
-                        description="Advanced anylyzer for solar panel Capacity and output."
-                        icon={<Grid className="h-6 w-6 text-green-500" />}
-                        highlight={false}
-                        action={() => navigate('/panel-sizer')}
-                    />
-                    <ToolCard
-                        title="Charge Controller Sizer"
-                        description="Easily size and select the right controller for your solar setup."
-                        icon={<Settings className="h-6 w-6 text-blue-400" />}
-                        highlight={false}
-                        action={() => navigate('/charge-controller')}
-                    />
-                    <ToolCard
-                        title="Breaker Selection Tool"
-                        description="Ensure safety and reliable electrical installations."
-                        icon={<Zap className="h-6 w-6 text-blue-500" />}
-                        highlight={false}
-                        action={() => navigate('/breaker-selection')}
-                    />
-                    <ToolCard
-                        title="Cable Sizer"
-                        description="Ensure safe and efficient power delivery with accurate wire sizing."
-                        icon={<Box className="h-6 w-6 text-green-500" />}
-                        highlight={false}
-                        action={() => navigate('/cable-sizer')}
-                    />
-                    <ToolCard
-                        title="Equipment Kits"
-                        description="Standard installation kits and inventory."
-                        icon={<Box className="h-6 w-6 text-blue-600" />}
-                        highlight={false}
-                        action={() => navigate('/kit')}
-                    />
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                    {tools.map((tool) => {
+                        const Icon = tool.icon;
+                        return (
+                            <ToolCard
+                                key={tool.link}
+                                title={tool.title}
+                                description={tool.description + (tool.subdescription ? '\n' + tool.subdescription : '')}
+                                icon={<Icon className={`h-8 w-8 ${colorMap[tool.color]?.text || 'text-gray-600'}`} />}
+                                action={tool.link}
+                                color={tool.color}
+                            />
+                        );
+                    })}
                 </div>
 
+
                 {/* About Section */}
-                <div className="bg-[#111521] rounded-2xl p-8 md:p-12 border border-gray-800 relative overflow-hidden">
+                <div className="rounded-2xl p-5 border border-gray-800 relative overflow-hidden bg-card/50">
                     <div className="relative z-10">
                         <h2 className="text-2xl font-bold text-white mb-4">About A.E Renewable Ltd</h2>
-                        <p className="text-gray-400 mb-10 max-w-3xl leading-relaxed">
+                        <p className="text-gray-400 mb-10 leading-relaxed">
                             A.E Renewable Ltd provides comprehensive solar engineering solutions for residential, commercial, and industrial projects. Our professional toolkit ensures accurate system sizing, optimal component selection, and reliable installation management.
                         </p>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="bg-[#161b2c] p-5 rounded-lg border border-gray-800/50">
+                            <div className="bg-engineering-blue/20 p-5 rounded-sm border border-gray-800/50">
                                 <h4 className="text-white font-semibold mb-2 text-sm">Precision Engineering</h4>
                                 <p className="text-xs text-gray-500 leading-relaxed">100% accurate calculations for optimal system design</p>
                             </div>
-                            <div className="bg-[#161b2c] p-5 rounded-lg border border-gray-800/50">
+                            <div className="bg-engineering-green/20 p-5 rounded-sm border border-gray-800/50">
                                 <h4 className="text-white font-semibold mb-2 text-sm">Cost Efficiency</h4>
                                 <p className="text-xs text-gray-500 leading-relaxed">Smart sizing reduces waste and maximizes ROI</p>
                             </div>
-                            <div className="bg-[#161b2c] p-5 rounded-lg border border-gray-800/50">
+                            <div className="bg-red-800/20 p-5 rounded-sm border border-gray-800/50">
                                 <h4 className="text-white font-semibold mb-2 text-sm">Professional Tools</h4>
                                 <p className="text-xs text-gray-500 leading-relaxed">Industry-standard equipment and calculations</p>
                             </div>
                         </div>
 
-                        <div className="mt-12 text-right">
-                            <span className="text-gray-600 text-xs font-mono">RC: <span className="text-red-500/80">9010643</span></span>
+                        <div className="mt-5 text-right">
+                            <span className="text-gray-600 text-[18px] font-bold">RC: <span className="text-red-500/80" style={{ letterSpacing: 2 }}>9010643</span></span>
                         </div>
                     </div>
                 </div>
@@ -164,7 +202,7 @@ export function ToolboxDashboard() {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 font-medium">Phone Support</p>
-                                        <p className="text-sm text-white font-semibold">0813 534 9474</p>
+                                        <p className="text-sm text-white font-semibold">+23408 133 6151 32</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 bg-[#161b2c] px-5 py-3 rounded-lg border border-gray-800/50">
@@ -173,7 +211,7 @@ export function ToolboxDashboard() {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 font-medium">Email Us</p>
-                                        <p className="text-sm text-white font-semibold">aerenewableltd@gmail.com</p>
+                                        <p className="text-sm text-white font-semibold">A.E.RenewableSolution@gmail.com</p>
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +220,7 @@ export function ToolboxDashboard() {
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 }
 

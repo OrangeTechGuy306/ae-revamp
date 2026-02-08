@@ -16,7 +16,4 @@ export function ThemeToggle() {
         </button>
     )
 }
-// Note: The absolute positioning of Moon might need a container relative wrapper.
-// Let's adjust slightly to use conditional rendering or proper overlapping stack if not robust.
-// Actually, standard shadcn toggles often use the robust rotation scale trick.
-// But for simplicity, let's keep it simple.
+

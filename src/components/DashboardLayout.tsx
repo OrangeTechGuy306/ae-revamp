@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Outlet } from "react-router-dom"
 import { Sidebar } from "./Sidebar"
-import { ThemeToggle } from "./ThemeToggle"
 import { Menu } from "lucide-react"
 
 export function DashboardLayout() {
@@ -31,10 +30,7 @@ export function DashboardLayout() {
                         </button>
                         {/* Breadcrumbs or Page Title could go here */}
                     </div>
-                    <div className="flex items-center gap-4">
-                        <ThemeToggle />
-                        {/* User menu placeholder */}
-                    </div>
+
                 </header>
 
                 <main className="p-4 sm:p-6 lg:p-8">

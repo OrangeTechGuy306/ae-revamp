@@ -32,7 +32,9 @@ interface SidebarProps {
     toggleCollapse: () => void
 }
 
+
 export function Sidebar({ isOpen, toggleSidebar, collapsed, toggleCollapse }: SidebarProps) {
+
     const location = useLocation()
 
     return (

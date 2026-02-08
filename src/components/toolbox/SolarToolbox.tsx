@@ -2,10 +2,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Tesseract from 'tesseract.js';
+import { CalculatorForm } from './CalculatorForm';
 import './SolarToolbox.css';
 
-// ==================== CONFIGURATION ====================
-// ==================== CONFIGURATION ====================
+
 export const APP_CONFIG = {
     inverter: {
         brand: "Growatt",
@@ -66,7 +66,7 @@ interface Device {
     timestamp?: string;
 }
 
-interface CalculationResult {
+export interface CalculationResult {
     inverterBrand: string;
     inverterModel: string;
     inverterPrice: number;
@@ -86,39 +86,35 @@ interface CalculationResult {
     checkingVolt: number;
     selectedLoad: number;
     totalEnergyWEff: string;
-    _batteryBankRaw: number; // retained for secondary calcs
-    _dailyEnergyRaw: number; // retained for secondary calcs
+    _batteryBankRaw: number;
+    _dailyEnergyRaw: number;
 }
 
 export function SolarToolbox() {
-    // ==================== STATE ====================
-    // Inputs
+
     const [inputs, setInputs] = useState({
         load: '' as string | number,
         usagehrDay: '' as string | number,
         psh: 5,
-        panelEff: 30, // Panel Factor in %
+        panelEff: 30,
         dod: 80,
         sysLoss: 0.8,
-        batteryEff: 100 // Percentage on Load input (repurposed by original logic?) OR percentage logic
+        batteryEff: 100
     });
 
-    // The original logic used `batteryEff` input sometimes as a display for the percentage buttons,
-    // but also `selectedLoadValue` was the source of truth for "Percentage Load% on Battery".
-    // The input id="batteryEff" in HTML had label "Percentage on Load".
     const [selectedLoadValue, setSelectedLoadValue] = useState<number>(100);
 
-    // Results
+
     const [result, setResult] = useState<CalculationResult | null>(null);
 
-    // UI State
+
     const [isLoading, setIsLoading] = useState(false);
     const [successMsg, setSuccessMsg] = useState<string | null>(null);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const navigate = useNavigate();
     const [showCamera, setShowCamera] = useState(false);
 
-    // Camera & Scanning
+
     const videoRef = useRef<HTMLVideoElement>(null);
     const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
     const [scannedDevices, setScannedDevices] = useState<Device[]>([]);
@@ -127,15 +123,10 @@ export function SolarToolbox() {
     const [isProcessingImage, setIsProcessingImage] = useState(false);
     const [showLoadListModal, setShowLoadListModal] = useState(false);
 
-    // ==================== EFFECTS ====================
     useEffect(() => {
-        // Sync input "batteryEff" with selectedLoadValue if user types manually
-        // In original code: input -> buttons sync
-        // We'll just bind input value to selectedLoadValue
+
         setInputs(prev => ({ ...prev, batteryEff: selectedLoadValue }));
     }, [selectedLoadValue]);
-
-    // ==================== LOGIC ====================
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { id, value } = e.target;
@@ -144,7 +135,6 @@ export function SolarToolbox() {
             val = parseFloat(value);
         }
 
-        // Special handling for percentage input sync
         if (id === 'batteryEff') {
             const num = parseInt(value);
             if (!isNaN(num) && num >= 10 && num <= 100) {
@@ -182,11 +172,9 @@ export function SolarToolbox() {
         setIsLoading(true);
 
         setTimeout(() => {
-            // Core Logic
+
             const totalEnergyKw = totalEnergyUsage / 1000;
-            const totalEnergyWEff = totalEnergyKw / (dod / 100); // Using DOD as efficiency factor loosely based on original code logic
-            // Note: Original code: totalEnergyWEff = totalEnergyKw / efficiencyLoad (where efficiencyLoad was hardcoded 80 or used DOD?). 
-            // Original logic: const totalEnergyWEff = (totalEnergyKw / DOD); (if DOD is 0.8)
+            const totalEnergyWEff = totalEnergyKw / (dod / 100);
 
             const batteryBank = totalEnergyWEff * (selectedLoadValue / 100) * usageHr;
 
@@ -390,7 +378,8 @@ export function SolarToolbox() {
 
     return (
         <div className="solar-toolbox-container">
-            <div className="container">
+
+            <div className="">
                 {/* HEADER */}
                 <div className="title">
                     <div>
@@ -403,87 +392,27 @@ export function SolarToolbox() {
                         </div>
                     </div>
 
-                    <div className="toggle">
-                        {/* Mode toggle handled by system theme or implement context later */}
+                    {/* Mode toggle handled by system theme or implement context later */}
+                    {/* <div className="toggle">
                         <label className="pill text-gray-500">Light mode (System)</label>
-                    </div>
+                    </div> */}
                 </div>
 
-                <div className="grid-layout">
+                <div className="grid md:grid-cols-2 w-full gap-5 grid-cols-1">
                     {/* LEFT: Inputs */}
-                    <div className="card">
-                        <h1>Panel Sizing</h1>
-                        <h2 className="text-xl mb-4 font-semibold">Input</h2>
-                        <div className="row">
-                            <div className="col-6">
-                                <label>Total Load Power <span className="unit">(W)</span></label>
-                                <input
-                                    id="load"
-                                    type="number"
-                                    min="0"
-                                    step="100"
-                                    placeholder="e.g. 1000"
-                                    value={inputs.load}
-                                    onChange={handleInputChange}
-                                    style={{ background: 'linear-gradient(90deg, rgba(0,180,216,0.1), rgba(255,255,255,0.02))', border: '1px solid rgba(0,180,216,0.3)' }}
-                                />
-                                <small style={{ display: 'block', marginTop: '4px', color: '#6ad1ff', fontSize: '11px' }}>
-                                    <button onClick={initCamera} style={{ background: 'none', border: 'none', color: '#6ad1ff', padding: 0, cursor: 'pointer', fontWeight: 600 }}>
-                                        📷 Scan devices
-                                    </button> or enter manually
-                                </small>
-                            </div>
-                            <div className="col-6">
-                                <label>Backup Time <span className="unit">(hr/day)</span></label>
-                                <input id="usagehrDay" type="number" min="0" step="1" placeholder="e.g. 8" value={inputs.usagehrDay} onChange={handleInputChange} />
-                            </div>
-
-                            {/* ADDITIONAL SETTINGS */}
-                            <div className="col-6">
-                                <label>Peak Sun Hours (PSH) <span className="unit">(hr/day)</span></label>
-                                <input id="psh" type="number" step="0.5" value={inputs.psh} onChange={handleInputChange} />
-                            </div>
-                            <div className="col-6">
-                                <label>Panel Factor <span className="unit">(%, default 30%)</span></label>
-                                <input id="panelEff" type="number" value={inputs.panelEff} onChange={handleInputChange} />
-                            </div>
-                            <div className="col-6">
-                                <label>Depth of Discharge <span className="unit">(%, default 80)</span></label>
-                                <input id="dod" type="number" value={inputs.dod} onChange={handleInputChange} />
-                            </div>
-                            <div className="col-6">
-                                <label>System Losses <span className="unit">(factor, default 0.8)</span></label>
-                                <input id="sysLoss" type="number" step="0.1" value={inputs.sysLoss} onChange={handleInputChange} />
-                            </div>
-                            <div className="col-6">
-                                <label><b>Percentage on Load</b></label>
-                                <input id="batteryEff" type="number" value={inputs.batteryEff} onChange={handleInputChange} />
-                            </div>
-                        </div>
-
-                        <div className="percentageContainer mt-4">
-                            <h3 className="text-lg font-bold">Percentage Load% on Battery</h3>
-                            <div className="load-group">
-                                {[100, 90, 80, 70, 60, 50, 40, 30, 20, 10].map(pct => (
-                                    <div key={pct} className={`load-item ${selectedLoadValue === pct ? 'active' : ''}`}>
-                                        <button className="top-btn" onClick={() => setSelectedLoadValue(pct)}>{pct}%</button>
-                                        <button className="bottom-btn" onClick={() => setSelectedLoadValue(pct)}></button>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="btnbar" style={{ marginTop: '14px' }}>
-                            <button id="compute" type="button" onClick={calculateArray}>Compute Array</button>
-                            <button id="reset" type="button" className="ghost" onClick={resetAll}>Reset</button>
-                            <button id="copy" type="button" className="ghost" onClick={handleQuotation}>Quotation</button>
-                        </div>
-
-                        {/* MESSAGES */}
-                        {isLoading && <div id="loading" style={{ marginTop: 10 }}>⏳ Loading...</div>}
-                        {successMsg && <div id="done" style={{ color: '#0aa80f', marginTop: 10 }}>✅ {successMsg}</div>}
-                        {errorMsg && <div className="warn" style={{ marginTop: 10 }}>⚠️ {errorMsg}</div>}
-                    </div>
+                    <CalculatorForm
+                        inputs={inputs}
+                        handleInputChange={handleInputChange}
+                        selectedLoadValue={selectedLoadValue}
+                        setSelectedLoadValue={setSelectedLoadValue}
+                        calculateArray={calculateArray}
+                        resetAll={resetAll}
+                        handleQuotation={handleQuotation}
+                        isLoading={isLoading}
+                        successMsg={successMsg}
+                        errorMsg={errorMsg}
+                        onScanClick={initCamera}
+                    />
 
                     {/* RIGHT: Results */}
                     <div className="card">
@@ -537,6 +466,7 @@ export function SolarToolbox() {
                         )}
                     </div>
                 </div>
+
             </div>
 
             {/* MODALS / OVERLAYS */}
