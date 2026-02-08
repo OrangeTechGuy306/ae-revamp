@@ -826,16 +826,13 @@ export function SolarToolbox() {
                                     <div className="v"></div>
                                 </div>
 
-
-
                             </div>
 
                             <div style={{ background: "linear-gradient(135deg, rgba(4, 67, 129, .3), rgba(244, 166, 0, 0.15))   " }} className='w-full p-10 bg-linear from-bg-[#044381], to-bg-[#f4a600] rounded-md mt-5 flex flex-col gap-3'>
                                 <hr className='mb-3' />
-                                <p className='flex items-center gap-2'>
+                                <p className='flex items-center gap-2 flex-wrap'>
                                     <span>For detailed system design and price information please use the</span>
                                     <button className='border-b-2 border-b-blue-500 text-blue-500 cursor-pointer' onClick={handleQuotation}> Quotation button</button>
-
                                 </p>
                                 <div>
                                     <hr className='mb-3' />

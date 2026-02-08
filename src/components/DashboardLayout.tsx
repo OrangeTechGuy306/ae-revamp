@@ -33,7 +33,7 @@ export function DashboardLayout() {
 
                 </header>
 
-                <main className="p-4 sm:p-6 lg:p-8 md:w-[95%] mx-auto">
+                <main className=" md:w-[95%] mx-auto">
                     <Outlet />
                 </main>
             </div>

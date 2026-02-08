@@ -37,8 +37,8 @@ export const CalculatorForm = ({
 }: CalculatorFormProps) => {
     return (
         <div className="card">
-            <h1>Panel Sizing</h1>
-            <h2 className="text-xl mb-4 font-semibold">Input</h2>
+            <h1>System Sizing</h1>
+            <p className="text-md mb-4 font-semibold text-grey-300">Enter your system parameters to calculate solar system requirements.</p>
             <div className="row">
                 <div className="col-6">
                     <label>Total Load Power <span className="unit">(W)</span></label>
@@ -65,19 +65,19 @@ export const CalculatorForm = ({
 
                 {/* ADDITIONAL SETTINGS */}
                 <div className="col-6">
-                    <label>Peak Sun Hours (PSH) <span className="unit">(hr/day)</span></label>
+                    <label>Optional: Peak Sun Hours (PSH) <span className="unit">(hr/day)</span></label>
                     <input id="psh" type="number" min="4" max="7" step="1" placeholder="5" value={inputs.psh} onChange={handleInputChange} />
                 </div>
                 <div className="col-6">
-                    <label>Panel Factor <span className="unit">(%, default 1.3%)</span></label>
+                    <label>Optional: Panel Factor <span className="unit">(%, default 1.3%)</span></label>
                     <input id="panelEff" type="number" value={inputs.panelEff} onChange={handleInputChange} step={0.1} max={5.0} min={1.0} placeholder='1.3' />
                 </div>
                 <div className="col-6">
-                    <label>Depth of Discharge <span className="unit">(default 0.8)</span></label>
+                    <label>Optional: Depth of Discharge <span className="unit">(default 0.8)</span></label>
                     <input id="dod" type="number" value={inputs.dod} onChange={handleInputChange} max="1.0" min="0.5" step="0.1" placeholder="0.8" />
                 </div>
                 <div className="col-6">
-                    <label>System Losses <span className="unit">(default 0.8)</span></label>
+                    <label>Optional: System Losses <span className="unit">(default 0.8)</span></label>
                     <input id="sysLoss" type="number" min="0.5" max="1.0" step="0.1" placeholder="0.8" value={inputs.sysLoss} onChange={handleInputChange} />
                 </div>
                 <div className="col-6">
@@ -99,9 +99,9 @@ export const CalculatorForm = ({
             </div>
 
             <div className="btnbar" style={{ marginTop: '14px' }}>
-                <button id="compute" type="button" onClick={calculateArray} className='w-50'>Compute Array</button>
-                <button id="reset" type="button" className="ghost w-50" onClick={resetAll}>Reset</button>
-                <button id="copy" type="button" className="ghost w-50" onClick={handleQuotation}>Quotation</button>
+                <button id="compute" type="button" onClick={calculateArray} className=''>Compute Array</button>
+                <button id="reset" type="button" className="ghost" onClick={resetAll}>Reset</button>
+                <button id="copy" type="button" className="ghost" onClick={handleQuotation}>Quotation</button>
             </div>
 
             {/* MESSAGES */}

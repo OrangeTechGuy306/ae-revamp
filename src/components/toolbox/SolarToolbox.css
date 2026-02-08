@@ -226,7 +226,7 @@
 
 .solar-toolbox-container .load-group {
   display: flex;
-  gap: 8px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 
@@ -241,17 +241,15 @@
 .solar-toolbox-container .top-btn {
   background: #222;
   border: none;
-  padding: 8px;
+  padding-inline: 2px 8px;
   border-radius: 6px;
   color: white;
-  font-weight: bold;
+  /* font-weight: bold; */
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .solar-toolbox-container .bottom-btn {
-  width: 32px;
-  height: 6px;
   background: #444;
   border: none;
   border-radius: 3px;
@@ -319,8 +317,8 @@
 .solar-toolbox-container input[type="text"],
 .solar-toolbox-container select {
   width: 100%;
-  padding: 12px 12px;
-  border-radius: 12px;
+  padding: 5px 12px;
+  border-radius: 5px;
   background: #0f1422;
   color: var(--text);
   border: 1px solid rgba(255, 255, 255, .08);
