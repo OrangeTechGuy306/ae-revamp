@@ -1,9 +1,10 @@
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Tesseract from 'tesseract.js';
 import { CalculatorForm } from './CalculatorForm';
 import './SolarToolbox.css';
+import './QuoteModal.css';
 
 
 export const APP_CONFIG = {
@@ -18,7 +19,7 @@ export const APP_CONFIG = {
     panel: {
         brand: "Jinko Solar",
         model: "Cheetah HC",
-        wattage: 300,
+        wattage: 600,
         panelFactor: 1.2
     },
     battery: {
@@ -66,6 +67,297 @@ interface Device {
     timestamp?: string;
 }
 
+interface InverterData {
+    inverterBrand: string;
+    inverterModel: string;
+    acOutputKw: number;
+    dcInputVoltage: string | number;
+    inverterACInputCurrent: number;
+    inverterDCInputCurrent: number;
+    chargeControlAmps: string | number;
+    chargeControlV: number;
+    efficiency: number;
+    inverterPrice: number;
+    Warranty: string | number;
+}
+
+const INVERTER_CATALOG: InverterData[] = [
+
+    {
+        inverterBrand: 'FIRMAN',
+        inverterModel: '1000W-FH01K0120',
+        acOutputKw: 1,
+        dcInputVoltage: 12,
+        inverterACInputCurrent: 60,
+        inverterDCInputCurrent: 83,
+        chargeControlAmps: 30,
+        chargeControlV: 50,
+        efficiency: 97,
+        inverterPrice: 170000,
+        Warranty: '2 years'
+    },
+    {
+        inverterBrand: 'FELICTY',
+        inverterModel: ' IVEM3024',
+        acOutputKw: 3,
+        dcInputVoltage: 24,
+        inverterACInputCurrent: 40,
+        inverterDCInputCurrent: 125,
+        chargeControlAmps: 100,
+        chargeControlV: 500,
+        efficiency: 95,
+        inverterPrice: 380000,
+        Warranty: '2 years'
+    },
+    {
+        inverterBrand: 'FELICTY',
+        inverterModel: ' IVEM5048',
+        acOutputKw: 5,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 40,
+        inverterDCInputCurrent: 125,
+        chargeControlAmps: 100,
+        chargeControlV: 500,
+        efficiency: 95,
+        inverterPrice: 480000,
+        Warranty: '2 years'
+    },
+    {
+        inverterBrand: 'FELICTY',
+        inverterModel: ' IVEM6048-II',
+        acOutputKw: 6,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 40,
+        inverterDCInputCurrent: 150,
+        chargeControlAmps: 120,
+        chargeControlV: 500,
+        efficiency: 95,
+        inverterPrice: 510000,
+        Warranty: '2 years'
+    },
+    {
+        inverterBrand: 'FELICTY',
+        inverterModel: ' IVEM12048-II',
+        acOutputKw: 12,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 53,
+        inverterDCInputCurrent: 250,
+        chargeControlAmps: 240,
+        chargeControlV: 500,
+        efficiency: 95,
+        inverterPrice: 1400000,
+        Warranty: '2 years'
+    },
+    {
+        inverterBrand: 'FELICTY',
+        inverterModel: ' IVEM15048-I',
+        acOutputKw: 15,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 65,
+        inverterDCInputCurrent: 350,
+        chargeControlAmps: 240,
+        chargeControlV: 500,
+        efficiency: 95,
+        inverterPrice: 1750000,
+        Warranty: '2 years'
+    },
+    {
+        inverterBrand: 'FELICITY',
+        inverterModel: 'IVGM50KHP3G01',
+        acOutputKw: 50,
+        dcInputVoltage: 160,
+        inverterACInputCurrent: 80,
+        inverterDCInputCurrent: 100,
+        chargeControlAmps: 36,
+        chargeControlV: 850,
+        efficiency: 98,
+        inverterPrice: 2830000,
+        Warranty: '10 years'
+    },
+    {
+        inverterBrand: 'FIRMAN',
+        inverterModel: 'FH11K0110',
+        acOutputKw: 11,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 60,
+        inverterDCInputCurrent: 260,
+        chargeControlAmps: 200,
+        chargeControlV: 500,
+        efficiency: 95,
+        inverterPrice: 1100000,
+        Warranty: '2 years'
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-5K-SG04LP1-EU-SM2',
+        acOutputKw: 5,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 35,
+        inverterDCInputCurrent: 120,
+        chargeControlAmps: 36,
+        chargeControlV: 500,
+        efficiency: 98,
+        inverterPrice: 650000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-8K-SG01LP1-EU',
+        acOutputKw: 8,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 50,
+        inverterDCInputCurrent: 190,
+        chargeControlAmps: 52,
+        chargeControlV: 500,
+        efficiency: 97,
+        inverterPrice: 950000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-12K-SG02LP1-EU-AM3',
+        acOutputKw: 12,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 52,
+        inverterDCInputCurrent: 250,
+        chargeControlAmps: 78,
+        chargeControlV: 500,
+        efficiency: 97,
+        inverterPrice: 1400000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-20K-SG05LP3-EU-SM2',
+        acOutputKw: 20,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 70,
+        inverterDCInputCurrent: 350,
+        chargeControlAmps: 56,
+        chargeControlV: 650,
+        efficiency: 98,
+        inverterPrice: 2300000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-6K-SG04LP3-EU',
+        acOutputKw: 6,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 10,
+        inverterDCInputCurrent: 150,
+        chargeControlAmps: 26,
+        chargeControlV: 650,
+        efficiency: 98,
+        inverterPrice: 950000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-16K-SG01LP1-EU',
+        acOutputKw: 16,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 70,
+        inverterDCInputCurrent: 290,
+        chargeControlAmps: 'MPPT controlled by system configuration',
+        chargeControlV: 500,
+        efficiency: 97,
+        inverterPrice: 4100000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-30K-SG02HP3-EU-AM3',
+        acOutputKw: 30,
+        dcInputVoltage: 700,
+        inverterACInputCurrent: 50,
+        inverterDCInputCurrent: 75,
+        chargeControlAmps: 108,
+        chargeControlV: 850,
+        efficiency: 98,
+        inverterPrice: 5500000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-50K-SG01HP3-EU-BM4',
+        acOutputKw: 50,
+        dcInputVoltage: 160,
+        inverterACInputCurrent: 83,
+        inverterDCInputCurrent: 100,
+        chargeControlAmps: 144,
+        chargeControlV: 850,
+        efficiency: 98,
+        inverterPrice: 7500000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-10K-SG04LP3-EU-SM2',
+        acOutputKw: 10,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 22,
+        inverterDCInputCurrent: 210,
+        chargeControlAmps: 39,
+        chargeControlV: 650,
+        efficiency: 98,
+        inverterPrice: 1150000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-3.6K-SG04LP1-EU',
+        acOutputKw: 3.6,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 35,
+        inverterDCInputCurrent: 90,
+        chargeControlAmps: 26,
+        chargeControlV: 500,
+        efficiency: 98,
+        inverterPrice: 480000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-100K-G03_On_Grid',
+        acOutputKw: 100,
+        dcInputVoltage: 'N/A (Battery-less On-Grid System)',
+        inverterACInputCurrent: 145,
+        inverterDCInputCurrent: 40,
+        chargeControlAmps: 240,
+        chargeControlV: 850,
+        efficiency: 99,
+        inverterPrice: 5200000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-100K-G03_Hybrid',
+        acOutputKw: 100,
+        dcInputVoltage: 48,
+        inverterACInputCurrent: 22.7,
+        inverterDCInputCurrent: 275,
+        chargeControlAmps: 52,
+        chargeControlV: 650,
+        efficiency: 98,
+        inverterPrice: 1900000,
+        Warranty: 5
+    },
+    {
+        inverterBrand: 'DEYE',
+        inverterModel: 'SUN-80K-SG02HP3-EU-EM6',
+        acOutputKw: 80,
+        dcInputVoltage: 800,
+        inverterACInputCurrent: 115,
+        inverterDCInputCurrent: 150,
+        chargeControlAmps: 144,
+        chargeControlV: 850,
+        efficiency: 98,
+        inverterPrice: 920000,
+        Warranty: 5
+    }
+];
+
 export interface CalculationResult {
     inverterBrand: string;
     inverterModel: string;
@@ -86,18 +378,20 @@ export interface CalculationResult {
     checkingVolt: number;
     selectedLoad: number;
     totalEnergyWEff: string;
-    _batteryBankRaw: number;
-    _dailyEnergyRaw: number;
+    _batteryBankRaw?: number;
+    _dailyEnergyRaw?: number;
+    warranty?: string | number;
+    efficiency?: number;
 }
 
 export function SolarToolbox() {
 
     const [inputs, setInputs] = useState({
         load: '' as string | number,
-        usagehrDay: '' as string | number,
+        usagehrDay: 8 as string | number,
         psh: 5,
-        panelEff: 30,
-        dod: 80,
+        panelEff: 1.3,
+        dod: 0.8,
         sysLoss: 0.8,
         batteryEff: 100
     });
@@ -122,6 +416,12 @@ export function SolarToolbox() {
     const [showScanResult, setShowScanResult] = useState(false);
     const [isProcessingImage, setIsProcessingImage] = useState(false);
     const [showLoadListModal, setShowLoadListModal] = useState(false);
+    const [showQuoteModal, setShowQuoteModal] = useState(false);
+    const [quoteFormData, setQuoteFormData] = useState({
+        fullName: '',
+        contact: '',
+        address: ''
+    });
 
     useEffect(() => {
 
@@ -157,53 +457,104 @@ export function SolarToolbox() {
     };
 
     // Calculation Engine
+    const findBestInverter = (requiredKw: number): { inverter: InverterData, count: number } => {
+        // Sort ascending by acOutputKw
+        const sorted = [...INVERTER_CATALOG].sort((a, b) => a.acOutputKw - b.acOutputKw);
+
+        // 1. Single Unit Priority
+        // Find the smallest single inverter that meets or exceeds the load
+        const singleInverter = sorted.find(inv => inv.acOutputKw >= requiredKw);
+        if (singleInverter) {
+            return { inverter: singleInverter, count: 1 };
+        }
+
+        // 2. Alternative Calculation (Multi-Unit Optimization)
+        // If the load exceeds every single inverter's capacity:
+        // Iterate through each model and see how many units (2-5) would be needed
+        let bestMatch: { inverter: InverterData, count: number, totalCap: number } | null = null;
+
+        for (const inverter of sorted) {
+            if (inverter.acOutputKw <= 0) continue;
+
+            const count = Math.ceil(requiredKw / inverter.acOutputKw);
+
+            // Constraint: 2 to 5 units (since 1 unit was already checked above)
+            if (count >= 2 && count <= 5) {
+                const totalCap = count * inverter.acOutputKw;
+
+                // Priority: Smallest total capacity (nearest higher), then fewest units as tie-breaker
+                if (!bestMatch || totalCap < bestMatch.totalCap || (totalCap === bestMatch.totalCap && count < bestMatch.count)) {
+                    bestMatch = { inverter, count, totalCap };
+                }
+            }
+        }
+
+        if (bestMatch) {
+            return { inverter: bestMatch.inverter, count: bestMatch.count };
+        }
+
+        // 3. Fallback: If no model covers the load with 5 units, use 5 units of the largest available inverter
+        const largest = sorted[sorted.length - 1];
+        return { inverter: largest, count: 5 };
+    };
+
     const calculateArray = () => {
         const totalEnergyUsage = parseFloat(String(inputs.load));
         const usageHr = parseFloat(String(inputs.usagehrDay));
         const peakSunHr = Number(inputs.psh);
-        const dod = Number(inputs.dod); // Original used this
-        // const sysLoss = Number(inputs.sysLoss);
+        const panelFact = Number(inputs.panelEff);
+        const systemLosses = Number(inputs.sysLoss);
 
-        if (isNaN(totalEnergyUsage) || totalEnergyUsage <= 0 || isNaN(usageHr) || usageHr <= 0) {
-            alert("Please enter valid positive numbers for Load and Backup Time.");
+        if (
+            isNaN(totalEnergyUsage) || totalEnergyUsage <= 0 ||
+            isNaN(usageHr) || usageHr <= 0 ||
+            isNaN(peakSunHr) || peakSunHr <= 0 ||
+            isNaN(panelFact) || panelFact <= 0 ||
+            isNaN(systemLosses) || systemLosses <= 0
+        ) {
+            alert("Please enter valid positive numbers for all fields.");
             return null;
         }
 
         setIsLoading(true);
 
         setTimeout(() => {
-
+            // Convert load to kWh and adjust for system losses
             const totalEnergyKw = totalEnergyUsage / 1000;
-            const totalEnergyWEff = totalEnergyKw / (dod / 100);
 
+            const totalEnergyWEff = totalEnergyKw / systemLosses;
+
+            // Battery bank sizing (kWh)
             const batteryBank = totalEnergyWEff * (selectedLoadValue / 100) * usageHr;
 
             let checkingVolt = 12;
             if (batteryBank <= 2) checkingVolt = 12;
             else if (batteryBank <= 5) checkingVolt = 24;
-            else if (batteryBank <= 50) checkingVolt = 48;
-            else if (batteryBank <= 100) checkingVolt = 96;
-            else if (batteryBank <= 200) checkingVolt = 360;
-            else checkingVolt = 500;
+            else if (batteryBank <= 100) checkingVolt = 48;
+            else if (batteryBank <= 250) checkingVolt = 48;
+            else checkingVolt = 96;
 
+            // Panel for load and panel for battery
             const panelForLoad = totalEnergyWEff;
             const panelForBattery = batteryBank / peakSunHr;
+
+            // Total solar capacity in kW
             const solarCap = panelForBattery + panelForLoad;
+
+            // Daily energy generation in kWh/day
             const dailyEnergyGen = batteryBank + (panelForLoad * peakSunHr);
 
             const pvWattage = APP_CONFIG.panel.wattage;
-            const pvArrayNos = solarCap / (pvWattage / 1000);
+            // const pvArrayNos = (solarCap * 1000) / pvWattage;
+            const pvArrayNos = (solarCap * 1000) / pvWattage;
 
-            const { maxSolarInput, maxACOutput } = APP_CONFIG.inverter;
-            const invertersByPV = Math.ceil(solarCap / maxSolarInput);
-            const invertersByLoad = Math.ceil(totalEnergyWEff / maxACOutput);
-            const invertNos = Math.max(invertersByPV, invertersByLoad, 1); // Ensure at least 1
-            const ACCapacity = (maxACOutput * invertNos);
+            // Recommend Inverter
+            const { inverter: recommendedInverter, count: invertNos } = findBestInverter(totalEnergyWEff);
 
             const newResult: CalculationResult = {
-                inverterBrand: APP_CONFIG.inverter.brand,
-                inverterModel: APP_CONFIG.inverter.model,
-                inverterPrice: APP_CONFIG.inverter.price,
+                inverterBrand: recommendedInverter.inverterBrand,
+                inverterModel: recommendedInverter.inverterModel,
+                inverterPrice: recommendedInverter.inverterPrice * invertNos,
                 pvBrand: APP_CONFIG.panel.brand,
                 pvModel: APP_CONFIG.panel.model,
                 pvWattage,
@@ -211,17 +562,19 @@ export function SolarToolbox() {
                 batteryModel: APP_CONFIG.battery.model,
                 batteryPrice: APP_CONFIG.battery.price,
                 totalEnergy: totalEnergyKw.toFixed(1),
-                batteryBankSize: batteryBank.toFixed(2),
+                batteryBankSize: batteryBank.toFixed(1),
                 dailyEnergyGeneneration: dailyEnergyGen.toFixed(1),
                 solarCapacity: solarCap.toFixed(2),
                 pvArrayNos: Math.ceil(pvArrayNos),
                 inverterNos: invertNos,
-                inverterCapacity: ACCapacity.toFixed(0),
+                inverterCapacity: (recommendedInverter.acOutputKw * invertNos).toFixed(1),
                 checkingVolt,
                 selectedLoad: selectedLoadValue,
                 totalEnergyWEff: totalEnergyWEff.toFixed(2),
                 _batteryBankRaw: batteryBank,
-                _dailyEnergyRaw: dailyEnergyGen
+                _dailyEnergyRaw: dailyEnergyGen,
+                warranty: recommendedInverter.Warranty,
+                efficiency: recommendedInverter.efficiency
             };
 
             setResult(newResult);
@@ -237,12 +590,23 @@ export function SolarToolbox() {
             setTimeout(() => setErrorMsg(null), 3000);
             return;
         }
-        navigate('/quotation', { state: { result, inputs } });
+        setShowQuoteModal(true);
+    };
+
+    const submitQuotation = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!quoteFormData.fullName || !quoteFormData.contact || !quoteFormData.address) {
+            setErrorMsg("Please fill in all fields.");
+            setTimeout(() => setErrorMsg(null), 3000);
+            return;
+        }
+        navigate('/quotation', { state: { result, inputs, quoteFormData } });
+        setShowQuoteModal(false);
     };
 
     const resetAll = () => {
         setInputs({
-            load: '', usagehrDay: '', psh: 5, panelEff: 30, dod: 80, sysLoss: 0.8, batteryEff: 100
+            load: '', usagehrDay: 8, psh: 5, panelEff: 1.3, dod: 0.8, sysLoss: 0.8, batteryEff: 100
         });
         setSelectedLoadValue(100);
         setResult(null);
@@ -417,42 +781,68 @@ export function SolarToolbox() {
                     {/* RIGHT: Results */}
                     <div className="card">
                         <h2 className="text-xl mb-4 font-semibold">Results</h2>
-                        <div className="out" id="results">
-                            <div className="stat">
-                                <div className="k">Load:</div>
-                                <div className="v">{result ? result.totalEnergy + ' Kw' : '—'}</div>
+                        <div>
+                            <div className="out" id="results">
+                                <div className="stat">
+                                    <div className="k">Load:</div>
+                                    <div className="v">{result ? result.totalEnergy + ' Kw' : '—'}</div>
+                                </div>
+                                <div className="stat">
+                                    <div className="k">Battery Sizing:</div>
+                                    <div className="v">{result ? result.batteryBankSize + ' KwHr' : '—'}</div>
+                                    <div className="checkingVolt">{result ? result.checkingVolt + ' Volt' : ''}</div>
+                                </div>
+                                <div className="stat">
+                                    <div className="k">Inverter System:</div>
+                                    <div className="v">{result ? `${result.inverterNos} Nos` : '—'}</div>
+                                    <div className="requiredInverterO">
+                                        {result ? `${result.inverterBrand} ${result.inverterModel} (${result.inverterCapacity} Kw Total)` : 'MaxPower'}
+                                    </div>
+                                </div>
+                                <div className="stat">
+                                    <div className="k">Required PV array:</div>
+                                    <div className="v">{result ? result.solarCapacity + ' KW' : '—'}</div>
+                                    <div className="pv">Pv_Kwatt Required</div>
+                                </div>
+                                <div className="stat">
+                                    <div className="k">Recommended Panel(W):</div>
+                                    <div className="v">{result ? result.pvWattage + 'W' : '—'}</div>
+                                    <div className="panelBrand">{result ? result.pvBrand : '--'}</div>
+                                </div>
+                                <div className="stat">
+                                    <div className="k">Panel count (rounded up):</div>
+                                    <div className="v">{result ? result.pvArrayNos + ' Nos' : '—'}</div>
+                                    <div className="pvN">{result ? result.pvArrayNos + ' Units. ' + result.pvModel : ''}</div>
+                                </div>
+
+                                <div className="stat">
+                                    <div className="k">Estimated daily energy:</div>
+                                    <div className="v">{result ? result.dailyEnergyGeneneration + ' kW/day' : '—'}</div>
+                                    <div className="kwD">kW/day</div>
+                                </div>
+
+                                <div className="stat">
+                                    <div className="k">Status</div>
+                                    <div className="v"></div>
+                                </div>
+
+
+
                             </div>
-                            <div className="stat">
-                                <div className="k">Required PV array:</div>
-                                <div className="v">{result ? result.solarCapacity + ' KW' : '—'}</div>
-                                <div className="pv">Pv_Kwatt Required</div>
+
+                            <div style={{ background: "linear-gradient(135deg, rgba(4, 67, 129, .3), rgba(244, 166, 0, 0.15))   " }} className='w-full p-10 bg-linear from-bg-[#044381], to-bg-[#f4a600] rounded-md mt-5 flex flex-col gap-3'>
+                                <hr className='mb-3' />
+                                <p className='flex items-center gap-2'>
+                                    <span>For detailed system design and price information please use the</span>
+                                    <button className='border-b-2 border-b-blue-500 text-blue-500 cursor-pointer' onClick={handleQuotation}> Quotation button</button>
+
+                                </p>
+                                <div>
+                                    <hr className='mb-3' />
+                                    <p> Developed by <Link to={''} className='text-blue-600 underline'>Abdulrazaq Eniola</Link> </p>
+                                </div>
                             </div>
-                            <div className="stat">
-                                <div className="k">Panel count (rounded up):</div>
-                                <div className="v">{result ? result.pvArrayNos + ' Nos' : '—'}</div>
-                                <div className="pvN">{result ? result.pvArrayNos + ' Units. ' + result.pvModel : ''}</div>
-                            </div>
-                            <div className="stat">
-                                <div className="k">Recommended Panel(W):</div>
-                                <div className="v">{result ? result.pvWattage + 'W' : '—'}</div>
-                                <div className="panelBrand">{result ? result.pvBrand : '--'}</div>
-                            </div>
-                            <div className="stat">
-                                <div className="k">Estimated daily energy:</div>
-                                <div className="v">{result ? result.dailyEnergyGeneneration + ' kW/day' : '—'}</div>
-                                <div className="kwD">kW/day</div>
-                            </div>
-                            {/* Omitted status field to save space or mapped to existing data */}
-                            <div className="stat">
-                                <div className="k">Inverter System:</div>
-                                <div className="v">{result ? result.inverterNos + ' Nos' : '—'}</div>
-                                <div className="requiredInverterO">{result ? 'MaxOutput ' + result.inverterCapacity + ' KwP' : 'MaxPower'}</div>
-                            </div>
-                            <div className="stat">
-                                <div className="k">Battery Sizing:</div>
-                                <div className="v">{result ? result.batteryBankSize + ' KwHr' : '—'}</div>
-                                <div className="checkingVolt">{result ? result.checkingVolt + ' Volt' : ''}</div>
-                            </div>
+
                         </div>
                         {result && (
                             <div className="resultFooter">
@@ -530,6 +920,65 @@ export function SolarToolbox() {
                             )}
                         </div>
                         <button onClick={() => setShowLoadListModal(false)} style={{ marginTop: 15, width: '100%', padding: 10, background: '#333', color: 'white', border: 'none', borderRadius: 8 }}>Close</button>
+                    </div>
+                </div>
+            )}
+
+            {/* Quotation Request Modal */}
+            {showQuoteModal && (
+                <div className="modal-overlay" onClick={() => setShowQuoteModal(false)}>
+                    <div className="modal-content quote-modal shadow-2xl" onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2 className="text-2xl font-bold text-brand">Client Details</h2>
+                            <button className="close-btn" onClick={() => setShowQuoteModal(false)}>✕</button>
+                        </div>
+                        <div className='border-b-2 border-b-amber-500 w-full mb-5' />
+                        {/* <p className="text-gray-400 mb-6 font-semibold">Please provide your details to generate your customized solar quotation.</p> */}
+
+                        <form onSubmit={submitQuotation} className="flex flex-col gap-4">
+                            <div className="form-group">
+                                <label htmlFor="fullName" className="block text-sm font-medium text-gray-300 mb-1">Full Name</label>
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    placeholder="e.g. Emeka Ayomide Musa"
+                                    value={quoteFormData.fullName}
+                                    onChange={(e) => setQuoteFormData({ ...quoteFormData, fullName: e.target.value })}
+                                    required
+                                    className="w-full p-3 rounded-lg bg-[#0a1e32] border border-[#6ad1ff4d] text-white focus:outline-none focus:border-[#6ad1ff]"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="contact" className="block text-sm font-medium text-gray-300 mb-1">Contact (Phone/Email)</label>
+                                <input
+                                    type="text"
+                                    id="contact"
+                                    placeholder="e.g. +234... or email@example.com"
+                                    value={quoteFormData.contact}
+                                    onChange={(e) => setQuoteFormData({ ...quoteFormData, contact: e.target.value })}
+                                    required
+                                    className="w-full p-3 rounded-lg bg-[#0a1e32] border border-[#6ad1ff4d] text-white focus:outline-none focus:border-[#6ad1ff]"
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="address" className="block text-sm font-medium text-gray-300 mb-1">Installation Address</label>
+                                <input
+                                    type="text"
+                                    id="address"
+                                    placeholder="e.g. No 1, Solar Way, Abuja"
+                                    value={quoteFormData.address}
+                                    onChange={(e) => setQuoteFormData({ ...quoteFormData, address: e.target.value })}
+                                    required
+                                    className="w-full p-3 rounded-lg bg-[#0a1e32] border border-[#6ad1ff4d] text-white focus:outline-none focus:border-[#6ad1ff]"
+                                />
+                            </div>
+
+                            <button type="submit" className="submit-quote-btn mt-4 bg-red-500">
+                                SUBMIT
+                            </button>
+                        </form>
                     </div>
                 </div>
             )}

@@ -14,7 +14,7 @@ import { cn } from "../lib/utils"
 
 const sidebarItems = [
     { name: "Home", href: "/", icon: Zap },
-    { name: "Panel Sizer", href: "/panel-sizer", icon: AppWindow },
+    { name: "Integrated Tool Hub", href: "/panel-sizer", icon: AppWindow },
     { name: "Charge Controller", href: "/charge-controller", icon: AlignLeft },
     { name: "Breaker Selection", href: "/breaker-selection", icon: Zap },
     { name: "Cable Sizer", href: "/cable-sizer", icon: FileCheck },
@@ -59,8 +59,8 @@ export function Sidebar({ isOpen, toggleSidebar, collapsed, toggleCollapse }: Si
                 {/* Header */}
                 <div className="flex items-center justify-between h-16 px-4 border-b border-[#1e2736]">
                     {!collapsed && (
-                        <span className="text-xl font-bold text-white tracking-wide">
-                            ENGR Tools
+                        <span className="text-MD font-bold text-white tracking-wide">
+                            AE RENEWABLE LTD.
                         </span>
                     )}
                     <button

@@ -60,34 +60,34 @@ export const CalculatorForm = ({
                 </div>
                 <div className="col-6">
                     <label>Backup Time <span className="unit">(hr/day)</span></label>
-                    <input id="usagehrDay" type="number" min="0" step="1" placeholder="e.g. 8" value={inputs.usagehrDay} onChange={handleInputChange} />
+                    <input id="usagehrDay" type="number" min="1" max="12" step="1" placeholder="8" value={inputs.usagehrDay} onChange={handleInputChange} />
                 </div>
 
                 {/* ADDITIONAL SETTINGS */}
                 <div className="col-6">
                     <label>Peak Sun Hours (PSH) <span className="unit">(hr/day)</span></label>
-                    <input id="psh" type="number" step="0.5" value={inputs.psh} onChange={handleInputChange} />
+                    <input id="psh" type="number" min="4" max="7" step="1" placeholder="5" value={inputs.psh} onChange={handleInputChange} />
                 </div>
                 <div className="col-6">
-                    <label>Panel Factor <span className="unit">(%, default 30%)</span></label>
-                    <input id="panelEff" type="number" value={inputs.panelEff} onChange={handleInputChange} />
+                    <label>Panel Factor <span className="unit">(%, default 1.3%)</span></label>
+                    <input id="panelEff" type="number" value={inputs.panelEff} onChange={handleInputChange} step={0.1} max={5.0} min={1.0} placeholder='1.3' />
                 </div>
                 <div className="col-6">
-                    <label>Depth of Discharge <span className="unit">(%, default 80)</span></label>
-                    <input id="dod" type="number" value={inputs.dod} onChange={handleInputChange} />
+                    <label>Depth of Discharge <span className="unit">(default 0.8)</span></label>
+                    <input id="dod" type="number" value={inputs.dod} onChange={handleInputChange} max="1.0" min="0.5" step="0.1" placeholder="0.8" />
                 </div>
                 <div className="col-6">
-                    <label>System Losses <span className="unit">(factor, default 0.8)</span></label>
-                    <input id="sysLoss" type="number" step="0.1" value={inputs.sysLoss} onChange={handleInputChange} />
+                    <label>System Losses <span className="unit">(default 0.8)</span></label>
+                    <input id="sysLoss" type="number" min="0.5" max="1.0" step="0.1" placeholder="0.8" value={inputs.sysLoss} onChange={handleInputChange} />
                 </div>
                 <div className="col-6">
-                    <label><b>Percentage on Load</b></label>
+                    <label><b>Percentage load % on battery</b></label>
                     <input id="batteryEff" type="number" value={inputs.batteryEff} onChange={handleInputChange} />
                 </div>
             </div>
 
             <div className="percentageContainer mt-4">
-                <h3 className="text-lg font-bold">Percentage Load% on Battery</h3>
+                <h3 className="text-lg font-bold">Percentage Load % on Battery</h3>
                 <div className="load-group">
                     {[100, 90, 80, 70, 60, 50, 40, 30, 20, 10].map(pct => (
                         <div key={pct} className={`load-item ${selectedLoadValue === pct ? 'active' : ''}`}>
@@ -99,9 +99,9 @@ export const CalculatorForm = ({
             </div>
 
             <div className="btnbar" style={{ marginTop: '14px' }}>
-                <button id="compute" type="button" onClick={calculateArray}>Compute Array</button>
-                <button id="reset" type="button" className="ghost" onClick={resetAll}>Reset</button>
-                <button id="copy" type="button" className="ghost" onClick={handleQuotation}>Quotation</button>
+                <button id="compute" type="button" onClick={calculateArray} className='w-50'>Compute Array</button>
+                <button id="reset" type="button" className="ghost w-50" onClick={resetAll}>Reset</button>
+                <button id="copy" type="button" className="ghost w-50" onClick={handleQuotation}>Quotation</button>
             </div>
 
             {/* MESSAGES */}

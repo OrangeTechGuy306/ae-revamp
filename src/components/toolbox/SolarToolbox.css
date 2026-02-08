@@ -213,7 +213,7 @@
 /* DETAILS SUMMARY */
 .solar-toolbox-container .percentageContainer {
   margin: 10px 0;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
   border-radius: 10px;
   display: inline-block;
   padding: 12px;
@@ -265,7 +265,7 @@
 }
 
 .solar-toolbox-container .load-item.active .top-btn {
-  background: linear-gradient(135deg, #044381, #f4a600);
+  background: linear-gradient(135deg, rgba(4, 67, 129, .3), rgba(244, 166, 0, 0.15));
   color: white;
   box-shadow: 0 0 10px rgba(244, 166, 0, .4);
 }
@@ -284,6 +284,7 @@
 }
 
 @media (max-width: 720px) {
+
   .solar-toolbox-container .col-6,
   .solar-toolbox-container .col-12 {
     grid-column: span 12;
@@ -414,21 +415,21 @@
 }
 
 
-  /* Page 2 Specific Styles */
-  .solar-toolbox-container .quotation-page-2 .cardContainer {
-    padding: 30mm !important;
-  }
+/* Page 2 Specific Styles */
+.solar-toolbox-container .quotation-page-2 .cardContainer {
+  padding: 30mm !important;
+}
 
 
-  .solar-toolbox-container .quotation-page-2 .mainContent {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-    gap: 28px;
-    align-items: start;
-    width: auto;
-  }
+.solar-toolbox-container .quotation-page-2 .mainContent {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 28px;
+  align-items: start;
+  width: auto;
+}
 
-  /*  COMPANY INFORMATION */
+/*  COMPANY INFORMATION */
 /* QUOTATION */
 .solar-toolbox-container .quotation {
   transform: translateY(100px);
@@ -685,7 +686,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   min-height: 120px;
 }
 
@@ -699,7 +700,7 @@
   line-height: 1;
   font-weight: 900;
   color: #fca311;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   margin-bottom: -5px;
 }
 
@@ -709,17 +710,18 @@
   color: white;
   text-transform: uppercase;
   line-height: 1.1;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .solar-toolbox-container .warrantyBadge .ribbon {
   margin-top: 5px;
   color: black;
 }
+
 .solar-toolbox-container .warrantyBadge .ribbon svg {
   width: 32px;
   height: 32px;
-  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
 }
 
 /* QUOTATION FOOTER */
@@ -731,12 +733,14 @@
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  margin-top: auto; /* Push to bottom if flex column */
+  margin-top: auto;
+  /* Push to bottom if flex column */
 }
 
 .solar-toolbox-container .quotationFooter a {
   text-decoration: none;
 }
+
 .solar-toolbox-container .quotationFooter .center {
   text-align: center;
   line-height: 1.4;
@@ -744,14 +748,15 @@
 
 .solar-toolbox-container .quotationFooter .printButton {
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
   padding: 6px 16px;
   border-radius: 4px;
   cursor: pointer;
 }
+
 .solar-toolbox-container .quotationFooter .printButton:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .solar-toolbox-container .footer {
@@ -820,9 +825,11 @@
   .solar-toolbox-container .content {
     grid-template-columns: 1fr;
   }
+
   .solar-toolbox-container .hero {
     height: 200px;
   }
+
   .solar-toolbox-container .logo-badge {
     left: 18px;
     top: 18px;
@@ -843,12 +850,13 @@
     padding: 15px;
     gap: 15px;
   }
-  
+
   .solar-toolbox-container .quotation {
     padding: 0;
     margin: 10px auto;
     width: 100%;
-    font-size: 13px; /* Smaller base font for mobile */
+    font-size: 13px;
+    /* Smaller base font for mobile */
   }
 
   .solar-toolbox-container .cardContainer {
@@ -860,49 +868,76 @@
   .solar-toolbox-container .hero {
     min-height: 100px;
   }
-  
+
   .solar-toolbox-container .logo-badge {
     position: relative;
     top: auto;
     left: auto;
     margin: 15px;
     display: flex;
-    transform: scale(0.9); /* Slightly smaller logo */
+    transform: scale(0.9);
+    /* Slightly smaller logo */
     transform-origin: left center;
   }
 
   /* Typography Scaling */
-  .solar-toolbox-container .quotation h2 { font-size: 18px; margin-bottom: 8px; }
-  .solar-toolbox-container .quotation h3 { font-size: 16px; margin-bottom: 6px; }
-  .solar-toolbox-container .quotation h4 { font-size: 14px; }
-  .solar-toolbox-container .quotation p, 
-  .solar-toolbox-container .quotation li { 
-      font-size: 13px; 
-      line-height: 1.4; 
+  .solar-toolbox-container .quotation h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .solar-toolbox-container .quotation h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .solar-toolbox-container .quotation h4 {
+    font-size: 14px;
+  }
+
+  .solar-toolbox-container .quotation p,
+  .solar-toolbox-container .quotation li {
+    font-size: 13px;
+    line-height: 1.4;
   }
 
   /* Compact Table */
-  .solar-toolbox-container table.spec-table { font-size: 12px; }
+  .solar-toolbox-container table.spec-table {
+    font-size: 12px;
+  }
+
   .solar-toolbox-container table.spec-table th,
   .solar-toolbox-container table.spec-table td {
-      padding: 6px 4px;
+    padding: 6px 4px;
   }
-  
+
   /* Price Section */
   .solar-toolbox-container .quotationPriceCont {
     margin-top: 15px;
     padding: 15px 10px;
   }
-  .solar-toolbox-container .quotationPrice { font-size: 28px; }
-  .solar-toolbox-container .quotationSpecs { font-size: 14px; }
-  
+
+  .solar-toolbox-container .quotationPrice {
+    font-size: 28px;
+  }
+
+  .solar-toolbox-container .quotationSpecs {
+    font-size: 14px;
+  }
+
   /* Warranty Badge Scale */
   .solar-toolbox-container .warrantyBadge {
-      padding: 10px;
-      min-height: auto;
+    padding: 10px;
+    min-height: auto;
   }
-  .solar-toolbox-container .badgeContent .years { font-size: 28px; }
-  .solar-toolbox-container .badgeContent .label { font-size: 10px; }
+
+  .solar-toolbox-container .badgeContent .years {
+    font-size: 28px;
+  }
+
+  .solar-toolbox-container .badgeContent .label {
+    font-size: 10px;
+  }
 
   /* Footer Scaling */
   .solar-toolbox-container .quotationFooter {
@@ -913,15 +948,15 @@
     font-size: 12px;
   }
 
-  .solar-toolbox-container .quotationFooter .left, 
-  .solar-toolbox-container .quotationFooter .center, 
+  .solar-toolbox-container .quotationFooter .left,
+  .solar-toolbox-container .quotationFooter .center,
   .solar-toolbox-container .quotationFooter .right {
     width: 100%;
     text-align: center;
   }
-  
+
   .solar-toolbox-container .quotationFooter .center div {
-      margin-bottom: 4px;
+    margin-bottom: 4px;
   }
 
   .solar-toolbox-container .quotationFooter .printButton {
@@ -936,17 +971,18 @@
   .solar-toolbox-container .quotation-page-last {
     padding: 15px !important;
   }
-  
+
   .solar-toolbox-container .quotation-page-last .flex {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .solar-toolbox-container .quotation-page-last h3 {
-      font-size: 16px;
+    font-size: 16px;
   }
+
   .solar-toolbox-container .quotation-page-last .text-sm {
-      font-size: 13px !important;
+    font-size: 13px !important;
   }
 }
 
@@ -977,6 +1013,7 @@
     opacity: 0;
     transform: translateY(-10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -993,9 +1030,11 @@
     size: A4 portrait;
     margin: 0;
   }
+
   body * {
     visibility: hidden;
   }
+
   .solar-toolbox-container .quotation,
   .solar-toolbox-container .quotation *,
   .solar-toolbox-container .quotation-page-2,
@@ -1004,6 +1043,7 @@
   .solar-toolbox-container .quotation-page-last * {
     visibility: visible;
   }
+
   .solar-toolbox-container .quotation {
     position: absolute;
     left: 0;
@@ -1021,6 +1061,7 @@
     opacity: 1 !important;
     transform: none !important;
   }
+
   /* .solar-toolbox-container .quotation .hero img {
     width: auto;
     max-width: 100%;
@@ -1038,6 +1079,7 @@
     color: black;
     display: block !important;
   }
+
   .solar-toolbox-container .quotation-page-last {
     width: 210mm;
     max-width: 210mm;
@@ -1050,26 +1092,30 @@
     print-color-adjust: exact;
 
   }
+
   .solar-toolbox-container .cardContainer {
     box-shadow: none;
     border: none;
     border-radius: 0;
     width: 100%;
   }
+
   .solar-toolbox-container .hero {
     page-break-inside: avoid;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
   .solar-toolbox-container .logo-badge {
     border: 1px solid #fff !important;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
+
   .solar-toolbox-container .quotationFooter .printButton {
     display: none !important;
   }
-  
+
   /* Prevent components from splitting across pages */
   .solar-toolbox-container .quotationPriceCont,
   .solar-toolbox-container .termsContainer,

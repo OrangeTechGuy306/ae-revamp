@@ -1,0 +1,111 @@
+/* Styles for the Quotation Request Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.modal-content.quote-modal {
+    background: linear-gradient(145deg, #0b1221, #162447);
+    border: 1px solid rgba(106, 209, 255, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    width: 95%;
+    max-width: 480px;
+    animation: modalSlideIn 0.3s ease-out;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes modalSlideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.close-btn {
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff6b6b;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 18px;
+}
+
+.close-btn:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
+.submit-quote-btn {
+    background: linear-gradient(90deg, #00d466, #00b852);
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0, 212, 102, 0.3);
+    width: 100%;
+}
+
+.submit-quote-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 102, 0.4);
+    background: linear-gradient(90deg, #00e66f, #00cc5b);
+}
+
+.submit-quote-btn:active {
+    transform: translateY(0);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #9fb0d0;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background: #0a1e32;
+    border: 1px solid rgba(106, 209, 255, 0.2);
+    color: white;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #6ad1ff;
+}

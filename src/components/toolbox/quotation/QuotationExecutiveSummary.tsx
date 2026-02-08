@@ -153,8 +153,8 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef 
                             <ul>
                                 <b style={{ fontSize: '20px', color: '#0b4a7b' }}>System Analysis</b>
                                 <li>Daily Energy Generation: <b>{result.dailyEnergyGeneneration}</b><b>KW/D</b></li>
-                                <li>Backup Time at {result.selectedLoad}% Load: <b>{((result._batteryBankRaw / parseFloat(result.totalEnergyWEff)) * result.selectedLoad / 10).toFixed(1)}</b><b>Hrs</b></li>
-                                <li>CO₂ Emissions Saved: ~<b>{(result._dailyEnergyRaw * APP_CONFIG.environment.emissionFactor).toFixed(2)}</b> kg/year</li>
+                                <li>Backup Time at {result.selectedLoad}% Load: <b>{(((result._batteryBankRaw || 0) / parseFloat(result.totalEnergyWEff)) * result.selectedLoad / 10).toFixed(1)}</b><b>Hrs</b></li>
+                                <li>CO₂ Emissions Saved: ~<b>{((result._dailyEnergyRaw || 0) * APP_CONFIG.environment.emissionFactor).toFixed(2)}</b> kg/year</li>
                             </ul>
                         </div>
 
