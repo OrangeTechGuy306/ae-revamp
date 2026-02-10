@@ -6,11 +6,11 @@
   color: #e6edf7;
   min-height: 100vh;
   /* padding: 20px; */
-  --bg: #0b0e14;
-  --card: #111521;
-  --muted: #1a2030;
-  --text: #e6edf7;
-  --sub: #9fb0d0;
+  --bg: hsl(217 31% 12%);
+  --card: rgba(23, 33, 53, 0.5);
+  --muted: rgba(26, 32, 48, 0.5);
+  --text: #cbd5e0;
+  --sub: #718096;
   --brand: #044381;
   --accent: #f4a600;
   --success: #0aa80f;
@@ -230,55 +230,29 @@
   flex-wrap: wrap;
 }
 
-.solar-toolbox-container .load-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  position: relative;
-}
-
-.solar-toolbox-container .top-btn {
-  background: #222;
-  border: none;
-  padding-inline: 2px 8px;
-  border-radius: 6px;
-  color: white;
-  /* font-weight: bold; */
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.solar-toolbox-container .bottom-btn {
-  background: #444;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.solar-toolbox-container .top-btn:hover,
-.solar-toolbox-container .bottom-btn:hover {
-  background: #555;
-}
-
-.solar-toolbox-container .load-item.active .top-btn {
-  background: linear-gradient(135deg, rgba(4, 67, 129, .3), rgba(244, 166, 0, 0.15));
-  color: white;
-  box-shadow: 0 0 10px rgba(244, 166, 0, .4);
-}
-
-.solar-toolbox-container .load-item.active .bottom-btn {
-  background: #f4a600;
-  box-shadow: 0 0 5px #f4a600;
-}
-
-.solar-toolbox-container .load-item.active::before {
-  content: "▲";
-  position: absolute;
-  top: -16px;
-  color: #f4a600;
+.solar-toolbox-container .load-chip {
+  background: #1a2030;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #9fb0d0;
   font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 70px;
+}
+
+.solar-toolbox-container .load-chip:hover {
+  background: #252d41;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.solar-toolbox-container .load-chip.active {
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  border: 1px solid var(--accent);
+  color: white;
+  box-shadow: 0 0 12px rgba(244, 166, 0, 0.3);
 }
 
 @media (max-width: 720px) {
@@ -309,19 +283,21 @@
 .solar-toolbox-container label {
   display: block;
   font-size: 12px;
-  color: var(--sub);
+  font-weight: 600;
   margin-bottom: 6px;
+  color: var(--sub);
 }
 
 .solar-toolbox-container input[type="number"],
 .solar-toolbox-container input[type="text"],
 .solar-toolbox-container select {
   width: 100%;
-  padding: 5px 12px;
-  border-radius: 5px;
-  background: #0f1422;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text);
-  border: 1px solid rgba(255, 255, 255, .08);
+  font-size: 14px;
   outline: none;
   transition: box-shadow .15s, border-color .15s, background .15s;
 }
@@ -340,28 +316,46 @@
 /* BUTTON */
 .solar-toolbox-container .btnbar {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-.solar-toolbox-container button[type='button'] {
-  padding: 10px 14px;
+.solar-toolbox-container .btnbar button {
+  padding: 12px 24px;
   border-radius: 12px;
-  border: 1px solid rgba(244, 166, 0, .3);
-  background: linear-gradient(135deg, rgba(4, 67, 129, .4), rgba(244, 166, 0, .15));
-  color: white;
   font-weight: 600;
+  font-size: 15px;
   cursor: pointer;
-  transition: transform .05s ease, opacity .15s, background .2s;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 150px;
 }
 
-.solar-toolbox-container button[type='button']:hover {
-  background: linear-gradient(135deg, rgba(4, 67, 129, .6), rgba(244, 166, 0, .25));
-  border-color: rgba(244, 166, 0, .6);
+.solar-toolbox-container .primary-action {
+  background: linear-gradient(135deg, var(--brand), var(--accent));
+  border: 1px solid var(--accent);
+  color: white;
+  box-shadow: 0 0 15px rgba(244, 166, 0, 0.2);
+}
+
+.solar-toolbox-container .primary-action:hover {
+  background: #0022a1;
+  box-shadow: 0 0 20px rgba(0, 67, 255, 0.2);
+}
+
+.solar-toolbox-container .secondary-action {
+  background: #1e2736;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e6edf7;
+}
+
+.solar-toolbox-container .secondary-action:hover {
+  background: #252d41;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .solar-toolbox-container button:active {
-  transform: translateY(1px);
+  transform: scale(0.98);
 }
 
 /* checkBox */

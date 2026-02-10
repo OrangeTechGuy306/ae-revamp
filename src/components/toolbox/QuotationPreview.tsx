@@ -13,12 +13,12 @@ const QuotationPreview = () => {
     const [quotationRef, setQuotationRef] = useState("");
 
     // Data passed from SolarToolbox
-    const { result } = location.state || {};
+    const { result, quoteFormData } = location.state || {};
 
     useEffect(() => {
         if (!result) {
             // Redirect back if no data
-            navigate('/toolbox');
+            navigate('/');
             return;
         }
 
@@ -31,7 +31,12 @@ const QuotationPreview = () => {
 
     return (
         <div className="solar-toolbox-container">
-            <QuotationExecutiveSummary result={result} quotationDate={quotationDate} quotationRef={quotationRef} />
+            <QuotationExecutiveSummary
+                result={result}
+                quotationDate={quotationDate}
+                quotationRef={quotationRef}
+                quoteFormData={quoteFormData}
+            />
             <QuotationCompanyProfile />
             <QuotationBankDetails />
         </div>

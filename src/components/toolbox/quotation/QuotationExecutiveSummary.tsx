@@ -5,10 +5,15 @@ interface Props {
     result: CalculationResult;
     quotationDate: string;
     quotationRef: string;
+    quoteFormData?: {
+        fullName: string;
+        contact: string;
+        address: string;
+    };
 }
 // url('https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072&auto=format&fit=crop')
 
-export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef }: Props) => {
+export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef, quoteFormData }: Props) => {
     return (
         <div className="quotation show" style={{ position: 'relative' }}>
             <div className="cardContainer">
@@ -35,7 +40,7 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef 
                 <div className="mainContent">
                     <div className="leftSide">
                         <h3>Executive Summary</h3>
-                        <p className='text-[15px]'><strong>Dear Client,</strong><br />
+                        <p className='text-[15px]'><strong>Dear {quoteFormData?.fullName || 'Client'},</strong><br />
                             Thank you for considering A.E RENEWABLE LTD for your solar energy needs. Based on the information provided, we have designed a customized solar power system to meet your energy requirements efficiently and sustainably.</p>
 
                         <div className="specsContainer">
@@ -54,8 +59,8 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef 
                                     {/* Solar Panels */}
                                     <tr>
                                         <td>Solar Panels</td>
-                                        <td><i>{result.pvBrand}</i> <br /> <small>{result.pvModel}</small></td>
-                                        <td><small>{result.solarCapacity} KwG</small></td>
+                                        <td><i>{result.pvBrand}</i> <br /> <small>{result.pvModel} ({result.pvArrayNos} units)</small></td>
+                                        <td><small>{result.solarCapacity} kW</small></td>
                                         <td><span className="mark mark-check"></span></td>
                                     </tr>
                                     {/* Inverter */}
@@ -68,8 +73,8 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef 
                                     {/* Batteries */}
                                     <tr>
                                         <td>Batteries</td>
-                                        <td><i>Felicity</i><br /><small>Lithium2E2D</small></td>
-                                        <td><small>{result.batteryBankSize} KwP</small></td>
+                                        <td><i>{result.batteryBrand}</i></td>
+                                        <td><small>{result.batteryBankSize} kWh</small></td>
                                         <td><span className="mark mark-check"></span></td>
                                     </tr>
                                     {/* Mounting Structure */}

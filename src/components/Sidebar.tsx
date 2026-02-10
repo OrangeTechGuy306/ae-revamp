@@ -51,7 +51,7 @@ export function Sidebar({ isOpen, toggleSidebar, collapsed, toggleCollapse }: Si
             {/* Sidebar Container */}
             <aside
                 className={cn(
-                    "fixed inset-y-0 left-0 z-50 flex flex-col bg-[#0f1422] border-r border-[#1e2736] transition-all duration-300 ease-in-out",
+                    "fixed inset-y-0 left-0 z-50 flex flex-col bg-background border-r border-[#1e2736] transition-all duration-300 ease-in-out",
                     collapsed ? "w-16" : "w-64",
                     isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
                 )}
@@ -104,7 +104,7 @@ export function Sidebar({ isOpen, toggleSidebar, collapsed, toggleCollapse }: Si
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-[#1e2736] bg-[#0b0e1a]">
+                <div className="p-4 border-t border-[#1e2736] bg-background">
                     {!collapsed && (
                         <p className="text-xs text-center text-gray-500 font-medium">
                             Engineering Tools v1.0

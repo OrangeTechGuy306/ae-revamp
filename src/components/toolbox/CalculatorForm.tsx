@@ -1,4 +1,5 @@
 import React from 'react';
+import { Zap } from 'lucide-react';
 
 interface CalculatorFormProps {
     inputs: {
@@ -37,8 +38,8 @@ export const CalculatorForm = ({
 }: CalculatorFormProps) => {
     return (
         <div className="card">
-            <h1>System Sizing</h1>
-            <p className="text-md mb-4 font-semibold text-grey-300">Enter your system parameters to calculate solar system requirements.</p>
+            <h1 className='text-xl font-bold'>System Sizing</h1>
+            <p className="text-xs mb-4 text-grey-500">Enter your system parameters to calculate solar system requirements.</p>
             <div className="row">
                 <div className="col-6">
                     <label>Total Load Power <span className="unit">(W)</span></label>
@@ -87,21 +88,26 @@ export const CalculatorForm = ({
             </div>
 
             <div className="percentageContainer mt-4">
-                <h3 className="text-lg font-bold">Percentage Load % on Battery</h3>
                 <div className="load-group">
                     {[100, 90, 80, 70, 60, 50, 40, 30, 20, 10].map(pct => (
-                        <div key={pct} className={`load-item ${selectedLoadValue === pct ? 'active' : ''}`}>
-                            <button className="top-btn" onClick={() => setSelectedLoadValue(pct)}>{pct}%</button>
-                            <button className="bottom-btn" onClick={() => setSelectedLoadValue(pct)}></button>
-                        </div>
+                        <button
+                            key={pct}
+                            className={`load-chip ${selectedLoadValue === pct ? 'active' : ''}`}
+                            onClick={() => setSelectedLoadValue(pct)}
+                        >
+                            {pct}%
+                        </button>
                     ))}
                 </div>
             </div>
 
-            <div className="btnbar" style={{ marginTop: '14px' }}>
-                <button id="compute" type="button" onClick={calculateArray} className=''>Compute Array</button>
-                <button id="reset" type="button" className="ghost" onClick={resetAll}>Reset</button>
-                <button id="copy" type="button" className="ghost" onClick={handleQuotation}>Quotation</button>
+            <div className="btnbar" style={{ marginTop: '20px' }}>
+                <button id="compute-btn" type="button" onClick={calculateArray} className='primary-action'>
+                    <Zap className="inline-block mr-2 h-5 w-5" />
+                    Compute Array
+                </button>
+                <button id="reset-btn" type="button" className="secondary-action" onClick={resetAll}>Reset</button>
+                <button id="quote-btn" type="button" className="secondary-action" onClick={handleQuotation}>Quotation</button>
             </div>
 
             {/* MESSAGES */}

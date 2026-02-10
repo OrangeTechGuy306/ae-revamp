@@ -546,10 +546,23 @@ export function SolarToolbox() {
 
             const pvWattage = APP_CONFIG.panel.wattage;
             // const pvArrayNos = (solarCap * 1000) / pvWattage;
-            const pvArrayNos = (solarCap * 1000) / pvWattage;
+            const pvArrayNos = solarCap / (pvWattage / 1000);
 
             // Recommend Inverter
             const { inverter: recommendedInverter, count: invertNos } = findBestInverter(totalEnergyWEff);
+
+            // Refined Battery Selection
+            const matchedBrand = recommendedInverter.inverterBrand;
+            // Check for 50kW unit availability for this brand in catalog
+            const has50kW = INVERTER_CATALOG.some(inv => inv.inverterBrand === matchedBrand && inv.acOutputKw === 50);
+
+            // Standard capacities
+            const standardCaps = [2.5, 5, 10, 15, 20, 30];
+            if (has50kW) standardCaps.push(50);
+            standardCaps.push(100);
+
+            // Find nearest higher standard capacity
+            const finalBatteryCap = standardCaps.find(cap => cap >= batteryBank) || standardCaps[standardCaps.length - 1];
 
             const newResult: CalculationResult = {
                 inverterBrand: recommendedInverter.inverterBrand,
@@ -558,14 +571,14 @@ export function SolarToolbox() {
                 pvBrand: APP_CONFIG.panel.brand,
                 pvModel: APP_CONFIG.panel.model,
                 pvWattage,
-                batteryBrand: APP_CONFIG.battery.brand,
-                batteryModel: APP_CONFIG.battery.model,
+                batteryBrand: matchedBrand,
+                batteryModel: "Lithium Series",
                 batteryPrice: APP_CONFIG.battery.price,
                 totalEnergy: totalEnergyKw.toFixed(1),
-                batteryBankSize: batteryBank.toFixed(1),
+                batteryBankSize: finalBatteryCap.toFixed(1),
                 dailyEnergyGeneneration: dailyEnergyGen.toFixed(1),
                 solarCapacity: solarCap.toFixed(2),
-                pvArrayNos: Math.ceil(pvArrayNos),
+                pvArrayNos: Math.round(pvArrayNos),
                 inverterNos: invertNos,
                 inverterCapacity: (recommendedInverter.acOutputKw * invertNos).toFixed(1),
                 checkingVolt,
@@ -750,8 +763,8 @@ export function SolarToolbox() {
                         <div className="sideView">
                             {/* Hamburger suppressed for simplicity in React version or implement sidebar later */}
                         </div>
-                        <div className="flex flex-col">
-                            <h1>Installer Tool Kit <span className="badge">100% Accuracy.</span></h1>
+                        <div className="flex flex-col md:p-0 px-5">
+                            <h1 className='font-bold '>Installer Tool Kit <span className="badge">100% Accuracy.</span></h1>
                             <div className="subtitle">Complete Solar Design & Sizing Toolkit – from Load to Quotation.</div>
                         </div>
                     </div>
@@ -841,16 +854,7 @@ export function SolarToolbox() {
                             </div>
 
                         </div>
-                        {result && (
-                            <div className="resultFooter">
-                                <hr style={{ border: '1px solid rgba(255,255,255,.1)' }} />
-                                <p className="aboutResult mt-2">
-                                    For detailed system design and professional quotation, please use the "Quotation" button.
-                                </p>
-                                <hr style={{ border: '1px solid rgba(255,255,255,.1)' }} />
-                                <p>Developed by <a href="https://github.com/EniolaAbdulQodir/MindThread_Ai" target="_blank" rel="noreferrer" className="text-brand">Abdulrasaq Eniola.</a></p>
-                            </div>
-                        )}
+
                     </div>
                 </div>
 
@@ -942,7 +946,7 @@ export function SolarToolbox() {
                                     value={quoteFormData.fullName}
                                     onChange={(e) => setQuoteFormData({ ...quoteFormData, fullName: e.target.value })}
                                     required
-                                    className="w-full p-3 rounded-lg bg-[#0a1e32] border border-[#6ad1ff4d] text-white focus:outline-none focus:border-[#6ad1ff]"
+                                    className="w-full p-3 rounded-lg bg-[#0a1e32] border border-[#6ad1ff4d] text-[#cbd5e0] focus:outline-none focus:border-[#6ad1ff]"
                                 />
                             </div>
 
@@ -955,7 +959,7 @@ export function SolarToolbox() {
                                     value={quoteFormData.contact}
                                     onChange={(e) => setQuoteFormData({ ...quoteFormData, contact: e.target.value })}
                                     required
-                                    className="w-full p-3 rounded-lg bg-[#0a1e32] border border-[#6ad1ff4d] text-white focus:outline-none focus:border-[#6ad1ff]"
+                                    className="w-full p-3 rounded-lg bg-[#0a1e32] border border-[#6ad1ff4d] text-[#cbd5e0] focus:outline-none focus:border-[#6ad1ff]"
                                 />
                             </div>
 

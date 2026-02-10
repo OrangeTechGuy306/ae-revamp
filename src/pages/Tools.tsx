@@ -26,12 +26,11 @@ const colorMap: Record<string, { bg: string, text: string, hsl: string }> = {
 const ToolCard = ({ title, description, icon, action, color }: ToolCardProps) => {
     const hsl = colorMap[color]?.hsl || '217 91% 60%';
     return (
-        <Link to={action}>
-            <Card className="h-full transition-all duration-300 hover:shadow-lg hover:scale-105 cursor-pointer border-[1px] hover:border-primary bg-card/50 backdrop-blur-sm">
+        <Link to={action} className="block group">
+            <Card className="h-full bg-card/50 border-border hover:border-blue-500/50 transition-all duration-300 backdrop-blur-sm group-hover:shadow-2xl group-hover:shadow-blue-500/10">
                 <CardHeader>
                     <div
-                        style={{ backgroundColor: `hsl(${hsl} / 0.15)` }}
-                        className="p-3 rounded-lg w-fit mb-3"
+                        className={`p-3 rounded-lg w-fit mb-3 ${colorMap[color]?.bg || 'bg-blue-500/10'}`}
                     >
                         <div style={{ color: `hsl(${hsl})` }}>
                             {icon}
@@ -113,7 +112,7 @@ const tools = [
 export function ToolboxDashboard() {
 
     return (
-        <div className="min-h-screen  text-white font-sans selection:bg-blue-900/30">
+        <div className="min-h-screen bg-background text-slate-300 font-sans selection:bg-blue-900/30">
             {/* Main Content */}
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  py-5">
 
@@ -125,15 +124,15 @@ export function ToolboxDashboard() {
                         </div>
                     </div>
 
-                    <div className="inline-flex items-center px-3 py-1 rounded-full border border-gray-800 bg-gray-900/50 text-sm text-white mb-6">
+                    <div className="inline-flex items-center px-3 py-1 rounded-full border border-border bg-card/50 text-sm text-slate-300 mb-6">
                         Professional Solar Engineering Tools
                     </div>
 
-                    <h1 className="text-4xl md:text-5xl font-black tracking-tight text-white mb-4">
+                    <h1 className="text-4xl md:text-5xl font-black tracking-tight text-slate-200 mb-4">
                         A.E RENEWABLE LTD
                     </h1>
-                    <p className="text-lg text-white max-w-2xl mx-auto">
-                        Complete suite of professional tools for solar system design, sizing, and <br /> installation management.
+                    <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+                        Complete suite of professional tools for solar system design, sizing, and installation management.
                     </p>
                 </div>
 
@@ -158,22 +157,22 @@ export function ToolboxDashboard() {
                 {/* About Section */}
                 <div className="rounded-2xl p-5 border border-gray-800 relative overflow-hidden bg-card/50">
                     <div className="relative z-10">
-                        <h2 className="text-2xl font-bold text-white mb-4">About A.E Renewable Ltd</h2>
+                        <h2 className="text-2xl font-bold text-slate-200 mb-4">About A.E Renewable Ltd</h2>
                         <p className="text-gray-400 mb-10 leading-relaxed">
                             A.E Renewable Ltd provides comprehensive solar engineering solutions for residential, commercial, and industrial projects. Our professional toolkit ensures accurate system sizing, optimal component selection, and reliable installation management.
                         </p>
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div className="bg-engineering-blue/20 p-5 rounded-sm border border-gray-800/50">
-                                <h4 className="text-white font-semibold mb-2 text-sm">Precision Engineering</h4>
+                                <h4 className="text-slate-200 font-semibold mb-2 text-sm">Precision Engineering</h4>
                                 <p className="text-xs text-gray-500 leading-relaxed">100% accurate calculations for optimal system design</p>
                             </div>
                             <div className="bg-engineering-green/20 p-5 rounded-sm border border-gray-800/50">
-                                <h4 className="text-white font-semibold mb-2 text-sm">Cost Efficiency</h4>
+                                <h4 className="text-slate-200 font-semibold mb-2 text-sm">Cost Efficiency</h4>
                                 <p className="text-xs text-gray-500 leading-relaxed">Smart sizing reduces waste and maximizes ROI</p>
                             </div>
                             <div className="bg-red-800/20 p-5 rounded-sm border border-gray-800/50">
-                                <h4 className="text-white font-semibold mb-2 text-sm">Professional Tools</h4>
+                                <h4 className="text-slate-200 font-semibold mb-2 text-sm">Professional Tools</h4>
                                 <p className="text-xs text-gray-500 leading-relaxed">Industry-standard equipment and calculations</p>
                             </div>
                         </div>
@@ -189,7 +188,7 @@ export function ToolboxDashboard() {
                     <div className="relative z-10">
                         <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                             <div className="text-center md:text-left">
-                                <h2 className="text-2xl font-bold text-white mb-2">Get in Touch</h2>
+                                <h2 className="text-2xl font-bold text-slate-200 mb-2">Get in Touch</h2>
                                 <p className="text-gray-400">Have questions about our tools or services? Reach out to our team.</p>
                             </div>
                             <div className="flex flex-col sm:flex-row gap-6">
@@ -199,7 +198,7 @@ export function ToolboxDashboard() {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 font-medium">Phone Support</p>
-                                        <p className="text-sm text-white font-semibold">+23408 133 6151 32</p>
+                                        <p className="text-sm text-slate-300 font-semibold">+23408 133 6151 32</p>
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-3 bg-[#161b2c] px-5 py-3 rounded-lg border border-gray-800/50">
@@ -208,7 +207,7 @@ export function ToolboxDashboard() {
                                     </div>
                                     <div>
                                         <p className="text-xs text-gray-500 font-medium">Email Us</p>
-                                        <p className="text-sm text-white font-semibold">A.E.RenewableSolution@gmail.com</p>
+                                        <p className="text-sm text-slate-300 font-semibold">A.E.RenewableSolution@gmail.com</p>
                                     </div>
                                 </div>
                             </div>
@@ -224,7 +223,7 @@ export function ToolboxDashboard() {
 // Placeholder for other tools
 export function ToolPlaceholder({ title }: { title: string }) {
     return (
-        <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8 bg-[#0b0e14] text-white">
+        <div className="flex flex-col items-center justify-center min-h-[50vh] text-center p-8 bg-[#0b0e14] text-slate-400">
             <div className="h-20 w-20 bg-gray-800 rounded-full flex items-center justify-center mb-6">
                 <Wrench className="h-10 w-10 text-gray-400" />
             </div>

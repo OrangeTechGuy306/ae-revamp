@@ -11,7 +11,7 @@ export function DashboardLayout() {
     const toggleCollapse = () => setCollapsed(!collapsed)
 
     return (
-        <div className="min-h-screen transition-colors duration-300">
+        <div className="min-h-screen bg-background transition-colors duration-300">
             <Sidebar
                 isOpen={sidebarOpen}
                 toggleSidebar={toggleSidebar}
