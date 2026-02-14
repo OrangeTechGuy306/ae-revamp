@@ -407,36 +407,18 @@
 }
 
 
-/* Page 2 Specific Styles */
-.solar-toolbox-container .quotation-page-2 .cardContainer {
-  padding: 30mm !important;
-}
-
-
-.solar-toolbox-container .quotation-page-2 .mainContent {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 28px;
-  align-items: start;
-  width: auto;
-}
-
-/*  COMPANY INFORMATION */
-/* QUOTATION */
-.solar-toolbox-container .quotation {
-  transform: translateY(100px);
-  transition: all 0.6s ease;
+/* QUOTATION PAGES (Shared Sizing) */
+.solar-toolbox-container .quotation,
+.solar-toolbox-container .quotation-page-2,
+.solar-toolbox-container .quotation-page-last {
   max-width: 1000px;
   margin: 28px auto;
   padding: 20px;
-  display: none;
-  opacity: 0;
-}
-
-.solar-toolbox-container .quotation.show {
   display: block;
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
+  background: transparent;
+  box-shadow: none;
 }
 
 .solar-toolbox-container .cardContainer {
@@ -838,143 +820,304 @@
 
 @media (max-width: 850px) {
   .solar-toolbox-container .mainContent {
-    grid-template-columns: 1fr;
-    padding: 15px;
-    gap: 15px;
+    display: grid !important;
+    grid-template-columns: 1.4fr 1fr;
+    /* Maintain two columns with a better ratio for mobile */
+    padding: 8px;
+    gap: 6px;
   }
 
   .solar-toolbox-container .quotation {
     padding: 0;
-    margin: 10px auto;
+    margin: 5px auto;
     width: 100%;
-    font-size: 13px;
-    /* Smaller base font for mobile */
+    font-size: 9px;
+    /* Ultra-compact base font */
   }
 
   .solar-toolbox-container .cardContainer {
-    border-radius: 8px;
+    border-radius: 4px;
     overflow: hidden;
   }
 
   /* Compact Header */
   .solar-toolbox-container .hero {
-    min-height: 100px;
+    min-height: 60px;
+    height: 80px;
   }
 
   .solar-toolbox-container .logo-badge {
     position: relative;
     top: auto;
     left: auto;
-    margin: 15px;
+    margin: 6px;
+    padding: 6px 10px;
     display: flex;
-    transform: scale(0.9);
-    /* Slightly smaller logo */
+    transform: scale(0.7);
     transform-origin: left center;
+  }
+
+  .solar-toolbox-container .tagline {
+    font-size: 9px;
+    margin-top: 1px;
+  }
+
+  .solar-toolbox-container .logo-sun {
+    width: 28px;
+    height: 20px;
+  }
+
+  .solar-toolbox-container .logo-badge div[style*="fontWeight: 800"] {
+    font-size: 14px !important;
   }
 
   /* Typography Scaling */
   .solar-toolbox-container .quotation h2 {
-    font-size: 18px;
-    margin-bottom: 8px;
+    font-size: 12px;
+    margin-bottom: 3px;
   }
 
   .solar-toolbox-container .quotation h3 {
-    font-size: 16px;
-    margin-bottom: 6px;
+    font-size: 11px;
+    margin-bottom: 3px;
+    padding: 0 8px !important;
   }
 
   .solar-toolbox-container .quotation h4 {
-    font-size: 14px;
+    font-size: 10px;
   }
 
   .solar-toolbox-container .quotation p,
   .solar-toolbox-container .quotation li {
-    font-size: 13px;
-    line-height: 1.4;
+    font-size: 9.5px;
+    line-height: 1.25;
+  }
+
+  .solar-toolbox-container .leftSide p {
+    margin-bottom: 6px;
   }
 
   /* Compact Table */
   .solar-toolbox-container table.spec-table {
-    font-size: 12px;
+    font-size: 8.5px;
   }
 
   .solar-toolbox-container table.spec-table th,
   .solar-toolbox-container table.spec-table td {
-    padding: 6px 4px;
+    padding: 3px 2px;
   }
 
   /* Price Section */
   .solar-toolbox-container .quotationPriceCont {
-    margin-top: 15px;
-    padding: 15px 10px;
+    margin-top: 8px;
+    padding: 8px 4px;
+    border-radius: 12px;
+  }
+
+  .solar-toolbox-container .quotationPriceCont h2 {
+    font-size: 14px;
   }
 
   .solar-toolbox-container .quotationPrice {
-    font-size: 28px;
+    font-size: 18px;
   }
 
   .solar-toolbox-container .quotationSpecs {
-    font-size: 14px;
+    font-size: 9px;
   }
 
   /* Warranty Badge Scale */
   .solar-toolbox-container .warrantyBadge {
-    padding: 10px;
+    padding: 4px;
     min-height: auto;
+    border-radius: 6px;
   }
 
   .solar-toolbox-container .badgeContent .years {
-    font-size: 28px;
+    font-size: 18px;
   }
 
   .solar-toolbox-container .badgeContent .label {
-    font-size: 10px;
+    font-size: 7px;
+  }
+
+  .solar-toolbox-container .warrantyBadge .ribbon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Right Side Components */
+  .solar-toolbox-container .diagramContainer {
+    margin-top: 8px;
+    padding: 2px;
+  }
+
+  .solar-toolbox-container .diagramContainer svg {
+    height: 60px;
+  }
+
+  .solar-toolbox-container .estimatesContainer ul {
+    padding-left: 10px;
+    font-size: 9px;
+  }
+
+  .solar-toolbox-container .estimatesContainer b {
+    font-size: 11px !important;
+  }
+
+  .solar-toolbox-container .warrantyContainer {
+    margin-top: 8px;
+    padding: 6px;
+  }
+
+  .solar-toolbox-container .warrantyContainer ul {
+    font-size: 8.5px;
+    padding-left: 14px;
   }
 
   /* Footer Scaling */
   .solar-toolbox-container .quotationFooter {
-    flex-direction: column;
-    gap: 12px;
-    padding: 15px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px;
     text-align: center;
-    font-size: 12px;
+    font-size: 8.5px;
   }
 
   .solar-toolbox-container .quotationFooter .left,
   .solar-toolbox-container .quotationFooter .center,
   .solar-toolbox-container .quotationFooter .right {
     width: 100%;
-    text-align: center;
+    margin: 0;
   }
 
   .solar-toolbox-container .quotationFooter .center div {
-    margin-bottom: 4px;
+    margin-bottom: 1px;
   }
 
   .solar-toolbox-container .quotationFooter .printButton {
     width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    font-size: 14px;
+    padding: 6px;
+    margin-top: 2px;
+    font-size: 10px;
   }
 
   /* Page 2 & Last Adjustments */
-  .solar-toolbox-container .quotation-page-2 .mainContent,
-  .solar-toolbox-container .quotation-page-last {
-    padding: 15px !important;
+  .solar-toolbox-container .quotation-page-last .mainContent {
+    display: block !important;
+    padding: 10px !important;
+  }
+
+  /* Page 2 Specific Overrides (Now in 2 Columns) */
+  .solar-toolbox-container .quotation-page-2 .mainContent {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    /* Equal columns for Page 2 */
+    gap: 6px;
+  }
+
+  .solar-toolbox-container .quotation-page-2 .leftSide,
+  .solar-toolbox-container .quotation-page-2 .rightSide {
+    display: block !important;
+    min-width: 0;
+    /* Prevent overflow */
+    overflow-wrap: break-word;
+  }
+
+  .solar-toolbox-container .quotation-page-2 h2 {
+    font-size: 15px !important;
+    border-bottom-width: 2px !important;
+    margin-bottom: 6px !important;
+    margin-top: 0 !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 h3 {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+    margin-top: 8px !important;
+    padding: 0 !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 p,
+  .solar-toolbox-container .quotation-page-2 li {
+    font-size: 8.5px !important;
+    margin-bottom: 4px !important;
+    line-height: 1.2 !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 .mainContent h3:nth-of-type(1) {
+    font-size: 12px !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 div[style*="background: #e9f2ff"] {
+    padding: 4px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 div[style*="background: #e9f2ff"] span {
+    font-size: 7.5px !important;
+    padding: 2px 6px !important;
+    margin: 1px 1px 0 0 !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 div[style*="background: #fcfdff"] {
+    padding: 6px !important;
+    margin-bottom: 4px !important;
+    border-radius: 6px !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 div[style*="background: #fcfdff"] h4 {
+    font-size: 11px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 div[style*="background: #fcfdff"] p {
+    font-size: 8px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 ul {
+    margin-left: 10px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .solar-toolbox-container .quotation-page-2 p[style*="textAlign: 'center'"] {
+    font-size: 7px !important;
+    margin-top: 15px !important;
+    padding-top: 8px !important;
+  }
+
+  /* Last Page Specific Overrides */
+  .solar-toolbox-container .quotation-page-last h3 {
+    font-size: 14px !important;
+    margin-bottom: 10px !important;
+    border-bottom-width: 2px !important;
   }
 
   .solar-toolbox-container .quotation-page-last .flex {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row !important;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
-  .solar-toolbox-container .quotation-page-last h3 {
-    font-size: 16px;
+  .solar-toolbox-container .quotation-page-last .flex>div {
+    min-width: 100px !important;
+    font-size: 9px !important;
   }
 
-  .solar-toolbox-container .quotation-page-last .text-sm {
-    font-size: 13px !important;
+  .solar-toolbox-container .quotation-page-last .flex span {
+    font-size: 11px !important;
+  }
+
+  .solar-toolbox-container .quotation-page-last p.mt-10 {
+    margin-top: 15px !important;
+    font-size: 8.5px !important;
+  }
+
+  .solar-toolbox-container .quotation-page-last button {
+    padding: 8px 16px !important;
+    font-size: 11px !important;
   }
 }
 
@@ -1025,6 +1168,7 @@
 
   body * {
     visibility: hidden;
+    background-color: transparent;
   }
 
   .solar-toolbox-container .quotation,
@@ -1036,53 +1180,59 @@
     visibility: visible;
   }
 
-  .solar-toolbox-container .quotation {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 210mm;
-    max-width: 210mm;
-    margin: 0;
-    padding: 0;
-    box-shadow: none;
-    page-break-after: always;
-    color: black;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    display: block !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  /* .solar-toolbox-container .quotation .hero img {
-    width: auto;
-    max-width: 100%;
-    height: auto;
-  } */
-  .solar-toolbox-container .quotation-page-2 {
-    width: 100%;
-    max-width: 210mm;
-    margin: 0;
-    padding: 10mm !important;
-    page-break-before: always;
-    page-break-inside: avoid;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    color: black;
-    display: block !important;
-  }
-
+  .solar-toolbox-container .quotation,
+  .solar-toolbox-container .quotation-page-2,
   .solar-toolbox-container .quotation-page-last {
-    width: 210mm;
-    max-width: 210mm;
-    margin: 0;
-    padding: 10mm !important;
-    page-break-before: always;
-    page-break-inside: avoid;
+    visibility: visible;
+    position: relative !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    page-break-after: always;
     display: block !important;
+    box-shadow: none !important;
+    border: none !important;
+    height: 100% !important;
+    color: black;
+    -webkit-print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+  }
 
+  /* FORCE GRID IN PRINT - first page (.quotation) */
+  .solar-toolbox-container .quotation .mainContent {
+    display: grid !important;
+    grid-template-columns: 1.4fr 1fr !important;
+    /* Use fr units to fill width */
+    gap: 10mm !important;
+    padding: 10mm !important;
+    background-color: rgba(187, 210, 252, 0.404) !important;
+    visibility: visible !important;
+    width: 100% !important;
+  }
+
+  /* FORCE GRID IN PRINT - second page (.quotation-page-2) */
+  .solar-toolbox-container .quotation-page-2 .mainContent {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10mm !important;
+    padding: 10mm !important;
+    background-color: rgba(187, 210, 252, 0.404) !important;
+    visibility: visible !important;
+  }
+
+  /* Last Page Adjustments in print */
+  .solar-toolbox-container .quotation-page-last .mainContent {
+    display: block !important;
+    padding: 10mm !important;
+    background-color: rgba(187, 210, 252, 0.404) !important;
+  }
+
+  .solar-toolbox-container .leftSide,
+  .solar-toolbox-container .rightSide {
+    display: block !important;
+    visibility: visible !important;
   }
 
   .solar-toolbox-container .cardContainer {

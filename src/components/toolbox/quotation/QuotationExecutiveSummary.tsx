@@ -80,28 +80,28 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                                     {/* Mounting Structure */}
                                     <tr>
                                         <td>Mounting</td>
-                                        <td><i>Will be determined</i><br /><small>at site survey</small></td>
-                                        <td><small>Mounting Structure</small></td>
+                                        <td><i>{result.mountingDescription || 'Will be determined'}</i><br /><small>{result.mountingDescription ? 'Auto-Scaled' : 'at site survey'}</small></td>
+                                        <td><small>Mounting Hardware</small></td>
                                         <td><span className="mark mark-check"></span></td>
                                     </tr>
                                     {/* Cabling */}
                                     <tr>
                                         <td>Cabling</td>
-                                        <td><i>Flex Cables</i><br /><small>6-75 mm² available</small></td>
+                                        <td><i>{result.cablingDescription || 'Flex Cables'}</i><br /><small>Professional PV & AC Cables</small></td>
                                         <td><small>Full gauge supplied</small></td>
                                         <td><span className="mark mark-check"></span></td>
                                     </tr>
                                     {/* Protection Devices */}
                                     <tr>
                                         <td>Protection</td>
-                                        <td><i>Main Switch / Neutral Safety</i><br /><small>Voltage Protection</small></td>
-                                        <td><small>40k MSC / ≤2.2kV VPL</small></td>
+                                        <td><i>{result.protectionDescription || 'Main Switch / Neutral Safety'}</i><br /><small>Voltage Protection</small></td>
+                                        <td><small>{result.protectionRated || '40k MSC / ≤2.2kV VPL'}</small></td>
                                         <td><span className="mark mark-check"></span></td>
                                     </tr>
                                     {/* Installation */}
                                     <tr>
                                         <td>Installation</td>
-                                        <td><i>Professional Install</i><br /><small>Testing & Commissioning</small></td>
+                                        <td><i>Professional Install</i><br /><small>{result.installationDescription || 'Testing & Commissioning'}</small></td>
                                         <td><small>Lump Sum</small></td>
                                         <td><span className="mark mark-check"></span></td>
                                     </tr>

@@ -382,7 +382,69 @@ export interface CalculationResult {
     _dailyEnergyRaw?: number;
     warranty?: string | number;
     efficiency?: number;
+    // New Advanced Logic Fields
+    mountingDescription?: string;
+    mountingEstimatedCost?: number;
+    cablingDescription?: string;
+    protectionDescription?: string;
+    protectionRated?: string;
+    installationDescription?: string;
+    installationChangeover?: number;
 }
+
+// Engineering Constants & Rules
+const AC_CABLE_RULES = [
+    { maxKw: 6, cable: "4mm²", cableMeter: 8, earth: "2.5mm²", earthMeter: 8 },
+    { maxKw: 10, cable: "6mm²", cableMeter: 20, earth: "2.5mm²", earthMeter: 15 },
+    { maxKw: 18, cable: "10mm²", cableMeter: 30, earth: "2.5mm²", earthMeter: 20 },
+    { maxKw: 25, cable: "16mm²", cableMeter: 40, earth: "6mm²", earthMeter: 25 },
+    { maxKw: 40, cable: "25mm²", cableMeter: 60, earth: "16mm²", earthMeter: 40 },
+    { maxKw: 60, cable: "35mm²", cableMeter: 60, earth: "16mm²", earthMeter: 40 },
+    { maxKw: 100, cable: "50mm²", cableMeter: 60, earth: "16mm²", earthMeter: 40 },
+    { maxKw: 150, cable: "75mm²", cableMeter: 60, earth: "16mm²", earthMeter: 40 },
+    { maxKw: Infinity, cable: "70mm²", cableMeter: 80, earth: "25mm²", earthMeter: 50 }
+];
+
+const PV_CABLE_RULES = [
+    { maxPv: 6, cable: "4mm²", meter: 20 },
+    { maxPv: 16, cable: "6mm²", meter: 30 },
+    { maxPv: 30, cable: "10mm²", meter: 20 },
+    { maxPv: 60, cable: "16mm²", meter: 20 },
+    { maxPv: 90, cable: "25mm²", meter: 20 },
+    { maxPv: 140, cable: "50mm²", meter: 30 },
+    { maxPv: 185, cable: "75mm²", meter: 40 },
+    { maxPv: Infinity, cable: "90mm²", meter: 50 }
+];
+
+const INVERTER_BREAKER_TABLE = [
+    { maxInvDcInput: 150, breakerSize: "250A DC MCCB" },
+    { maxInvDcInput: 340, breakerSize: "400A DC MCCB" },
+    { maxInvDcInput: 450, breakerSize: "500A DC MCCB" },
+    { maxInvDcInput: 500, breakerSize: "630A DC MCCB" },
+    { maxInvDcInput: 640, breakerSize: "800A DC MCCB / ACB" },
+    { maxInvDcInput: 800, breakerSize: "1000A DC ACB" },
+    { maxInvDcInput: Infinity, breakerSize: "1250A DC ACB" }
+];
+
+const INVERTER_AC_BREAKER_TABLE = [
+    { maxCurrent: 13, breakerSize: "20A / 25A 1-Phase MCB", phase: "1P", voltage: 230 },
+    { maxCurrent: 22, breakerSize: "32A 1-Phase MCB", phase: "1P", voltage: 230 },
+    { maxCurrent: 35, breakerSize: "50A / 63A 1-Phase MCB", phase: "1P", voltage: 230 },
+    { maxCurrent: 48, breakerSize: "63A / 80A 1-Phase MCCB", phase: "1P", voltage: 230 },
+    { maxCurrent: 52, breakerSize: "80A 1-Phase MCCB", phase: "1P", voltage: 230 },
+    { maxCurrent: 65, breakerSize: "100A 1-Phase MCCB", phase: "1P", voltage: 230 },
+    { maxCurrent: 32, breakerSize: "40A / 50A 3-Pole MCB", phase: "3P", voltage: 400 },
+    { maxCurrent: 48, breakerSize: "63A / 80A 3-Pole MCCB", phase: "3P", voltage: 400 },
+    { maxCurrent: 80, breakerSize: "100A / 125A 3-Pole MCCB", phase: "3P", voltage: 400 },
+    { maxCurrent: Infinity, breakerSize: "200A / 250A 3-Pole MCCB", phase: "3P", voltage: 400 }
+];
+
+const MOUNTING_PRICES = {
+    trunk: 8000,
+    peg: 2000,
+    bolt: 500,
+    screwPack: 7000
+};
 
 export function SolarToolbox() {
 
@@ -564,6 +626,44 @@ export function SolarToolbox() {
             // Find nearest higher standard capacity
             const finalBatteryCap = standardCaps.find(cap => cap >= batteryBank) || standardCaps[standardCaps.length - 1];
 
+            // Advanced Calculations (Mounting, Cabling, Protection, Installation)
+            const inverterCount = invertNos;
+            const panelCount = Math.round(pvArrayNos);
+            const totalInverterKw = recommendedInverter.acOutputKw * invertNos;
+
+            // 1. Mounting Logic
+            const invFactor = Math.ceil(inverterCount / 2);
+            const panFactor = Math.ceil(panelCount / 3);
+            const trunkPipe = invFactor;
+            const fishruPeg = invFactor;
+            const screwPack = invFactor + panFactor;
+            const panelRail = panFactor * 2;
+            const boltNut = panFactor * 6;
+            const totalMountingCost = (trunkPipe * MOUNTING_PRICES.trunk) + (fishruPeg * MOUNTING_PRICES.peg) + (boltNut * MOUNTING_PRICES.bolt) + (screwPack * MOUNTING_PRICES.screwPack);
+            const mountingDesc = `Trunk Pipe: ${trunkPipe}, Peg: ${fishruPeg}, Rail: ${panelRail}, Bolt/Nut: ${boltNut}, Screw Pack: ${screwPack}`;
+
+            // 2. Cabling Logic
+            const selectCable = (rules: any[], capacity: number) => rules.find(rule => capacity <= (rule.maxKw || rule.maxPv)) || rules[rules.length - 1];
+            const acCable = selectCable(AC_CABLE_RULES, totalInverterKw);
+            const pvCable = selectCable(PV_CABLE_RULES, solarCap);
+            const cablingDesc = `AC: ${acCable.cable} (${acCable.cableMeter}m), PV: ${pvCable.cable} (${pvCable.meter}m), Earth: ${acCable.earth} (${acCable.earthMeter}m)`;
+
+            // 3. Protection Logic
+            const acOutputWatts = totalInverterKw * 1000;
+            const inverterAcVolt = totalInverterKw >= 20 ? 400 : 230; // Assuming 3-phase for 20kW+
+
+            const batDcCurrent = (acOutputWatts / checkingVolt) * inverterCount;
+            const batBreaker = INVERTER_BREAKER_TABLE.find(b => batDcCurrent <= b.maxInvDcInput)?.breakerSize || "1250A DC ACB";
+
+            const acOutCurrent = acOutputWatts / inverterAcVolt;
+            const acBreaker = INVERTER_AC_BREAKER_TABLE.find(b => b.voltage === inverterAcVolt && acOutCurrent <= b.maxCurrent)?.breakerSize || "200A / 250A 3-Pole AC MCCB";
+            const protectionDesc = `DC: ${batBreaker} (${batDcCurrent.toFixed(1)}A), AC: ${acBreaker} (${acOutCurrent.toFixed(1)}A)`;
+            const protectionRated = `${(acOutCurrent * 1.25).toFixed(0)}A MSC / ≤2.2kV VPL`;
+
+            // 4. Installation Logic
+            const installationChangeover = (acOutputWatts / inverterAcVolt) * 1.25;
+            const installationDesc = `${installationChangeover.toFixed(0)}A Changeover, Neutral Safety & Commissioning`;
+
             const newResult: CalculationResult = {
                 inverterBrand: recommendedInverter.inverterBrand,
                 inverterModel: recommendedInverter.inverterModel,
@@ -587,7 +687,14 @@ export function SolarToolbox() {
                 _batteryBankRaw: batteryBank,
                 _dailyEnergyRaw: dailyEnergyGen,
                 warranty: recommendedInverter.Warranty,
-                efficiency: recommendedInverter.efficiency
+                efficiency: recommendedInverter.efficiency,
+                mountingDescription: mountingDesc,
+                mountingEstimatedCost: totalMountingCost,
+                cablingDescription: cablingDesc,
+                protectionDescription: protectionDesc,
+                protectionRated: protectionRated,
+                installationDescription: installationDesc,
+                installationChangeover: installationChangeover
             };
 
             setResult(newResult);
