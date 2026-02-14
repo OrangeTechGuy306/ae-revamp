@@ -27,7 +27,7 @@ const ToolCard = ({ title, description, icon, action, color }: ToolCardProps) =>
     const hsl = colorMap[color]?.hsl || '217 91% 60%';
     return (
         <Link to={action} className="block group">
-            <Card className="h-full bg-card/50 border-border hover:border-blue-500/50 transition-all duration-300 backdrop-blur-sm group-hover:shadow-2xl group-hover:shadow-blue-500/10">
+            <Card className="h-full bg-card/50 border-border hover:border-blue-500/50 active:border-blue-500/50 transition-all duration-300 backdrop-blur-sm group-hover:shadow-2xl group-hover:shadow-blue-500/10 group-active:shadow-2xl group-active:shadow-blue-500/10">
                 <CardHeader>
                     <div
                         className={`p-3 rounded-lg w-fit mb-3 ${colorMap[color]?.bg || 'bg-blue-500/10'}`}
@@ -46,9 +46,9 @@ const ToolCard = ({ title, description, icon, action, color }: ToolCardProps) =>
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <button className="w-full group py-2 rounded-sm bg-[#111521] transition-all text-primary-foreground hover:bg-[#044381] group">
+                    <button className="w-full group py-2 rounded-sm bg-[#111521] transition-all text-primary-foreground hover:bg-[#044381] active:bg-[#044381] group">
                         Access Tool
-                        <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                        <span className="ml-2 group-hover:translate-x-1 group-active:translate-x-1 transition-transform">→</span>
                     </button>
                 </CardContent>
             </Card>

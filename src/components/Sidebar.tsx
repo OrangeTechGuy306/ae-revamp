@@ -1,28 +1,27 @@
 import { Link, useLocation } from "react-router-dom"
 import {
     Zap,
-    AppWindow,
-    AlignLeft,
     Box,
     Wrench,
     FileCheck,
-    ClipboardCheck,
     Shield,
     Menu,
+    PanelBottomDashedIcon,
+    ChartNoAxesGantt,
+    Cable,
 } from "lucide-react"
 import { cn } from "../lib/utils"
 
 const sidebarItems = [
     { name: "Home", href: "/", icon: Zap },
-    { name: "Integrated Tool Hub", href: "/panel-sizer", icon: AppWindow },
-    { name: "Charge Controller", href: "/charge-controller", icon: AlignLeft },
-    { name: "Breaker Selection", href: "/breaker-selection", icon: Zap },
-    { name: "Cable Sizer", href: "/cable-sizer", icon: FileCheck },
-    { name: "Kit", href: "/kit", icon: Box },
-    { name: "ToolBox", href: "/toolbox", icon: Wrench },
+    { name: "Integrated Tool Hub", href: "/toolbox", icon: Wrench },
+    { name: "Panel sizing Tools", href: "/panel-sizer", icon: PanelBottomDashedIcon },
+    { name: "Charge Control Sizer", href: "/charge-controller", icon: ChartNoAxesGantt },
+    { name: "Breaker selection Tool", href: "/breaker-selection", icon: Zap },
+    { name: "Cable sizer", href: "/cable-sizer", icon: Cable },
     { name: "Certificate", href: "/certificate", icon: FileCheck },
-    { name: "Completion", href: "/completion", icon: ClipboardCheck },
     { name: "Earthing", href: "/earthing", icon: Shield },
+    { name: "Kits", href: "/kit", icon: Box },
 ]
 
 interface SidebarProps {
