@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 
 import { DashboardLayout } from "./components/DashboardLayout"
+import { AdminLayout } from "./components/AdminLayout"
 import { ThemeProvider } from "./components/ThemeProvider"
 
 import {
@@ -13,6 +14,12 @@ import {
   CertificatesPage,
 } from "./pages/Tools"
 
+import { Overview } from "./pages/Overview"
+import { Customers } from "./pages/Customers"
+import { Users } from "./pages/Users"
+import { Settings } from "./pages/Settings"
+import { Login } from "./pages/Login"
+
 import QuotationPreview from "./components/toolbox/QuotationPreview";
 
 function App() {
@@ -23,9 +30,18 @@ function App() {
 
           {/* Public Routes */}
           <Route path="/" element={<Toolbox />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/quotation" element={<QuotationPreview />} />
 
-          {/* Tool Routes with Sidebar */}
+          {/* Dashboard Routes with separate AdminSidebar */}
+          <Route element={<AdminLayout />}>
+            <Route path="/dashboard" element={<Overview />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/settings" element={<Settings />} />
+          </Route>
+
+          {/* Tool Routes with original Sidebar */}
           <Route element={<DashboardLayout />}>
             <Route path="/toolbox" element={<PanelSizer />} />
             <Route path="/panel-sizer" element={<PanelSizer />} />
@@ -33,7 +49,6 @@ function App() {
             <Route path="/breaker-selection" element={<BreakerSelection />} />
             <Route path="/cable-sizer" element={<CableSizer />} />
             <Route path="/kit" element={<KitGenerator />} />
-            {/* Add placeholder routes to avoid 404 for sidebar links */}
             <Route path="/certificate" element={<CertificatesPage />} />
             <Route path="/completion" element={<Toolbox />} />
             <Route path="/earthing" element={<Toolbox />} />
