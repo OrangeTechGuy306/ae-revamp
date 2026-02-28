@@ -15,9 +15,9 @@ interface Props {
 
 export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef, quoteFormData }: Props) => {
     return (
-        <div className="quotation show" style={{ position: 'relative' }}>
-            <div className="cardContainer">
-                <div className="hero overflow-hidden" style={{ backgroundImage: "url(/public/solar-header.jpeg)", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        <div className="quotation show" style={{ position: 'relative', height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            <div className="cardContainer" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <div className="hero overflow-hidden" style={{ backgroundImage: "url(/solar-header.jpeg)", backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
                     <div className="logo-badge">
                         <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
@@ -37,7 +37,7 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                     </div>
                 </div>
 
-                <div className="mainContent">
+                <div className="mainContent" style={{ flexGrow: 1 }}>
                     <div className="leftSide">
                         <h3>Executive Summary</h3>
                         <p className='text-[15px]'><strong>Dear {quoteFormData?.fullName || 'Client'},</strong><br />
@@ -197,7 +197,7 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                     </div>
                 </div>
 
-                <div className="quotationFooter">
+                <div className="quotationFooter" style={{ marginTop: 'auto', width: '100%' }}>
                     <div className="left">© 2024 A.E RENEWABLE LTD. All rights reserved.</div>
                     <div className="center">
                         <div>Phone: <a href="tel:+2348133615132" style={{ color: '#46a500' }}>+234 813 361 5132</a></div>

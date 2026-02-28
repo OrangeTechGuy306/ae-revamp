@@ -1,9 +1,9 @@
 
 export const QuotationCompanyProfile = () => {
     return (
-        <div className="quotation-page-2">
-            <div className="cardContainer">
-                <div className="mainContent">
+        <div className="quotation-page-2" style={{ height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            <div className="cardContainer" style={{ height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <div className="mainContent" style={{ flexGrow: 1 }}>
                     <div className="leftSide">
                         <h2 style={{ fontSize: '28px', color: '#044381', borderBottom: '3px solid #f4a600', paddingBottom: '10px', marginBottom: '18px' }}>A.E RENEWABLE LTD</h2>
                         <h3 style={{ fontSize: '22px', color: '#044381', marginBottom: '14px' }}>Company Overview & Identity</h3>
@@ -93,6 +93,17 @@ export const QuotationCompanyProfile = () => {
                         <p style={{ textAlign: 'center', fontSize: '12px', color: '#999', marginTop: '30px', paddingTop: '15px', borderTop: '1px solid #e4e4e4', borderRight: '12px solid #044381', borderRadius: '20px' }}>
                             © 2024 A.E RENEWABLE LTD — Clean Energy • Smart Power • Professional Installation
                         </p>
+                    </div>
+                </div>
+
+                <div className="quotationFooter" style={{ marginTop: 'auto', width: '100%' }}>
+                    <div className="left">© 2024 A.E RENEWABLE LTD. All rights reserved.</div>
+                    <div className="center">
+                        <div>Phone: <a href="tel:+2348133615132" style={{ color: '#46a500' }}>+234 813 361 5132</a></div>
+                        <div>Website: <a href="https://www.aerenewable.com" style={{ color: '#46a500' }}>www.aerenewable.com</a></div>
+                    </div>
+                    <div className="right">
+                        <button className="printButton" onClick={() => window.print()}>Print</button>
                     </div>
                 </div>
             </div>

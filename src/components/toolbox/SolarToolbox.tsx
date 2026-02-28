@@ -1,8 +1,9 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Tesseract from 'tesseract.js';
 import { CalculatorForm } from './CalculatorForm';
+import { Loader2 } from 'lucide-react';
+import api from '@/lib/api';
 import './SolarToolbox.css';
 import './QuoteModal.css';
 
@@ -484,6 +485,7 @@ export function SolarToolbox() {
         contact: '',
         address: ''
     });
+    const [isSubmittingQuote, setIsSubmittingQuote] = useState(false);
 
     useEffect(() => {
 
@@ -713,15 +715,43 @@ export function SolarToolbox() {
         setShowQuoteModal(true);
     };
 
-    const submitQuotation = (e: React.FormEvent) => {
+    const submitQuotation = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!quoteFormData.fullName || !quoteFormData.contact || !quoteFormData.address) {
             setErrorMsg("Please fill in all fields.");
             setTimeout(() => setErrorMsg(null), 3000);
             return;
         }
-        navigate('/quotation', { state: { result, inputs, quoteFormData } });
-        setShowQuoteModal(false);
+
+        setIsSubmittingQuote(true);
+        try {
+            // Generating auto-ref for backend save
+            const quoteRef = `Q-${Math.floor(1000 + Math.random() * 9000)}`;
+
+            // Wait for backend confirmation
+            await api.post("/api/quotations", {
+                fullName: quoteFormData.fullName,
+                contact: quoteFormData.contact,
+                address: quoteFormData.address,
+                quoteRef: quoteRef,
+                results: result,
+                inputs: inputs
+            });
+
+            navigate('/quotation', { state: { result, inputs, quoteFormData, quoteRef, autoDownload: true } });
+            setShowQuoteModal(false);
+        } catch (err) {
+            console.error("Failed to save quotation:", err);
+            setErrorMsg("Failed to save quotation to server. Generating locally instead.");
+            setTimeout(() => setErrorMsg(null), 3000);
+
+            // Fallback generation if server fails
+            const fallbackRef = `Q-${Math.floor(1000 + Math.random() * 9000)}`;
+            navigate('/quotation', { state: { result, inputs, quoteFormData, quoteRef: fallbackRef, autoDownload: true } });
+            setShowQuoteModal(false);
+        } finally {
+            setIsSubmittingQuote(false);
+        }
     };
 
     const resetAll = () => {
@@ -971,17 +1001,29 @@ export function SolarToolbox() {
 
             {/* Camera Interface */}
             {showCamera && (
-                <div id="cameraPanel" style={{ display: 'flex', position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0, 0, 0, 0.7)', zIndex: 9999, alignItems: 'center', justifyContent: 'center', backdropFilter: 'blur(4px)' }}>
-                    <div style={{ background: 'linear-gradient(135deg, rgba(10, 30, 50, 0.95), rgba(20, 50, 80, 0.95))', borderRadius: '16px', border: '2px solid rgba(106, 209, 255, 0.4)', padding: '24px', maxWidth: '500px', width: '90%', maxHeight: '80vh', overflowY: 'auto' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                            <h2 style={{ margin: 0, color: '#6ad1ff', fontSize: '22px' }}>📷 Smart Device Scanner</h2>
-                            <button onClick={stopCamera} style={{ background: '#ff6b6b', color: 'white', padding: '8px 14px', border: 'none', borderRadius: '6px', cursor: 'pointer' }}>✕</button>
+                <div id="cameraPanel" className="scanner-app-overlay" onClick={stopCamera}>
+                    <div className="scanner-app" onClick={e => e.stopPropagation()}>
+                        <div className="scanner-brand">
+                            <h2>A.E RENEWABLE LTD</h2>
+                            <small>Smart Appliance Load Detection</small>
                         </div>
 
-                        <div style={{ position: 'relative', width: '100%', marginBottom: '12px' }}>
-                            <video ref={videoRef} style={{ width: '100%', borderRadius: '8px', background: '#000', maxHeight: '300px', display: 'block' }}></video>
+                        {/* TOP BUTTONS */}
+                        <div className="scanner-top-bar">
+                            {/* In the React version, the camera is always mounted if showCamera is true, so "Camera" toggle can act as a stop/restart or upload button here */}
+                            <label className="scanner-upload-btn">
+                                ➕ Upload
+                                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
+                            </label>
+                            <button onClick={scanDevice}>📸 Scan Item</button>
+                            <button onClick={() => setShowLoadListModal(true)}>📋 List</button>
+                        </div>
+
+                        {/* CAMERA */}
+                        <div className="scanner-camera-box" id="cameraBox" style={{ display: 'block' }}>
+                            <video ref={videoRef} id="video" autoPlay playsInline></video>
                             {isProcessingImage && (
-                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', color: 'white' }}>
+                                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', color: 'white', borderRadius: '10px' }}>
                                     <div style={{ fontSize: '28px' }}>⏳</div>
                                     <div>Processing...</div>
                                 </div>
@@ -989,25 +1031,46 @@ export function SolarToolbox() {
                         </div>
 
                         {showScanResult && lastScannedResult && (
-                            <div style={{ background: 'rgba(106,209,255,0.15)', border: '1px solid rgba(106,209,255,0.4)', borderRadius: '8px', padding: 12, marginBottom: 12 }}>
-                                <div style={{ fontSize: 13, fontWeight: 600, color: '#6ad1ff', marginBottom: 8 }}>Last Scan Result:</div>
+                            <div style={{ background: '#f4f6f8', border: '1px solid #ccc', borderRadius: '8px', padding: 12, marginTop: 12 }}>
+                                <div style={{ fontSize: 13, fontWeight: 600, color: '#0072CE', marginBottom: 8 }}>Last Scan Result:</div>
                                 <div style={{ marginBottom: 8 }}>
-                                    <span style={{ color: 'white', fontWeight: 600 }}>{lastScannedResult.type}</span> - <span style={{ color: '#00d466' }}>{lastScannedResult.wattage}W</span>
+                                    <span style={{ color: '#333', fontWeight: 600 }}>{lastScannedResult.type}</span> - <span style={{ color: '#b02a2a', fontWeight: 'bold' }}>{lastScannedResult.wattage}W</span>
                                 </div>
-                                <button onClick={addScannedDevice} style={{ width: '100%', background: '#00d466', color: 'white', padding: 8, border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
+                                <button onClick={addScannedDevice} style={{ width: '100%', background: '#0aa80f', color: 'white', padding: 8, border: 'none', borderRadius: 6, cursor: 'pointer', fontWeight: 600 }}>
                                     ✅ Add to Load
                                 </button>
                             </div>
                         )}
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
-                            <button onClick={scanDevice} style={{ background: '#00d466', color: 'white', padding: 12, border: 'none', borderRadius: 8 }}>📸 Scan</button>
-                            <label style={{ background: '#6ad1ff', color: 'white', padding: 12, border: 'none', borderRadius: 8, textAlign: 'center', cursor: 'pointer' }}>
-                                ➕ Upload
-                                <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleImageUpload} />
-                            </label>
-                            <button onClick={() => setShowLoadListModal(true)} style={{ background: 'linear-gradient(90deg, #00d4ff, #0099ff)', color: 'white', padding: 12, border: 'none', borderRadius: 8 }}>📋 List</button>
+                        {/* INFO */}
+                        <div className="scanner-info">
+                            <p><strong>Scanned Items:</strong> <span id="items">{scannedDevices.reduce((sum, d) => sum + d.count, 0)}</span></p>
+                            <p><strong>Total Scanned Load:</strong> <span id="totalWatt">{scannedDevices.reduce((sum, d) => sum + (d.wattage * d.count), 0)} W</span></p>
                         </div>
+
+                        {/* ITEM LIST PREVIEW (Optional inline, but using modal instead based on original UX) */}
+                        <div className="scanner-item-list" id="itemList">
+                            {scannedDevices.length > 0 && scannedDevices.slice(0, 3).map((d, i) => (
+                                <div key={i} className="scanner-item">
+                                    <span>{d.emoji} {d.type} (x{d.count})</span>
+                                    <span>{d.wattage * d.count}W</span>
+                                </div>
+                            ))}
+                            {scannedDevices.length > 3 && (
+                                <div style={{ textAlign: 'center', fontSize: '11px', color: '#666', marginTop: '4px' }}>
+                                    + {scannedDevices.length - 3} more. Click List to view all.
+                                </div>
+                            )}
+                        </div>
+
+                        {/* BOTTOM BUTTONS */}
+                        <div className="scanner-bottom-bar">
+                            <button className="scanner-close-btn" onClick={stopCamera}>CLOSE SCANNER</button>
+                        </div>
+
+                        <footer className="scanner-footer">
+                            ©️ A.E Renewable Ltd | Solar & Power Systems
+                        </footer>
                     </div>
                 </div>
             )}
@@ -1083,8 +1146,8 @@ export function SolarToolbox() {
                                 />
                             </div>
 
-                            <button type="submit" className="submit-quote-btn mt-4 bg-red-500">
-                                SUBMIT
+                            <button type="submit" disabled={isSubmittingQuote} className="submit-quote-btn mt-4 bg-red-500 flex justify-center items-center">
+                                {isSubmittingQuote ? <Loader2 className="h-5 w-5 animate-spin" /> : 'SUBMIT & GENERATE PDF'}
                             </button>
                         </form>
                     </div>

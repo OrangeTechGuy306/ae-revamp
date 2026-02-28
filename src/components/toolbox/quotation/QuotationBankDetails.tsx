@@ -1,9 +1,9 @@
 
 export const QuotationBankDetails = () => {
     return (
-        <div className="quotation-page-last">
-            <div className="cardContainer">
-                <div className="mainContent" style={{ display: 'block', minHeight: '180mm' }}>
+        <div className="quotation-page-last" style={{ height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            <div className="cardContainer" style={{ height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <div className="mainContent" style={{ display: 'block', minHeight: '180mm', flexGrow: 1 }}>
                     <h3 style={{ fontSize: '24px', color: '#044381', borderBottom: '3px solid #f4a600', paddingBottom: '10px', marginBottom: '20px' }}>Bank / Account Details</h3>
                     <div className="flex flex-wrap gap-8 items-center mt-6">
                         <div className="min-w-[280px] text-base text-[#010a1d]"><strong>Account Name:</strong> <br /><span style={{ fontSize: '18px', fontWeight: 600 }}>A.E RENEWABLE LTD</span></div>
@@ -20,7 +20,7 @@ export const QuotationBankDetails = () => {
                     </div>
                 </div>
 
-                <div className="quotationFooter">
+                <div className="quotationFooter" style={{ marginTop: 'auto', width: '100%' }}>
                     <div className="left">© 2024 A.E RENEWABLE LTD. All rights reserved.</div>
                     <div className="center">
                         <div>Phone: <a href="tel:+2348133615132" style={{ color: '#46a500' }}>+234 813 361 5132</a></div>

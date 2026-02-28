@@ -1,68 +1,86 @@
-import { useState } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
     Search, Plus, Filter, MoreHorizontal, User, Zap, Battery, Sun, FileText,
-    Eye, Edit, Trash2, Download, X, CheckCircle2
+    Eye, Edit, Trash2, Download, X, CheckCircle2, Loader2, AlertCircle
 } from "lucide-react";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
+import api from "@/lib/api";
+
+// Import real quotation components for exact replica
+import { QuotationExecutiveSummary } from "@/components/toolbox/quotation/QuotationExecutiveSummary";
+import { QuotationCompanyProfile } from "@/components/toolbox/quotation/QuotationCompanyProfile";
+import { QuotationBankDetails } from "@/components/toolbox/quotation/QuotationBankDetails";
+import "@/components/toolbox/SolarToolbox.css";
+import { type CalculationResult } from "@/components/toolbox/SolarToolbox";
+
+// Map an API quotation row to the customer display shape
+function mapQuotationToCustomer(q: any) {
+    const results = q.results || {};
+    const inputs = q.inputs || {};
+    const pvNos = results.pvArrayNos || inputs.pvArrayNos || 0;
+    const invCap = results.inverterCapacity || inputs.inverterCapacity || "0";
+    const batSize = results.batteryBankSize || inputs.batteryBankSize || "0";
+    const solarCap = results.solarCapacity || inputs.solarCapacity || "0";
+    const pvBrand = results.pvBrand || inputs.pvBrand || "";
+    const pvModel = results.pvModel || inputs.pvModel || "";
+    const invBrand = results.inverterBrand || inputs.inverterBrand || "";
+    const invModel = results.inverterModel || inputs.inverterModel || "";
+    const batBrand = results.batteryBrand || inputs.batteryBrand || "";
+    const mounting = results.mountingDescription || inputs.mountingDescription || "—";
+    const cabling = results.cablingDescription || inputs.cablingDescription || "—";
+    const protection = results.protectionDescription || inputs.protectionDescription || "—";
+    const installation = results.installationDescription || inputs.installationDescription || "—";
+
+    return {
+        id: q.id,
+        name: q.full_name,
+        contact: `${q.contact} / ${q.address}`,
+        solarCap: `${solarCap} kW`,
+        inverter: invModel || invBrand || "—",
+        batterySize: `${batSize} kWh`,
+        panels: `${pvNos} Units`,
+        quoteRef: q.quote_ref,
+        totalInvestment: "—",
+        status: "Active",
+        fullSpecs: {
+            pvBrand,
+            pvModel,
+            pvNos: Number(pvNos),
+            invBrand,
+            invModel,
+            invCap: `${invCap} kW`,
+            batBrand,
+            batSize: `${batSize} kWh`,
+            mounting,
+            cabling,
+            protection,
+            installation,
+        },
+    };
+}
 
 export function Customers() {
-    const [customers, setCustomers] = useState([
-        {
-            id: "CUST-001",
-            name: "John Smith",
-            contact: "john.s@example.com / +234 801 234 5678",
-            solarCap: "5.45 kW",
-            inverter: "DEYE 5000TL",
-            batterySize: "10.0 kWh",
-            panels: "9 Units",
-            quoteRef: "Q-8421",
-            totalInvestment: "₦2,450,000",
-            status: "Active",
-            fullSpecs: {
-                pvBrand: "Jinko Solar",
-                pvModel: "Tiger Pro 600W",
-                pvNos: 9,
-                invBrand: "DEYE",
-                invModel: "SUN-5K-SG04LP1",
-                invCap: "5.0 kW",
-                batBrand: "Felicity",
-                batSize: "10.0 kWh",
-                mounting: "Auto-Scaled Roof Mount",
-                cabling: "4mm² PV / 6mm² AC",
-                protection: "125A DC / 32A AC",
-                installation: "Standard Commissioning"
-            }
-        },
-        {
-            id: "CUST-002",
-            name: "Sarah Johnson",
-            contact: "s.johnson@example.com / +234 802 987 6543",
-            solarCap: "10.20 kW",
-            inverter: "Growatt 10000TL",
-            batterySize: "20.0 kWh",
-            panels: "18 Units",
-            quoteRef: "Q-3312",
-            totalInvestment: "₦4,800,000",
-            status: "Active",
-            fullSpecs: {
-                pvBrand: "Jinko Solar",
-                pvModel: "Tiger Pro 600W",
-                pvNos: 18,
-                invBrand: "Growatt",
-                invModel: "MOD 10KTL3-X",
-                invCap: "10.0 kW",
-                batBrand: "LG Chem",
-                batSize: "20.0 kWh",
-                mounting: "Ground Mount Structure",
-                cabling: "6mm² PV / 10mm² AC",
-                protection: "250A DC / 50A AC",
-                installation: "Custom Industrial"
-            }
+    const [customers, setCustomers] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [fetchError, setFetchError] = useState<string | null>(null);
+
+    const fetchQuotations = async () => {
+        try {
+            setLoading(true);
+            setFetchError(null);
+            const res = await api.get("/api/quotations");
+            setCustomers(res.data.map(mapQuotationToCustomer));
+        } catch (err: any) {
+            setFetchError(err.response?.data?.message || "Failed to load quotations.");
+        } finally {
+            setLoading(false);
         }
-    ]);
+    };
+
+    useEffect(() => { fetchQuotations(); }, []);
 
     const [openMenuId, setOpenMenuId] = useState<string | null>(null);
     const [selectedCustomer, setSelectedCustomer] = useState<any>(null);
@@ -70,8 +88,78 @@ export function Customers() {
     const [isDeleteOpen, setIsDeleteOpen] = useState(false);
     const [isDownloading, setIsDownloading] = useState<string | null>(null);
 
+    const [isAddOpen, setIsAddOpen] = useState(false);
+    const [addLoading, setAddLoading] = useState(false);
+    const [addError, setAddError] = useState<string | null>(null);
+    const [addForm, setAddForm] = useState({
+        fullName: "", contact: "", address: "", quoteRef: ""
+    });
+
+    const handleAddCustomer = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setAddError(null);
+        setAddLoading(true);
+        try {
+            // Generating a random quote ref if empty
+            const finalQuoteRef = addForm.quoteRef || `Q-${Math.floor(1000 + Math.random() * 9000)}`;
+            await api.post("/api/quotations", {
+                ...addForm,
+                quoteRef: finalQuoteRef,
+                results: { pvArrayNos: 12, inverterCapacity: 5, batteryBankSize: 10, solarCapacity: 5.4 },
+                inputs: { pvBrand: "Jinko", inverterBrand: "DEYE", batteryBrand: "Felicity" }
+            });
+            setIsAddOpen(false);
+            setAddForm({ fullName: "", contact: "", address: "", quoteRef: "" });
+            fetchQuotations();
+        } catch (err: any) {
+            setAddError(err.response?.data?.message || "Failed to create quotation.");
+        } finally {
+            setAddLoading(false);
+        }
+    };
+
     const toggleMenu = (id: string) => {
         setOpenMenuId(openMenuId === id ? null : id);
+    };
+
+    // Helper to map customer data to the format expected by quotation components
+    const mapCustomerToResult = (cust: any): CalculationResult => {
+        const invCap = parseFloat(cust.fullSpecs.invCap || "0");
+        const batSize = parseFloat(cust.fullSpecs.batSize || "0");
+        const solCap = parseFloat(cust.solarCap || "0");
+        const dailyGen = (solCap * 4.5).toFixed(1);
+
+        return {
+            inverterBrand: cust.fullSpecs.invBrand,
+            inverterModel: cust.fullSpecs.invModel,
+            inverterPrice: 0,
+            pvBrand: cust.fullSpecs.pvBrand,
+            pvModel: cust.fullSpecs.pvModel,
+            pvWattage: 600,
+            batteryBrand: cust.fullSpecs.batBrand,
+            batteryModel: "Lithium Series",
+            batteryPrice: 0,
+            totalEnergy: solCap.toFixed(1),
+            batteryBankSize: batSize.toFixed(1),
+            dailyEnergyGeneneration: dailyGen,
+            solarCapacity: solCap.toFixed(2),
+            pvArrayNos: cust.fullSpecs.pvNos,
+            inverterNos: 1,
+            inverterCapacity: invCap.toFixed(1),
+            checkingVolt: 48,
+            selectedLoad: 100,
+            totalEnergyWEff: solCap.toFixed(2),
+            _batteryBankRaw: batSize,
+            _dailyEnergyRaw: parseFloat(dailyGen),
+            warranty: 5,
+            efficiency: 98,
+            mountingDescription: cust.fullSpecs.mounting,
+            cablingDescription: cust.fullSpecs.cabling,
+            protectionDescription: cust.fullSpecs.protection,
+            protectionRated: cust.fullSpecs.protection,
+            installationDescription: cust.fullSpecs.installation,
+            installationChangeover: 63
+        };
     };
 
     const handleAction = (action: string, customer: any) => {
@@ -95,15 +183,59 @@ export function Customers() {
             }
 
             const opt = {
-                margin: [10, 10, 10, 10] as [number, number, number, number],
+                margin: [0, 0, 0, 0] as [number, number, number, number],
                 filename: `Quotation_${customer.name.replace(/\s+/g, '_')}_${customer.quoteRef}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
+                pagebreak: { mode: ['css', 'legacy'] },
                 html2canvas: {
                     scale: 2,
                     useCORS: true,
                     letterRendering: true,
                     allowTaint: true,
-                    windowWidth: 1200
+                    windowWidth: 1000,
+                    x: 0,
+                    y: 0,
+                    scrollX: 0,
+                    scrollY: 0,
+                    onclone: (clonedDoc: Document) => {
+                        // Safely strip oklch from style tags to prevent html2canvas parsing crashes
+                        try {
+                            const styles = clonedDoc.querySelectorAll('style');
+                            styles.forEach(style => {
+                                if (style.innerHTML.includes('oklch')) {
+                                    style.innerHTML = style.innerHTML.replace(/oklch\([^\)]+\)/g, '#94a3b8');
+                                }
+                            });
+                        } catch (e) {
+                            console.warn("PDF Style Scrubbing failed:", e);
+                        }
+
+                        // Inject global safe overrides for layout stability and oklch fallbacks
+                        const styleNode = clonedDoc.createElement('style');
+                        styleNode.innerHTML = `
+                            * {
+                                border-color: #e2e8f0 !important;
+                                outline: none !important;
+                                box-shadow: none !important;
+                                --tw-ring-color: transparent !important;
+                                --tw-ring-shadow: 0 0 #0000 !important;
+                                --tw-shadow: 0 0 #0000 !important;
+                                --tw-outline-color: transparent !important;
+                            }
+                            
+                            /* Preserving exact replica visuals for engineering colors */
+                            .text-engineering-blue { color: #2563eb !important; }
+                            .text-engineering-green { color: #16a34a !important; }
+                            .text-engineering-orange { color: #f59e0b !important; }
+                            .text-engineering-red { color: #dc2626 !important; }
+                            
+                            .bg-engineering-blue { background-color: #2563eb !important; }
+                            .bg-engineering-green { background-color: #16a34a !important; }
+                            .bg-engineering-orange { background-color: #f59e0b !important; }
+                            .bg-engineering-red { background-color: #dc2626 !important; }
+                        `;
+                        clonedDoc.head.appendChild(styleNode);
+                    }
                 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
@@ -118,10 +250,16 @@ export function Customers() {
         }
     };
 
-    const confirmDelete = () => {
-        setCustomers(customers.filter(c => c.id !== selectedCustomer.id));
-        setIsDeleteOpen(false);
-        setSelectedCustomer(null);
+    const confirmDelete = async () => {
+        try {
+            await api.delete(`/api/quotations/${selectedCustomer.id}`);
+            setCustomers(prev => prev.filter(c => c.id !== selectedCustomer.id));
+        } catch (err: any) {
+            alert(err.response?.data?.message || "Failed to delete quotation.");
+        } finally {
+            setIsDeleteOpen(false);
+            setSelectedCustomer(null);
+        }
     };
 
     return (
@@ -131,11 +269,20 @@ export function Customers() {
                     <h1 className="text-3xl font-bold tracking-tight text-white">Project Customers</h1>
                     <p className="text-muted-foreground mt-2">Detailed engineering results and quotation history for all clients.</p>
                 </div>
-                <Button className="bg-engineering-blue hover:bg-engineering-blue/90 text-white">
+                <Button
+                    className="bg-engineering-blue hover:bg-engineering-blue/90 text-white"
+                    onClick={() => { setIsAddOpen(true); setAddError(null); }}
+                >
                     <Plus className="h-4 w-4 mr-2" />
                     Add Customer
                 </Button>
             </div>
+
+            {fetchError && (
+                <div className="flex items-center gap-2 text-sm text-engineering-red bg-engineering-red/10 border border-engineering-red/20 rounded-lg px-4 py-3">
+                    <AlertCircle className="h-4 w-4" /> {fetchError}
+                </div>
+            )}
 
             <Card className="bg-card/50 border-border backdrop-blur-sm relative z-0">
                 <CardHeader className="pb-0">
@@ -170,7 +317,17 @@ export function Customers() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border">
-                                {customers.map((cust) => (
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan={6} className="px-4 py-10 text-center">
+                                            <Loader2 className="h-6 w-6 animate-spin text-engineering-blue mx-auto" />
+                                        </td>
+                                    </tr>
+                                ) : customers.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={6} className="px-4 py-10 text-center text-muted-foreground text-sm">No quotations found.</td>
+                                    </tr>
+                                ) : customers.map((cust) => (
                                     <tr key={cust.id} className="group hover:bg-white/5 transition-colors">
                                         <td className="px-4 py-4">
                                             <div className="flex items-center gap-3">
@@ -294,210 +451,160 @@ export function Customers() {
                 </CardContent>
             </Card>
 
-            {/* Hidden PDF Templates - Multi-page design matching QuotationPreview */}
-            <div className="hidden-pdf-container" style={{ position: 'fixed', top: '-10000px', left: 0, opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
-                {customers.map(cust => (
-                    <div key={`pdf-${cust.id}`} id={`pdf-content-${cust.id}`} style={{ width: '794px', backgroundColor: '#ffffff', color: '#000000', fontFamily: 'sans-serif' }}>
+            {/* Hidden PDF Templates - EXACT REPLICAS using real components */}
+            <div className="hidden-pdf-container" style={{ position: 'absolute', top: 0, left: '-15000px', opacity: 0, pointerEvents: 'none', zIndex: -1 }}>
+                {/* CSS Overrides for oklch compatibility with html2pdf/html2canvas */}
+                <style dangerouslySetInnerHTML={{
+                    __html: `
+                    .pdf-export-wrapper {
+                        /* Force light scheme */
+                        color-scheme: light !important;
+                        background: white !important;
+                        color: #020617 !important;
+                        font-size: 14px !important;
+                        line-height: 1.4 !important;
 
-                        {/* PAGE 1: EXECUTIVE SUMMARY */}
-                        <div className="pdf-page" style={{ padding: '40px', minHeight: '1123px', boxSizing: 'border-box', pageBreakAfter: 'always', backgroundColor: '#f0f4ff' }}>
-                            {/* Hero Header */}
-                            <div style={{ position: 'relative', height: '160px', backgroundColor: '#0e5b8a', marginBottom: '30px', borderRadius: '8px', overflow: 'hidden' }}>
-                                <div style={{ position: 'absolute', left: '20px', top: '20px', backgroundColor: '#ffffff', padding: '15px', borderRadius: '8px', display: 'flex', gap: '15px', alignItems: 'center', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
-                                    <div style={{ width: '45px', height: '45px', backgroundColor: '#044381', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                        <div style={{ color: '#f4a600', fontSize: '24px', fontWeight: 'bold' }}>⚡</div>
-                                    </div>
-                                    <div>
-                                        <div style={{ fontWeight: 800, fontSize: '18px', color: '#044381', lineHeight: '1.2' }}>A.E<br />RENEWABLE LTD</div>
-                                        <div style={{ fontSize: '10px', color: '#f4a600', fontWeight: 'bold', marginTop: '4px' }}>POWERING YOUR FUTURE WITH SUN</div>
-                                    </div>
+                        /* Standard Shadcn Variables (HSL) - forcing safe HSL/RGB values */
+                        --background: 0 0% 100% !important;
+                        --foreground: 222 47% 11% !important;
+                        --card: 0 0% 100% !important;
+                        --card-foreground: 222 47% 11% !important;
+                        --popover: 0 0% 100% !important;
+                        --popover-foreground: 222 47% 11% !important;
+                        --primary: 221 83% 53% !important; /* Engineering Blue */
+                        --primary-foreground: 210 40% 98% !important;
+                        --secondary: 210 40% 96% !important;
+                        --secondary-foreground: 222 47% 11% !important;
+                        --muted: 210 40% 96% !important;
+                        --muted-foreground: 215 16% 47% !important;
+                        --accent: 210 40% 96% !important;
+                        --accent-foreground: 222 47% 11% !important;
+                        --destructive: 0 84% 60% !important;
+                        --destructive-foreground: 210 40% 98% !important;
+                        --border: 214 32% 91% !important;
+                        --input: 214 32% 91% !important;
+                        --ring: 221 83% 53% !important;
+                        
+                        /* Tailwind v4 specific color overrides (Force Hex/RGB) */
+                        --color-engineering-blue: #2563eb !important;
+                        --color-engineering-green: #16a34a !important;
+                        --color-engineering-orange: #f59e0b !important;
+                        --color-engineering-red: #dc2626 !important;
+                        
+                        /* Common Tailwind theme colors that might be oklch */
+                        --color-border: #e2e8f0 !important;
+                        --color-input: #e2e8f0 !important;
+                        --color-ring: #3b82f6 !important;
+                        --color-background: #ffffff !important;
+                        --color-foreground: #020617 !important;
+                        --color-primary: #3b82f6 !important;
+                        --color-secondary: #f1f5f9 !important;
+                        --color-muted: #f1f5f9 !important;
+                        --color-accent: #f1f5f9 !important;
+                        --color-destructive: #ef4444 !important;
+                    }
+                    
+                    .pdf-export-wrapper * {
+                        border-color: #e2e8f0 !important;
+                        outline-color: transparent !important; /* Prevent oklch outline parse error */
+                    }
+                    
+                    /* Page break handling */
+                    .pdf-page-break {
+                        page-break-before: always !important;
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        border: none !important;
+                    }
+
+                    /* Ensure background images are handled properly */
+                    .pdf-export-wrapper .hero {
+                        background-color: #044381 !important;
+                    }
+
+                    .pdf-export-wrapper .quotation,
+                    .pdf-export-wrapper .quotation-page-2,
+                    .pdf-export-wrapper .quotation-page-last {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        max-width: 100% !important;
+                        box-shadow: none !important;
+                    }
+                    
+                    .pdf-export-wrapper .mainContent {
+                        padding: 24px 28px !important;
+                        gap: 24px !important;
+                    }
+
+                    .pdf-export-wrapper h3 {
+                        font-size: 18px !important;
+                        padding: 4px 16px !important;
+                    }
+
+                    .pdf-export-wrapper table.spec-table th, 
+                    .pdf-export-wrapper table.spec-table td {
+                        padding: 8px 6px !important;
+                        font-size: 13px !important;
+                    }
+
+                    .pdf-export-wrapper .termsContainer {
+                        padding: 12px !important;
+                    }
+
+                    .pdf-export-wrapper .termsContainer ul {
+                        font-size: 13px !important;
+                    }
+
+                    .pdf-export-wrapper .leftSide p {
+                        font-size: 14px !important;
+                    }
+
+                    .pdf-export-wrapper .estimatesContainer ul {
+                        font-size: 14px !important;
+                    }
+                    
+                    .pdf-export-wrapper .quotationPriceCont {
+                        padding: 15px 12px !important;
+                    }
+
+                    .pdf-export-wrapper .quotationPriceCont h2 {
+                        font-size: 24px !important;
+                    }
+
+                    .pdf-export-wrapper .quotationPriceCont .quotationPrice {
+                        font-size: 32px !important;
+                    }
+                `}} />
+
+                {customers.map(cust => {
+                    const resultData = mapCustomerToResult(cust);
+                    const quoteFormData = {
+                        fullName: cust.name,
+                        contact: cust.contact.split(' / ')[0],
+                        address: cust.contact.split(' / ')[1] || ""
+                    };
+
+                    return (
+                        <div key={`pdf-${cust.id}`} id={`pdf-content-${cust.id}`} className="pdf-export-wrapper" style={{ width: '1000px', transform: 'scale(0.79)', transformOrigin: 'top left', backgroundColor: '#ffffff' }}>
+                            <div className="solar-toolbox-container">
+                                <div style={{ height: '1410px', overflow: 'hidden', display: 'flex', flexDirection: 'column', pageBreakAfter: 'always' }}>
+                                    <QuotationExecutiveSummary
+                                        result={resultData}
+                                        quotationDate={new Date().toLocaleDateString()}
+                                        quotationRef={cust.quoteRef}
+                                        quoteFormData={quoteFormData}
+                                    />
                                 </div>
-                            </div>
-
-                            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: '30px' }}>
-                                {/* Left Side */}
-                                <div>
-                                    <h3 style={{ display: 'inline-block', padding: '4px 20px', margin: '0 0 15px 0', fontSize: '18px', backgroundColor: '#044381', color: '#ffffff', borderRadius: '4px' }}>Executive Summary</h3>
-                                    <p style={{ fontSize: '13px', lineHeight: '1.6', color: '#1f2937' }}>
-                                        <strong>Dear {cust.name},</strong><br />
-                                        Thank you for considering A.E RENEWABLE LTD for your solar energy needs. Based on the information provided, we have designed a customized solar power system to meet your energy requirements efficiently and sustainably.
-                                    </p>
-
-                                    <div style={{ marginTop: '25px' }}>
-                                        <h2 style={{ padding: '4px 0', textAlign: 'center', fontSize: '16px', backgroundColor: '#044381', color: '#ffffff', borderRadius: '4px', margin: '0 0 10px 0' }}>SYSTEM DESIGN & SPECIFICATIONS</h2>
-                                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
-                                            <thead>
-                                                <tr style={{ backgroundColor: '#f8fafc' }}>
-                                                    <th style={{ padding: '10px', border: '1px solid #e2e8f0', textAlign: 'left', color: '#044381' }}>Item</th>
-                                                    <th style={{ padding: '10px', border: '1px solid #e2e8f0', textAlign: 'left', color: '#044381' }}>Description</th>
-                                                    <th style={{ padding: '10px', border: '1px solid #e2e8f0', textAlign: 'left', color: '#044381' }}>Rated</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Solar Panels</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.pvBrand} {cust.fullSpecs.pvModel} ({cust.fullSpecs.pvNos} units)</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.solarCap}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Inverter</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.invBrand} {cust.fullSpecs.invModel}</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.invCap}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Batteries</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.batBrand} Energy Storage</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.batSize}</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Mounting</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.mounting}</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Hardware</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Cabling</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.cabling}</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Full gauge</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Protection</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>{cust.fullSpecs.protection}</td>
-                                                    <td style={{ padding: '10px', border: '1px solid #e2e8f0' }}>Safety Systems</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                <div className="pdf-page-break" style={{ height: '1410px', overflow: 'hidden', display: 'flex', flexDirection: 'column', pageBreakAfter: 'always' }}>
+                                    <QuotationCompanyProfile />
                                 </div>
-
-                                {/* Right Side */}
-                                <div>
-                                    <div style={{ fontSize: '11px', color: '#64748b', marginBottom: '20px', textAlign: 'right' }}>
-                                        Date: {new Date().toLocaleDateString()} • Ref: {cust.quoteRef}
-                                    </div>
-
-                                    <div style={{ padding: '15px', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0', marginBottom: '20px' }}>
-                                        <h4 style={{ margin: '0 0 10px 0', fontSize: '14px', color: '#044381' }}>SYSTEM ANALYSIS</h4>
-                                        <ul style={{ margin: 0, padding: '0 0 0 15px', fontSize: '12px', lineHeight: '1.8' }}>
-                                            <li>Design Capacity: <b>{cust.solarCap}</b></li>
-                                            <li>Storage Bank: <b>{cust.batterySize}</b></li>
-                                            <li>CO₂ Saved: ~1,250 kg/year</li>
-                                        </ul>
-                                    </div>
-
-                                    <div style={{ padding: '20px', backgroundColor: '#ffffff', borderRadius: '20px', border: '2px dashed #16a34a', textAlign: 'center' }}>
-                                        <h2 style={{ color: '#16a34a', margin: '0 0 5px 0', fontSize: '18px' }}>Total Investment</h2>
-                                        <div style={{ fontSize: '32px', fontWeight: 900, color: '#16a34a', margin: '10px 0' }}>{cust.totalInvestment}</div>
-                                        <div style={{ fontSize: '12px', color: '#16a34a', fontWeight: 'bold' }}>
-                                            {cust.fullSpecs.invCap} Power | {cust.fullSpecs.batSize} Bank
-                                        </div>
-
-                                        <div style={{ marginTop: '15px', padding: '10px', backgroundColor: '#044381', borderRadius: '8px', color: '#ffffff' }}>
-                                            <div style={{ fontSize: '24px', fontWeight: 900, color: '#f4a600' }}>5</div>
-                                            <div style={{ fontSize: '10px', fontWeight: 'bold' }}>YEARS WARRANTY</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div style={{ marginTop: 'Auto', paddingTop: '30px', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', fontSize: '11px', color: '#64748b' }}>
-                                <div>© 2024 A.E RENEWABLE LTD</div>
-                                <div>www.aerenewable.com</div>
-                            </div>
-                        </div>
-
-                        {/* PAGE 2: COMPANY PROFILE */}
-                        <div className="pdf-page" style={{ padding: '60px', minHeight: '1123px', boxSizing: 'border-box', pageBreakAfter: 'always', backgroundColor: '#ffffff' }}>
-                            <h2 style={{ fontSize: '28px', color: '#044381', borderBottom: '3px solid #f4a600', paddingBottom: '10px', marginBottom: '20px' }}>A.E RENEWABLE LTD</h2>
-                            <h3 style={{ fontSize: '20px', color: '#044381', marginBottom: '15px' }}>Company Overview & Identity</h3>
-                            <p style={{ fontSize: '14px', lineHeight: '1.6', color: '#374151', marginBottom: '20px' }}>
-                                A.E RENEWABLE LTD is a comprehensive renewable energy and electrical engineering company in Nigeria, delivering solar installations, smart power systems, electrical works, and energy-efficient solutions for homes, offices, and industrial facilities.
-                            </p>
-
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
-                                <div>
-                                    <h3 style={{ color: '#16a34a', fontSize: '16px', marginBottom: '10px' }}>Our Mission</h3>
-                                    <p style={{ fontSize: '13px', lineHeight: '1.6', color: '#4b5563' }}>
-                                        To deliver clean, reliable, and affordable energy solutions while continuously innovating and enhancing performance for every client and project.
-                                    </p>
-
-                                    <h3 style={{ color: '#16a34a', fontSize: '16px', marginBottom: '10px', marginTop: '20px' }}>Core Values</h3>
-                                    <ul style={{ fontSize: '13px', lineHeight: '1.8', color: '#4b5563', paddingLeft: '20px' }}>
-                                        <li>Innovation & Excellence</li>
-                                        <li>Integrity & Transparency</li>
-                                        <li>Safety & Quality First</li>
-                                        <li>Customer Satisfaction</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h3 style={{ color: '#044381', fontSize: '16px', marginBottom: '15px' }}>Services & Capabilities</h3>
-                                    {[
-                                        { t: 'Solar Home & Office', d: 'Hybrid/Off-grid systems with smart monitoring.' },
-                                        { t: 'Mini-Grid Power', d: 'Community and industrial clusters electrification.' },
-                                        { t: 'Electrical Installations', d: 'Professional wiring and surge protection.' },
-                                        { t: 'Smart Automation', d: 'IoT-based energy and facility management.' }
-                                    ].map((s, i) => (
-                                        <div key={i} style={{ padding: '10px', border: '1px solid #f1f5f9', backgroundColor: '#f8fafc', borderRadius: '8px', marginBottom: '10px' }}>
-                                            <div style={{ fontWeight: 'bold', fontSize: '12px', color: '#16a34a' }}>{s.t}</div>
-                                            <div style={{ fontSize: '11px', color: '#64748b' }}>{s.d}</div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div style={{ marginTop: '40px', padding: '20px', backgroundColor: '#f0f9ff', borderRadius: '12px', borderLeft: '6px solid #044381' }}>
-                                <h4 style={{ color: '#044381', margin: '0 0 10px 0' }}>Why Clients Trust Us</h4>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', fontSize: '12px', color: '#334155' }}>
-                                    <div>✓ High-quality materials</div>
-                                    <div>✓ Certified engineers</div>
-                                    <div>✓ Transparent pricing</div>
-                                    <div>✓ 24/7 Support</div>
+                                <div className="pdf-page-break" style={{ height: '1410px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                                    <QuotationBankDetails />
                                 </div>
                             </div>
                         </div>
-
-                        {/* PAGE 3: BANK DETAILS */}
-                        <div className="pdf-page" style={{ padding: '60px', minHeight: '1123px', boxSizing: 'border-box', backgroundColor: '#ffffff', display: 'flex', flexDirection: 'column' }}>
-                            <h3 style={{ fontSize: '24px', color: '#044381', borderBottom: '3px solid #f4a600', paddingBottom: '10px', marginBottom: '30px' }}>Bank / Account Details</h3>
-
-                            <div style={{ backgroundColor: '#f8fafc', padding: '30px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-                                    <div>
-                                        <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 'bold' }}>Account Name:</div>
-                                        <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', marginTop: '5px' }}>A.E RENEWABLE LTD</div>
-                                    </div>
-                                    <div>
-                                        <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 'bold' }}>Account Number:</div>
-                                        <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', marginTop: '5px', letterSpacing: '1px' }}>0123456789</div>
-                                    </div>
-                                    <div>
-                                        <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 'bold' }}>Bank Name:</div>
-                                        <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', marginTop: '5px' }}>Example Bank PLC</div>
-                                    </div>
-                                    <div>
-                                        <div style={{ fontSize: '13px', color: '#64748b', fontWeight: 'bold' }}>Branch:</div>
-                                        <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#0f172a', marginTop: '5px' }}>Abuja Central</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <p style={{ marginTop: '40px', fontSize: '14px', color: '#64748b', fontStyle: 'italic', lineHeight: '1.6' }}>
-                                Please make payments to the account above. For assistance, call <span style={{ color: '#16a34a', fontWeight: 'bold' }}>+234 813 361 5132</span>.
-                                Quotation valid for 30 days from issued date.
-                            </p>
-
-                            <div style={{ marginTop: 'auto', backgroundColor: '#044381', color: '#ffffff', padding: '30px', borderRadius: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div>
-                                    <div style={{ fontWeight: 800, fontSize: '16px' }}>A.E RENEWABLE LTD</div>
-                                    <div style={{ fontSize: '11px', opacity: 0.8, marginTop: '4px' }}>Sustainable Solar Engineering Solutions</div>
-                                </div>
-                                <div style={{ textAlign: 'right', fontSize: '11px' }}>
-                                    <div>Abuja, Nigeria</div>
-                                    <div style={{ color: '#f4a600', fontWeight: 'bold', marginTop: '4px' }}>www.aerenewable.com</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
 
             {/* View Modal */}
@@ -682,6 +789,99 @@ export function Customers() {
                             >
                                 Cancel Action
                             </Button>
+                        </CardContent>
+                    </Card>
+                </div>
+            )}
+
+            {/* Add Customer Modal */}
+            {isAddOpen && (
+                <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
+                    <div className="fixed inset-0 bg-black/70 backdrop-blur-md" onClick={() => setIsAddOpen(false)} />
+                    <Card className="w-full max-w-md bg-[#0a0d14] border-engineering-blue/30 shadow-2xl relative z-[1001]">
+                        <CardHeader className="bg-[#111521]/80 border-b border-white/5 flex flex-row items-center justify-between py-5 px-6">
+                            <CardTitle className="text-white text-lg flex items-center gap-2">
+                                <Plus className="h-5 w-5 text-engineering-blue" />
+                                Add Customer Quotation
+                            </CardTitle>
+                            <button
+                                onClick={() => setIsAddOpen(false)}
+                                className="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all"
+                            >
+                                <X className="h-5 w-5" />
+                            </button>
+                        </CardHeader>
+                        <CardContent className="pt-6">
+                            <form onSubmit={handleAddCustomer} className="space-y-4">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground">Full Name</label>
+                                    <input
+                                        type="text"
+                                        placeholder="John Doe"
+                                        value={addForm.fullName}
+                                        onChange={e => setAddForm(f => ({ ...f, fullName: e.target.value }))}
+                                        required
+                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground">Contact Detail (Email/Phone)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="john@example.com / +234..."
+                                        value={addForm.contact}
+                                        onChange={e => setAddForm(f => ({ ...f, contact: e.target.value }))}
+                                        required
+                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground">Address</label>
+                                    <input
+                                        type="text"
+                                        placeholder="123 Solar Street, Lagos"
+                                        value={addForm.address}
+                                        onChange={e => setAddForm(f => ({ ...f, address: e.target.value }))}
+                                        required
+                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground">Quote Ref (Optional)</label>
+                                    <input
+                                        type="text"
+                                        placeholder="Leave blank to auto-generate"
+                                        value={addForm.quoteRef}
+                                        onChange={e => setAddForm(f => ({ ...f, quoteRef: e.target.value }))}
+                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                    />
+                                </div>
+
+                                {addError && (
+                                    <div className="flex items-center gap-2 text-sm text-engineering-red bg-engineering-red/10 border border-engineering-red/20 rounded-lg px-4 py-3">
+                                        <AlertCircle className="h-4 w-4 flex-shrink-0" />
+                                        <span>{addError}</span>
+                                    </div>
+                                )}
+
+                                <div className="flex gap-3 pt-2">
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        className="flex-1 text-muted-foreground hover:text-white"
+                                        onClick={() => setIsAddOpen(false)}
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        disabled={addLoading}
+                                        className="flex-1 bg-engineering-blue hover:bg-engineering-blue/90 text-white"
+                                    >
+                                        {addLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Customer"}
+                                    </Button>
+                                </div>
+                            </form>
                         </CardContent>
                     </Card>
                 </div>

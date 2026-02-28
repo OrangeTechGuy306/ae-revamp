@@ -1,8 +1,34 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Bell, Shield, Globe, Save } from "lucide-react";
+import { User, Bell, Shield, Globe, Save, Loader2 } from "lucide-react";
+import api from "@/lib/api";
 
 export function Settings() {
+    const [profile, setProfile] = useState<any>(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const res = await api.get("/api/users/profile");
+                setProfile(res.data);
+            } catch (err) {
+                console.error("Failed to fetch profile", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProfile();
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="flex h-[50vh] items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-engineering-blue" />
+            </div>
+        );
+    }
     return (
         <div className="space-y-8 py-6">
             <div>
@@ -42,7 +68,7 @@ export function Settings() {
                                     <label className="text-sm font-medium text-muted-foreground">Full Name</label>
                                     <input
                                         type="text"
-                                        defaultValue="Admin User"
+                                        defaultValue={profile?.full_name || "Admin User"}
                                         className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
                                     />
                                 </div>
@@ -50,7 +76,7 @@ export function Settings() {
                                     <label className="text-sm font-medium text-muted-foreground">Email Address</label>
                                     <input
                                         type="email"
-                                        defaultValue="admin@aerenewable.com"
+                                        defaultValue={profile?.email || "admin@aerenewable.com"}
                                         className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
                                     />
                                 </div>

@@ -1,11 +1,32 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Users, Zap, Battery, Activity, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import api from "@/lib/api";
 
 export function Overview() {
+    const [quotationCount, setQuotationCount] = useState<number | null>(null);
+    const [recentQuotations, setRecentQuotations] = useState<any[]>([]);
+
+    useEffect(() => {
+        const loadStats = async () => {
+            try {
+                const [quotRes] = await Promise.all([
+                    api.get("/api/quotations"),
+                    api.get("/api/users"),
+                ]);
+                setQuotationCount(quotRes.data.length);
+                setRecentQuotations(quotRes.data.slice(0, 4));
+            } catch {
+                // Fail silently on overview — stats just show static fallbacks
+            }
+        };
+        loadStats();
+    }, []);
+
     const stats = [
         {
             title: "Total Customers",
-            value: "1,284",
+            value: quotationCount !== null ? quotationCount.toLocaleString() : "—",
             change: "+12.5%",
             trend: "up",
             icon: Users,
@@ -13,8 +34,8 @@ export function Overview() {
             bg: "bg-engineering-blue/10",
         },
         {
-            title: "Active Projets",
-            value: "42",
+            title: "Active Projects",
+            value: quotationCount !== null ? String(quotationCount) : "—",
             change: "+3.2%",
             trend: "up",
             icon: Zap,
@@ -83,22 +104,38 @@ export function Overview() {
                 <Card className="col-span-full lg:col-span-4 bg-card/50 border-border backdrop-blur-sm">
                     <CardHeader>
                         <CardTitle className="text-white">Recent Activity</CardTitle>
-                        <CardDescription>Latest system updates and installations</CardDescription>
+                        <CardDescription>Latest quotations submitted</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-6">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="flex items-center gap-4">
-                                    <div className="h-10 w-10 rounded-full bg-[#111521] border border-border flex items-center justify-center">
-                                        <Zap className="h-5 w-5 text-engineering-blue" />
+                            {recentQuotations.length > 0
+                                ? recentQuotations.map((q: any) => (
+                                    <div key={q.id} className="flex items-center gap-4">
+                                        <div className="h-10 w-10 rounded-full bg-[#111521] border border-border flex items-center justify-center">
+                                            <Zap className="h-5 w-5 text-engineering-blue" />
+                                        </div>
+                                        <div className="flex-1 space-y-1">
+                                            <p className="text-sm font-medium text-white">Quotation — {q.full_name}</p>
+                                            <p className="text-xs text-muted-foreground">Ref: {q.quote_ref} | {q.contact}</p>
+                                        </div>
+                                        <div className="text-xs text-muted-foreground">
+                                            {new Date(q.created_at).toLocaleDateString()}
+                                        </div>
                                     </div>
-                                    <div className="flex-1 space-y-1">
-                                        <p className="text-sm font-medium text-white">New Installation Complete</p>
-                                        <p className="text-xs text-muted-foreground">Customer ID: #4521 - 5kW Residential System</p>
+                                ))
+                                : [1, 2, 3, 4].map((i) => (
+                                    <div key={i} className="flex items-center gap-4">
+                                        <div className="h-10 w-10 rounded-full bg-[#111521] border border-border flex items-center justify-center">
+                                            <Zap className="h-5 w-5 text-engineering-blue" />
+                                        </div>
+                                        <div className="flex-1 space-y-1">
+                                            <p className="text-sm font-medium text-white">New Installation Complete</p>
+                                            <p className="text-xs text-muted-foreground">Customer ID: #4521 - 5kW Residential System</p>
+                                        </div>
+                                        <div className="text-xs text-muted-foreground">2 hours ago</div>
                                     </div>
-                                    <div className="text-xs text-muted-foreground">2 hours ago</div>
-                                </div>
-                            ))}
+                                ))
+                            }
                         </div>
                     </CardContent>
                 </Card>

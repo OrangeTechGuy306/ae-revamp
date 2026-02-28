@@ -1270,3 +1270,162 @@
     break-inside: avoid;
   }
 }
+
+/* --- SMART SCANNER MODAL (PORTED FROM HTML MOCKUP) --- */
+
+.scanner-app-overlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  padding: 20px;
+}
+
+.scanner-app {
+  width: 390px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  max-width: 100%;
+}
+
+/* Branding */
+.scanner-brand {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.scanner-brand h2 {
+  margin: 0;
+  color: #0072CE;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.scanner-brand small {
+  color: #555;
+  font-size: 13px;
+}
+
+/* Top Controls */
+.scanner-top-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.scanner-top-bar button, .scanner-upload-btn {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  background: #0b2e4f;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+  font-weight: 500;
+  display: inline-block;
+}
+
+/* Camera */
+.scanner-camera-box {
+  height: 210px;
+  background: black;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+}
+
+.scanner-camera-box video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Manual Input (Handled by different modal context in React, but keeping style) */
+.scanner-manual {
+  display: none;
+  margin-top: 10px;
+}
+
+.scanner-manual input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+/* Info */
+.scanner-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.scanner-info p {
+  margin: 4px 0;
+}
+
+/* Item List */
+.scanner-item-list {
+  margin-top: 10px;
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+.scanner-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 7px;
+  background: #f4f6f8;
+  margin-bottom: 5px;
+  border-radius: 6px;
+  color: #333;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Bottom Buttons */
+.scanner-bottom-bar {
+  display: flex;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.scanner-bottom-bar button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.scanner-reset-btn {
+  background: #b02a2a;
+  color: white;
+}
+
+.scanner-close-btn {
+  background: #0072CE;
+  color: white;
+}
+
+.scanner-footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 10px;
+  color: #666;
+}
