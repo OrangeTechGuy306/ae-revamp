@@ -1,0 +1,29 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # Allow existing files & folders
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # React Router fallback
+  RewriteRule ^ index.html [L]
+</IfModule>
+
+# =========================
+# Security (Safe for React)
+# =========================
+
+# Block access to hidden files (.env, .git, etc)
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Block dangerous HTTP methods
+<IfModule mod_rewrite.c>
+  RewriteCond %{REQUEST_METHOD} ^(TRACE|DELETE|TRACK|DEBUG|PUT|PATCH) [NC]
+  RewriteRule .* - [F,L]
+</IfModule>
+
