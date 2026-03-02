@@ -48,18 +48,16 @@ function App() {
           </Route>
 
           {/* Tool Routes with original Sidebar */}
-          <Route element={<ProtectedRoute />}>
-            <Route element={<DashboardLayout />}>
-              <Route path="/toolbox" element={<PanelSizer />} />
-              <Route path="/panel-sizer" element={<PanelSizer />} />
-              <Route path="/charge-controller" element={<ChargeControllerSizer />} />
-              <Route path="/breaker-selection" element={<BreakerSelection />} />
-              <Route path="/cable-sizer" element={<CableSizer />} />
-              <Route path="/kit" element={<KitGenerator />} />
-              <Route path="/certificate" element={<CertificatesPage />} />
-              <Route path="/completion" element={<Toolbox />} />
-              <Route path="/earthing" element={<Toolbox />} />
-            </Route>
+          <Route element={<DashboardLayout />}>
+            <Route path="/toolbox" element={<PanelSizer />} />
+            <Route path="/panel-sizer" element={<PanelSizer />} />
+            <Route path="/charge-controller" element={<ChargeControllerSizer />} />
+            <Route path="/breaker-selection" element={<BreakerSelection />} />
+            <Route path="/cable-sizer" element={<CableSizer />} />
+            <Route path="/kit" element={<KitGenerator />} />
+            <Route path="/certificate" element={<CertificatesPage />} />
+            <Route path="/completion" element={<Toolbox />} />
+            <Route path="/earthing" element={<Toolbox />} />
           </Route>
         </Routes>
       </Router>

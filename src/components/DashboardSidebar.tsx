@@ -6,8 +6,10 @@ import {
     Settings,
     Menu,
     LogOut,
+    Home,
 } from "lucide-react"
 import { cn } from "../lib/utils"
+import { useAuth } from "@/context/AuthContext"
 
 const dashboardItems = [
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
@@ -25,6 +27,13 @@ interface SidebarProps {
 
 export function DashboardSidebar({ isOpen, toggleSidebar, collapsed, toggleCollapse }: SidebarProps) {
     const location = useLocation()
+    const { logout } = useAuth()
+
+    const handleLogout = () => {
+        if (window.confirm("Are you sure you want to logout?")) {
+            logout()
+        }
+    }
 
     return (
         <>
@@ -93,7 +102,7 @@ export function DashboardSidebar({ isOpen, toggleSidebar, collapsed, toggleColla
                 </div>
 
                 {/* Footer */}
-                <div className="p-4 border-t border-[#1e2736] bg-background">
+                <div className="p-4 border-t border-[#1e2736] bg-background space-y-2">
                     <Link
                         to="/"
                         className={cn(
@@ -102,9 +111,21 @@ export function DashboardSidebar({ isOpen, toggleSidebar, collapsed, toggleColla
                         )}
                         title={collapsed ? "Back to Site" : undefined}
                     >
-                        <LogOut className={cn("h-5 w-5", !collapsed && "mr-3")} />
+                        <Home className={cn("h-5 w-5", !collapsed && "mr-3")} />
                         {!collapsed && <span>Back to Site</span>}
                     </Link>
+
+                    <button
+                        onClick={handleLogout}
+                        className={cn(
+                            "w-full flex items-center px-3 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-950/20 rounded-md transition-all",
+                            collapsed && "justify-center"
+                        )}
+                        title={collapsed ? "Logout" : undefined}
+                    >
+                        <LogOut className={cn("h-5 w-5", !collapsed && "mr-3")} />
+                        {!collapsed && <span>Logout</span>}
+                    </button>
                 </div>
             </aside>
         </>
