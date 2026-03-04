@@ -1,0 +1,167 @@
+/* ===============================
+   COMPANY COLOR SYSTEM
+================================ */
+
+:root {
+    --reg-primary: #0d1220;
+    --reg-secondary: #6ad1ff;
+    --reg-tertiary: #0A1F44;
+    --reg-light: #ffffff;
+    --reg-accent: #FFD43B;
+}
+
+/* ===============================
+   WRAPPER (to scope the page-level styles)
+================================ */
+
+.registration-wrapper {
+    background: linear-gradient(135deg, var(--reg-tertiary), var(--reg-primary));
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* ===============================
+   CONTAINER
+================================ */
+
+.registration-container {
+    width: 100%;
+    max-width: 420px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 0 10px var(--reg-accent);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ===============================
+   HEADER
+================================ */
+
+.form-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.form-header h1 {
+    color: var(--reg-light);
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.form-header p {
+    color: var(--reg-secondary);
+    font-size: 14px;
+}
+
+/* ===============================
+   PHOTO SECTION
+================================ */
+
+.photo-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.photo-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px dashed var(--reg-accent);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--reg-secondary);
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    background-size: cover;
+    background-position: center;
+}
+
+.photo-circle:hover {
+    background: var(--reg-secondary);
+    color: var(--reg-tertiary);
+    transform: scale(1.05);
+}
+
+/* ===============================
+   INPUTS
+================================ */
+
+.input-group {
+    position: relative;
+    margin-bottom: 22px;
+}
+
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 12px 10px;
+    border: none;
+    border-bottom: 2px solid var(--reg-secondary);
+    background: transparent;
+    color: var(--reg-light);
+    font-size: 15px;
+    outline: none;
+}
+
+.input-group label {
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    pointer-events: none;
+    transition: 0.3s ease;
+}
+
+/* Floating label animation */
+.input-group input:focus+label,
+.input-group input:valid+label,
+.input-group textarea:focus+label,
+.input-group textarea:valid+label {
+    top: -10px;
+    font-size: 11px;
+    color: var(--reg-secondary);
+}
+
+/* ===============================
+   BUTTON
+================================ */
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 30px;
+    background: var(--reg-accent);
+    color: var(--reg-tertiary);
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: var(--reg-light);
+    color: var(--reg-primary);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.submit-btn:disabled {
+    background: #555;
+    color: #888;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}

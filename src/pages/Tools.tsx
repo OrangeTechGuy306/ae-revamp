@@ -114,7 +114,17 @@ export function ToolboxDashboard() {
     return (
         <div className="min-h-screen bg-background text-slate-300 font-sans selection:bg-blue-900/30">
             {/* Main Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  py-5">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+                {/* Header Action */}
+                <div className="flex justify-end mb-4">
+                    <Link
+                        to="/register-installer"
+                        className="bg-card/50 border border-border hover:border-engineering-orange/50 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold shadow-lg transition-all hover:-translate-y-1 flex items-center gap-2 backdrop-blur-sm"
+                    >
+                        <span>Register as Installer</span>
+                        <Wrench className="h-4 w-4" />
+                    </Link>
+                </div>
 
                 {/* Header */}
                 <div className="text-center mb-20">

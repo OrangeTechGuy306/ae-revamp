@@ -7,6 +7,7 @@ import {
     Menu,
     LogOut,
     Home,
+    HardHat,
 } from "lucide-react"
 import { cn } from "../lib/utils"
 import { useAuth } from "@/context/AuthContext"
@@ -14,6 +15,7 @@ import { useAuth } from "@/context/AuthContext"
 const dashboardItems = [
     { name: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { name: "Customers", href: "/customers", icon: Users },
+    { name: "Installers", href: "/installers", icon: HardHat },
     { name: "System Users", href: "/users", icon: UserCog },
     { name: "Settings", href: "/settings", icon: Settings },
 ]

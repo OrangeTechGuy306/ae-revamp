@@ -19,8 +19,10 @@ import {
 import { Overview } from "./pages/Overview"
 import { Customers } from "./pages/Customers"
 import { Users } from "./pages/Users"
+import { Installers } from "./pages/Installers"
 import { Settings } from "./pages/Settings"
 import { Login } from "./pages/Login"
+import InstallerRegistration from "./pages/InstallerRegistration"
 
 import QuotationPreview from "./components/toolbox/QuotationPreview";
 
@@ -30,8 +32,11 @@ function App() {
       <Router>
         <Routes>
 
-          {/* Public Routes */}
+          {/* Global Public Routes (Accessible to everyone) */}
           <Route path="/" element={<Toolbox />} />
+          <Route path="/register-installer" element={<InstallerRegistration />} />
+
+          {/* Guest Only Routes (Redirects if logged in) */}
           <Route element={<PublicRoute />}>
             <Route path="/login" element={<Login />} />
           </Route>
@@ -42,6 +47,7 @@ function App() {
             <Route element={<AdminLayout />}>
               <Route path="/dashboard" element={<Overview />} />
               <Route path="/customers" element={<Customers />} />
+              <Route path="/installers" element={<Installers />} />
               <Route path="/users" element={<Users />} />
               <Route path="/settings" element={<Settings />} />
             </Route>
