@@ -119,7 +119,7 @@ export function ToolboxDashboard() {
                 <div className="flex justify-end mb-4">
                     <Link
                         to="/register-installer"
-                        className="bg-card/50 border border-border hover:border-engineering-orange/50 text-slate-300 px-4 py-2 rounded-lg text-sm font-bold shadow-lg transition-all hover:-translate-y-1 flex items-center gap-2 backdrop-blur-sm"
+                        className="bg-engineering-orange hover:bg-engineering-orange/90 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-lg shadow-orange-900/20 transition-all hover:-translate-y-1 flex items-center gap-2"
                     >
                         <span>Register as Installer</span>
                         <Wrench className="h-4 w-4" />
