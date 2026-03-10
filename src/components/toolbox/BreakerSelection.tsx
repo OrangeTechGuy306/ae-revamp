@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { AlertCircle, Zap } from 'lucide-react';
-import '../../styles/BreakerSelection.css';
 
 type BreakerMode = 'AC' | 'DC_BATTERY' | 'DC_PANEL';
 
@@ -156,169 +155,198 @@ export const BreakerSelection: React.FC = () => {
     };
 
     return (
-        <div className="breaker-container">
-            <div className="breaker-header">
-                <h1 className="breaker-title">Breaker & Switch Selection</h1>
-                <p className="breaker-subtitle">Calculate appropriate breaker sizing for AC/DC systems</p>
+        <div className="min-h-screen bg-background py-8 px-4 md:px-8">
+            {/* Header */}
+            <div className="text-center mb-8 max-w-4xl mx-auto">
+                <h1 className="text-3xl md:text-4xl font-bold mb-3 text-primary">
+                    Breaker & Switch Selection
+                </h1>
+                <p className="text-muted-foreground text-sm md:text-base">
+                    Calculate appropriate breaker sizing for AC/DC systems
+                </p>
             </div>
 
-            <div className="breaker-content">
+            <div className="max-w-6xl mx-auto">
                 {/* Mode Selection Tabs */}
-                <div className="mode-tabs">
-                    <button
-                        className={`tab-btn ${mode === 'AC' ? 'active' : ''}`}
-                        onClick={() => { setMode('AC'); setResult(null); }}
-                    >
-                        <Zap size={18} />
-                        AC Breaker
-                    </button>
-                    <button
-                        className={`tab-btn ${mode === 'DC_BATTERY' ? 'active' : ''}`}
-                        onClick={() => { setMode('DC_BATTERY'); setResult(null); }}
-                    >
-                        <Zap size={18} />
-                        DC Battery
-                    </button>
-                    <button
-                        className={`tab-btn ${mode === 'DC_PANEL' ? 'active' : ''}`}
-                        onClick={() => { setMode('DC_PANEL'); setResult(null); }}
-                    >
-                        <Zap size={18} />
-                        DC Panel
-                    </button>
+                <div className="flex flex-wrap gap-3 justify-center mb-8">
+                    {[
+                        { key: 'AC' as BreakerMode, label: 'AC Breaker' },
+                        { key: 'DC_BATTERY' as BreakerMode, label: 'DC Battery' },
+                        { key: 'DC_PANEL' as BreakerMode, label: 'DC Panel' },
+                    ].map(({ key, label }) => (
+                        <button
+                            key={key}
+                            onClick={() => { setMode(key); setResult(null); }}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 ${
+                                mode === key
+                                    ? 'bg-primary text-primary-foreground shadow-lg'
+                                    : 'bg-secondary text-secondary-foreground hover:border-primary border-2 border-transparent'
+                            }`}
+                        >
+                            <Zap size={18} />
+                            {label}
+                        </button>
+                    ))}
                 </div>
 
-                <div className="breaker-grid">
+                {/* Main Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* Left: Inputs */}
-                    <div className="input-section">
-                        <h2>Input Parameters</h2>
+                    <div className="card bg-card/50 border border-border rounded-lg p-6 backdrop-blur-sm">
+                        <h2 className="text-xl font-semibold mb-6 text-foreground">Input Parameters</h2>
 
                         {/* Error Display */}
                         {error && (
-                            <div className="error-box">
-                                <AlertCircle size={20} />
-                                <span>{error}</span>
+                            <div className="flex items-center gap-3 p-3 mb-6 bg-destructive/10 border border-destructive/30 rounded-lg text-destructive">
+                                <AlertCircle size={20} className="flex-shrink-0" />
+                                <span className="text-sm">{error}</span>
                             </div>
                         )}
 
-                        {/* AC Mode */}
-                        {mode === 'AC' && (
-                            <div className="input-group">
-                                <div className="input-field">
-                                    <label>AC Voltage (V)</label>
-                                    <input
-                                        type="number"
-                                        min="110"
-                                        max="415"
-                                        step="1"
-                                        value={inputs.acVoltage}
-                                        onChange={(e) => handleInputChange('acVoltage', parseFloat(e.target.value))}
-                                        placeholder="e.g., 230"
-                                    />
-                                </div>
-                                <div className="input-field">
-                                    <label>Peak Load (W)</label>
-                                    <input
-                                        type="number"
-                                        min="10"
-                                        max="200000"
-                                        step="1"
-                                        value={inputs.peakLoad}
-                                        onChange={(e) => handleInputChange('peakLoad', parseFloat(e.target.value))}
-                                        placeholder="e.g., 5000"
-                                    />
-                                </div>
-                            </div>
-                        )}
+                        <div className="space-y-5">
+                            {/* AC Mode */}
+                            {mode === 'AC' && (
+                                <>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            AC Voltage (V)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="110"
+                                            max="415"
+                                            step="1"
+                                            value={inputs.acVoltage}
+                                            onChange={(e) => handleInputChange('acVoltage', parseFloat(e.target.value))}
+                                            placeholder="e.g., 230"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            Peak Load (W)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="10"
+                                            max="200000"
+                                            step="1"
+                                            value={inputs.peakLoad}
+                                            onChange={(e) => handleInputChange('peakLoad', parseFloat(e.target.value))}
+                                            placeholder="e.g., 5000"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                </>
+                            )}
 
-                        {/* DC Battery Mode */}
-                        {mode === 'DC_BATTERY' && (
-                            <div className="input-group">
-                                <div className="input-field">
-                                    <label>Battery Voltage (V)</label>
-                                    <input
-                                        type="number"
-                                        min="12"
-                                        max="800"
-                                        step="12"
-                                        value={inputs.batteryVolt}
-                                        onChange={(e) => handleInputChange('batteryVolt', parseFloat(e.target.value))}
-                                        placeholder="e.g., 48"
-                                    />
-                                </div>
-                                <div className="input-field">
-                                    <label>System Capacity (kW)</label>
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max="200000"
-                                        step="1"
-                                        value={inputs.systemCapacity}
-                                        onChange={(e) => handleInputChange('systemCapacity', parseFloat(e.target.value))}
-                                        placeholder="e.g., 5"
-                                    />
-                                </div>
-                            </div>
-                        )}
+                            {/* DC Battery Mode */}
+                            {mode === 'DC_BATTERY' && (
+                                <>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            Battery Voltage (V)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="12"
+                                            max="800"
+                                            step="12"
+                                            value={inputs.batteryVolt}
+                                            onChange={(e) => handleInputChange('batteryVolt', parseFloat(e.target.value))}
+                                            placeholder="e.g., 48"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            System Capacity (kW)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="200000"
+                                            step="1"
+                                            value={inputs.systemCapacity}
+                                            onChange={(e) => handleInputChange('systemCapacity', parseFloat(e.target.value))}
+                                            placeholder="e.g., 5"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                </>
+                            )}
 
-                        {/* DC Panel Mode */}
-                        {mode === 'DC_PANEL' && (
-                            <div className="input-group">
-                                <div className="input-field">
-                                    <label>Panel Wattage (W)</label>
-                                    <input
-                                        type="number"
-                                        min="100"
-                                        max="1000"
-                                        step="5"
-                                        value={inputs.panelWatt}
-                                        onChange={(e) => handleInputChange('panelWatt', parseFloat(e.target.value))}
-                                        placeholder="e.g., 550"
-                                    />
-                                </div>
-                                <div className="input-field">
-                                    <label>Panel Voltage (V)</label>
-                                    <input
-                                        type="number"
-                                        min="5"
-                                        max="100"
-                                        step="1"
-                                        value={inputs.panelVolt}
-                                        onChange={(e) => handleInputChange('panelVolt', parseFloat(e.target.value))}
-                                        placeholder="e.g., 36"
-                                    />
-                                </div>
-                                <div className="input-field">
-                                    <label>Charger Voltage (V)</label>
-                                    <input
-                                        type="number"
-                                        min="16"
-                                        max="800"
-                                        step="1"
-                                        value={inputs.chargerVolt}
-                                        onChange={(e) => handleInputChange('chargerVolt', parseFloat(e.target.value))}
-                                        placeholder="e.g., 500"
-                                    />
-                                </div>
-                                <div className="input-field">
-                                    <label>Charger Current (A)</label>
-                                    <input
-                                        type="number"
-                                        min="20"
-                                        max="300"
-                                        step="1"
-                                        value={inputs.chargerCurrent}
-                                        onChange={(e) => handleInputChange('chargerCurrent', parseFloat(e.target.value))}
-                                        placeholder="e.g., 120"
-                                    />
-                                </div>
-                            </div>
-                        )}
+                            {/* DC Panel Mode */}
+                            {mode === 'DC_PANEL' && (
+                                <>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            Panel Wattage (W)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="100"
+                                            max="1000"
+                                            step="5"
+                                            value={inputs.panelWatt}
+                                            onChange={(e) => handleInputChange('panelWatt', parseFloat(e.target.value))}
+                                            placeholder="e.g., 550"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            Panel Voltage (V)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="5"
+                                            max="100"
+                                            step="1"
+                                            value={inputs.panelVolt}
+                                            onChange={(e) => handleInputChange('panelVolt', parseFloat(e.target.value))}
+                                            placeholder="e.g., 36"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            Charger Voltage (V)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="16"
+                                            max="800"
+                                            step="1"
+                                            value={inputs.chargerVolt}
+                                            onChange={(e) => handleInputChange('chargerVolt', parseFloat(e.target.value))}
+                                            placeholder="e.g., 500"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                            Charger Current (A)
+                                        </label>
+                                        <input
+                                            type="number"
+                                            min="20"
+                                            max="300"
+                                            step="1"
+                                            value={inputs.chargerCurrent}
+                                            onChange={(e) => handleInputChange('chargerCurrent', parseFloat(e.target.value))}
+                                            placeholder="e.g., 120"
+                                            className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
+                                        />
+                                    </div>
+                                </>
+                            )}
 
-                        {/* Common Engineering Factor */}
-                        <div className="input-group">
-                            <div className="input-field">
-                                <label>Engineering Factor (default 1.25)</label>
+                            {/* Common Engineering Factor */}
+                            <div>
+                                <label className="block text-sm font-medium text-muted-foreground mb-2">
+                                    Engineering Factor (default 1.25)
+                                </label>
                                 <input
                                     type="number"
                                     min="1.0"
@@ -327,73 +355,80 @@ export const BreakerSelection: React.FC = () => {
                                     value={inputs.engineeringFactor}
                                     onChange={(e) => handleInputChange('engineeringFactor', parseFloat(e.target.value))}
                                     placeholder="e.g., 1.25"
+                                    className="w-full px-3 py-2 bg-secondary border border-border rounded-md text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                                 />
                             </div>
                         </div>
 
                         {/* Button Group */}
-                        <div className="button-group">
-                            <button className="btn btn-primary" onClick={calculateBreaker}>
+                        <div className="flex gap-3 mt-8">
+                            <button
+                                onClick={calculateBreaker}
+                                className="flex-1 px-4 py-2 bg-primary text-primary-foreground font-semibold rounded-md hover:opacity-90 transition-opacity"
+                            >
                                 Calculate
                             </button>
-                            <button className="btn btn-secondary" onClick={resetForm}>
+                            <button
+                                onClick={resetForm}
+                                className="flex-1 px-4 py-2 bg-secondary text-secondary-foreground font-semibold rounded-md hover:bg-accent transition-colors border border-border"
+                            >
                                 Reset
                             </button>
                         </div>
 
                         {/* Info Box */}
-                        <div className="info-box">
-                            <h3>Important Information</h3>
-                            <p>
-                                This tool uses standard electrical engineering formulas to calculate the appropriate
-                                breaker size based on the provided load and system parameters. It considers factors such
-                                as system phase, voltage, and power factor to ensure accurate sizing for safety and efficiency.
+                        <div className="mt-6 p-4 bg-secondary/50 border border-border rounded-lg">
+                            <h3 className="text-sm font-semibold text-primary mb-2">Important Information</h3>
+                            <p className="text-xs text-muted-foreground leading-relaxed">
+                                This tool uses standard electrical engineering formulas to calculate the appropriate breaker
+                                size based on the provided load and system parameters. It considers factors such as system
+                                phase, voltage, and power factor to ensure accurate sizing for safety and efficiency.
                             </p>
                         </div>
                     </div>
 
                     {/* Right: Results */}
-                    <div className="results-section">
-                        <h2>Calculation Results</h2>
+                    <div className="card bg-card/50 border border-border rounded-lg p-6 backdrop-blur-sm">
+                        <h2 className="text-xl font-semibold mb-6 text-foreground">Calculation Results</h2>
 
                         {result ? (
-                            <div className="results-container">
-                                <div className="result-item">
-                                    <span className="label">Status:</span>
-                                    <span className="value success">{result.Status}</span>
+                            <div className="space-y-3">
+                                <div className="stat">
+                                    <div className="k">Status:</div>
+                                    <div className="v text-green-400">{result.Status}</div>
                                 </div>
-                                <div className="result-item">
-                                    <span className="label">Design Voltage:</span>
-                                    <span className="value">{result.Design_Voltage} V</span>
+                                <div className="stat">
+                                    <div className="k">Design Voltage:</div>
+                                    <div className="v">{result.Design_Voltage} V</div>
                                 </div>
-                                <div className="result-item">
-                                    <span className="label">Max Voltage:</span>
-                                    <span className="value">{result.Max_Voltage} V</span>
+                                <div className="stat">
+                                    <div className="k">Max Voltage:</div>
+                                    <div className="v">{result.Max_Voltage} V</div>
                                 </div>
-                                <div className="result-item">
-                                    <span className="label">Max Current:</span>
-                                    <span className="value">{result.Max_Current} A</span>
+                                <div className="stat">
+                                    <div className="k">Max Current:</div>
+                                    <div className="v">{result.Max_Current} A</div>
                                 </div>
-                                <div className="result-item">
-                                    <span className="label">Design Power:</span>
-                                    <span className="value">{result.Design_Power} W</span>
+                                <div className="stat">
+                                    <div className="k">Design Power:</div>
+                                    <div className="v">{result.Design_Power} W</div>
                                 </div>
-                                <div className="result-item">
-                                    <span className="label">Max Power:</span>
-                                    <span className="value">{result.Max_Power} W</span>
+                                <div className="stat">
+                                    <div className="k">Max Power:</div>
+                                    <div className="v">{result.Max_Power} W</div>
                                 </div>
-                                <div className="result-item">
-                                    <span className="label">Phase Type:</span>
-                                    <span className="value">{result.Phase}</span>
+                                <div className="stat">
+                                    <div className="k">Phase Type:</div>
+                                    <div className="v">{result.Phase}</div>
                                 </div>
-                                <div className="result-item highlight">
-                                    <span className="label">Recommended Breaker:</span>
-                                    <span className="value recommended">{result.Recommended_Breaker}</span>
+                                <div className="stat border-2 border-primary bg-primary/10 rounded-lg p-3 mt-4">
+                                    <div className="k">Recommended Breaker:</div>
+                                    <div className="v text-yellow-400 text-lg font-bold">{result.Recommended_Breaker}</div>
                                 </div>
                             </div>
                         ) : (
-                            <div className="no-results">
-                                <p>Click "Calculate" to see results</p>
+                            <div className="flex items-center justify-center h-80 text-muted-foreground">
+                                <p className="text-center">Click "Calculate" to see results</p>
                             </div>
                         )}
                     </div>
