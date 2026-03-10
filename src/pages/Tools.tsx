@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import SolarToolbox from '../components/toolbox/SolarToolbox';
 import EquipmentKits from '../components/toolbox/EquipmentKits';
 import Certificates from '../components/toolbox/Certificates';
+import BreakerSelectionComponent from '../components/toolbox/BreakerSelection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Zap, Box, Wrench, PanelBottomDashedIcon, ChartNoAxesGantt, Cable } from "lucide-react";
 
@@ -250,7 +251,7 @@ export function PanelSizer() {
     return <SolarToolbox />;
 }
 export const ChargeControllerSizer = () => <ToolPlaceholder title="Charge Controller Sizer" />
-export const BreakerSelection = () => <ToolPlaceholder title="Breaker Selection" />
+export const BreakerSelection = () => <BreakerSelectionComponent />
 export const CableSizer = () => <ToolPlaceholder title="Cable Sizer" />
 export const KitGenerator = () => <EquipmentKits />;
 
