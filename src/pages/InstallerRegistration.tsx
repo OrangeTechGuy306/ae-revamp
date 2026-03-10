@@ -57,7 +57,7 @@ const InstallerRegistration: React.FC = () => {
         <div className="registration-wrapper">
             <div className="registration-container">
                 <div className="form-header">
-                    <h1>Join Our Installer Network</h1>
+                    <h1 className='text-xm font-bold'>Join Our Installer Network</h1>
                     <p>Register today and start receiving verified installation jobs in your area.</p>
                 </div>
 
@@ -69,7 +69,14 @@ const InstallerRegistration: React.FC = () => {
                                 {!previewPhoto && <span>Upload Live Photo</span>}
                             </div>
                         </label>
-                        <input type="file" id="livePhoto" accept="image/*" capture="environment" hidden onChange={handlePhotoChange} />
+                        <input
+                            type="file"
+                            id="livePhoto"
+                            accept="image/*"
+                            capture="environment"
+                            onChange={handlePhotoChange}
+                            style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', borderWidth: 0 }}
+                        />
                     </div>
 
                     {/* Full Name */}

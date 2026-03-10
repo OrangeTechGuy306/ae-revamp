@@ -589,7 +589,7 @@ export function SolarToolbox() {
             const totalEnergyWEff = totalEnergyKw / systemLosses;
 
             // Battery bank sizing (kWh)
-            const batteryBank = totalEnergyWEff * (selectedLoadValue / 100) * usageHr;
+            const batteryBank = ((totalEnergyWEff * (selectedLoadValue / 100)) * (usageHr));
 
             let checkingVolt = 12;
             if (batteryBank <= 2) checkingVolt = 12;

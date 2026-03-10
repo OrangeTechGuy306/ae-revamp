@@ -316,19 +316,41 @@
 /* BUTTON */
 .solar-toolbox-container .btnbar {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  /* Space for scrollbar if needed */
 }
 
 .solar-toolbox-container .btnbar button {
-  padding: 12px 24px;
+  padding: 12px 10px;
   border-radius: 12px;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-  flex: 1;
-  min-width: 150px;
+  flex: 1 1 auto;
+  white-space: nowrap;
+  min-width: max-content;
+}
+
+@media (max-width: 480px) {
+  .solar-toolbox-container .btnbar {
+    gap: 4px;
+  }
+
+  .solar-toolbox-container .btnbar button {
+    padding: 8px 4px;
+    font-size: 11px;
+    border-radius: 6px;
+  }
+
+  .solar-toolbox-container .load-chip {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-width: 50px;
+  }
 }
 
 .solar-toolbox-container .primary-action {
@@ -1322,7 +1344,8 @@
   margin-bottom: 10px;
 }
 
-.scanner-top-bar button, .scanner-upload-btn {
+.scanner-top-bar button,
+.scanner-upload-btn {
   flex: 1;
   padding: 8px;
   border: none;

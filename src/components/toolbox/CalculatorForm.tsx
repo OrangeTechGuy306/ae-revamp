@@ -102,9 +102,9 @@ export const CalculatorForm = ({
             </div>
 
             <div className="btnbar" style={{ marginTop: '20px' }}>
-                <button id="compute-btn" type="button" onClick={calculateArray} className='primary-action'>
-                    <Zap className="inline-block mr-2 h-5 w-5" />
-                    Compute Array
+                <button id="compute-btn" type="button" onClick={calculateArray} className='primary-action sm:text-[10px] flex items-center justify-center'>
+                    <Zap className=" mr-2 h-5" />
+                    <span> Compute Array</span>
                 </button>
                 <button id="reset-btn" type="button" className="secondary-action" onClick={resetAll}>Reset</button>
                 <button id="quote-btn" type="button" className="secondary-action" onClick={handleQuotation}>Quotation</button>

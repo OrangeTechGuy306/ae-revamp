@@ -36,79 +36,92 @@ export function Settings() {
                 <p className="text-muted-foreground mt-2">Manage your account and system configuration.</p>
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-4 whitespace-nowrap overflow-x-auto pb-4 lg:overflow-x-visible lg:pb-0">
-                <div className="lg:col-span-1 space-y-1">
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg bg-engineering-blue/10 text-engineering-blue font-medium transition-colors">
-                        <User className="h-4 w-4" />
-                        Profile Information
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 font-medium transition-colors text-left">
-                        <Bell className="h-4 w-4" />
-                        Notifications
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 font-medium transition-colors text-left">
-                        <Shield className="h-4 w-4" />
-                        Security & Access
-                    </button>
-                    <button className="w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 font-medium transition-colors text-left">
-                        <Globe className="h-4 w-4" />
-                        System Preferences
-                    </button>
+            <div className="flex flex-col lg:flex-row gap-8">
+                {/* Navigation Sidebar */}
+                <div className="w-full lg:w-64 flex-shrink-0">
+                    <div className="flex flex-row lg:flex-col gap-2 overflow-x-auto hide-scrollbar pb-2 lg:pb-0">
+                        <button className="flex items-center gap-3 px-4 py-2.5 rounded-lg bg-engineering-blue/10 text-engineering-blue font-medium transition-colors whitespace-nowrap lg:whitespace-normal text-left">
+                            <User className="h-4 w-4 shrink-0" />
+                            Profile Information
+                        </button>
+                        <button className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 font-medium transition-colors whitespace-nowrap lg:whitespace-normal text-left">
+                            <Bell className="h-4 w-4 shrink-0" />
+                            Notifications
+                        </button>
+                        <button className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 font-medium transition-colors whitespace-nowrap lg:whitespace-normal text-left">
+                            <Shield className="h-4 w-4 shrink-0" />
+                            Security & Access
+                        </button>
+                        <button className="flex items-center gap-3 px-4 py-2.5 rounded-lg text-muted-foreground hover:text-white hover:bg-white/5 font-medium transition-colors whitespace-nowrap lg:whitespace-normal text-left">
+                            <Globe className="h-4 w-4 shrink-0" />
+                            System Preferences
+                        </button>
+                    </div>
                 </div>
 
-                <div className="lg:col-span-3 space-y-6">
+                {/* Main Content Area */}
+                <div className="flex-1 space-y-6 min-w-0">
                     <Card className="bg-card/50 border-border backdrop-blur-sm">
                         <CardHeader>
                             <CardTitle className="text-white text-lg">Profile Information</CardTitle>
                             <CardDescription>Update your personal details and how others see you on the platform.</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-6">
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-muted-foreground">Full Name</label>
-                                    <input
-                                        type="text"
-                                        defaultValue={profile?.full_name || "Admin User"}
-                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-muted-foreground">Email Address</label>
-                                    <input
-                                        type="email"
-                                        defaultValue={profile?.email || "admin@aerenewable.com"}
-                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-muted-foreground">Job Title</label>
-                                    <input
-                                        type="text"
-                                        defaultValue="Project Manager"
-                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-muted-foreground">Department</label>
-                                    <input
-                                        type="text"
-                                        defaultValue="Engineering"
-                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
-                                    />
+                        <CardContent className="space-y-8">
+                            {/* Personal Details Section */}
+                            <div className="space-y-4">
+                                <h3 className="text-sm font-medium text-white border-b border-border pb-2">Personal Details</h3>
+                                <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-muted-foreground">Full Name</label>
+                                        <input
+                                            type="text"
+                                            defaultValue={profile?.full_name || "Admin User"}
+                                            className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-muted-foreground">Email Address</label>
+                                        <input
+                                            type="email"
+                                            defaultValue={profile?.email || "admin@aerenewable.com"}
+                                            className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-muted-foreground">Job Title</label>
+                                        <input
+                                            type="text"
+                                            defaultValue="Project Manager"
+                                            className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                        />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-muted-foreground">Department</label>
+                                        <input
+                                            type="text"
+                                            defaultValue="Engineering"
+                                            className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-muted-foreground">Biography</label>
-                                <textarea
-                                    rows={4}
-                                    className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all resize-none"
-                                    placeholder="Tell us about yourself..."
-                                />
+                            {/* Bio Section */}
+                            <div className="space-y-4">
+                                <h3 className="text-sm font-medium text-white border-b border-border pb-2">About</h3>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-muted-foreground">Biography</label>
+                                    <textarea
+                                        rows={4}
+                                        className="w-full px-4 py-2 bg-[#111521] border border-border rounded-md text-sm text-white focus:outline-none focus:ring-1 focus:ring-engineering-blue transition-all resize-y min-h-[100px]"
+                                        placeholder="Tell us about yourself..."
+                                    />
+                                    <p className="text-xs text-muted-foreground">Brief description for your profile. URLs are hyperlinked.</p>
+                                </div>
                             </div>
 
-                            <div className="flex justify-end pt-4">
-                                <Button className="bg-engineering-blue hover:bg-engineering-blue/90 text-white">
+                            <div className="flex justify-end pt-4 border-t border-border mt-6">
+                                <Button className="bg-engineering-blue hover:bg-engineering-blue/90 text-white shadow-lg shadow-blue-900/20">
                                     <Save className="h-4 w-4 mr-2" />
                                     Save Changes
                                 </Button>
