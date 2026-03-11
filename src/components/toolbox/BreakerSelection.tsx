@@ -271,27 +271,27 @@ export const BreakerSelection: React.FC = () => {
 
                         <div className="out">
                             <div className="stat">
-                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'none' }}>Voltage:</Link></div>
+                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'underline' }}>Voltage:</Link></div>
                                 <div className="v">{result ? result.designVoltage + ' V' : '—'}</div>
-                                <div className="unit">Max: <Link to="/kit" style={{ color: 'inherit', textDecoration: 'none' }}>{result ? result.maxVoltage + ' V' : '—'}</Link></div>
+                                <div className="unit">Max: <Link to="/kit" style={{ color: 'inherit', textDecoration: 'underline' }}>{result ? result.maxVoltage + ' V' : '—'}</Link></div>
                             </div>
 
                             <div className="stat">
-                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'none' }}>Breaker Size:</Link></div>
+                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'underline' }}>Breaker Size:</Link></div>
                                 <div className="v">{result ? result.recommendedBreaker : '—'}</div>
-                                <div className="unit">Max Current: <Link to="/kit" style={{ color: 'inherit', textDecoration: 'none' }}>{result ? result.maxCurrent + ' A' : '—'}</Link></div>
+                                <div className="unit">Max Current: <Link to="/kit" style={{ color: 'inherit', textDecoration: 'underline' }}>{result ? result.maxCurrent + ' A' : '—'}</Link></div>
                             </div>
 
                             <div className="stat">
-                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'none' }}>Power:</Link></div>
+                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'underline' }}>Power:</Link></div>
                                 <div className="v">{result ? result.designPower + ' W' : '—'}</div>
-                                <div className="unit">Max Power: <Link to="/kit" style={{ color: 'inherit', textDecoration: 'none' }}>{result ? result.maxPower + ' W' : '—'}</Link></div>
+                                <div className="unit">Max Power: <Link to="/kit" style={{ color: 'inherit', textDecoration: 'underline' }}>{result ? result.maxPower + ' W' : '—'}</Link></div>
                             </div>
 
                             <div className="stat">
-                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'none' }}>Power Unit:</Link></div>
+                                <div className="k"><Link to="/kit" style={{ color: 'inherit', textDecoration: 'underline' }}>Power Unit:</Link></div>
                                 <div className="v">{result ? result.phase : '—'}</div>
-                                <div className="unit">Recommended: <Link to={"/kit"}> <span style={{ textDecoration: 'underline' }}>Chint</span> </Link> </div>
+                                <div className="unit">Recommended: <Link to={"/kit"} style={{ color: 'inherit', textDecoration: 'underline' }}>Chint</Link></div>
                             </div>
 
                             <div className="stat span-2">
