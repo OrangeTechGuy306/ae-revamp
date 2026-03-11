@@ -266,7 +266,7 @@ export const BreakerSelection: React.FC = () => {
                                         sizing for safety and efficiency.
                                     </p>
                                     <div className="contact">
-                                        <p>For further assistance, contact <a href="mailto:eniola.abdulqodir@gmail.com">eniola.abdulqodir@gmail.com</a></p>
+                                        <p>For further assistance, contact <a href="mailto:eniola.abdulqodir@gmail.com" style={{ color: 'var(--brand)', textDecoration: 'underline' }}>eniola.abdulqodir@gmail.com</a></p>
                                     </div>
                                 </div>
                             </div>
