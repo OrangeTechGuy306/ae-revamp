@@ -304,7 +304,7 @@ export const BreakerSelection: React.FC = () => {
                         <div className="resultFooter">
                             <p>For detailed system design and pricing, use the <u>Solar Toolbox</u>.</p>
                             <hr />
-                            <p>Developed by <Link to="/kit" style={{ color: 'var(--brand)', textDecoration: 'underline' }}>A.E Renewable Ltd.</Link></p>
+                            <p>Developed by. <a href="https://github.com/EniolaAbdulQodir/MindThread_Ai" style={{ color: 'var(--brand)', textDecoration: 'underline' }}>Abdulrasaq Eniola.</a></p>
                         </div>
                     </div>
 
