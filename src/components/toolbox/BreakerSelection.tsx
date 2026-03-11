@@ -154,7 +154,7 @@ export const BreakerSelection: React.FC = () => {
                             </h3>
 
                             <div className="row">
-                                {/* Sub-type select */}
+                                {/* Long labels together - Sub-type select and Engineering Factor */}
                                 <div className="col-6">
                                     {mainMode === 'AC' ? (
                                         <>
@@ -173,6 +173,13 @@ export const BreakerSelection: React.FC = () => {
                                             </select>
                                         </>
                                     )}
+                                </div>
+
+                                <div className="col-6">
+                                    <label htmlFor="eng-factor">Engineering Factor <span className="unit">(default 1.25)</span></label>
+                                    <input type="number" id="eng-factor" min={1.0} max={5.0} step={0.1}
+                                        placeholder="e.g., 1.25" value={engFactor}
+                                        onChange={e => setEngFactor(parseFloat(e.target.value))} />
                                 </div>
 
                                 {/* AC fields */}
@@ -234,14 +241,6 @@ export const BreakerSelection: React.FC = () => {
                                             onChange={e => setChargerCurrent(parseFloat(e.target.value))} />
                                     </div>
                                 </>)}
-
-                                {/* Engineering Factor — always visible */}
-                                <div className="col-6">
-                                    <label htmlFor="eng-factor">Engineering Factor <span className="unit">(default 1.25)</span></label>
-                                    <input type="number" id="eng-factor" min={1.0} max={5.0} step={0.1}
-                                        placeholder="e.g., 1.25" value={engFactor}
-                                        onChange={e => setEngFactor(parseFloat(e.target.value))} />
-                                </div>
                             </div>
 
                             {/* Derivation Info */}
