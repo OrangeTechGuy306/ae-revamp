@@ -129,8 +129,20 @@ export const BreakerSelection: React.FC = () => {
                 {/* Header */}
                 <div className="title">
                     <div>
-                        <h1>Breaker Selection <span className="badge">100% Accuracy.</span></h1>
-                        <div className="subtitle">AC / DC Breaker &amp; Switch Sizing by A.E RENEWABLE.</div>
+                        {/* SIDEVIEW */}
+                        <div className="sideView">
+                            <h5 style={{ textDecoration: 'underline' }}> A.E RENEWABLE LTD</h5>
+                        </div>
+
+                        <div>
+                            <h1>Installer Tool Kit <span className="badge">100% Accuracy.</span></h1>
+                            <div className="subtitle">Complete Electrical Design &amp; Breaker Sizing by A.E RENEWABLE.</div>
+                        </div>
+                    </div>
+
+                    {/* LIGHT MODE TOGGLE */}
+                    <div className="toggle">
+                        <label className="pill"><input type="checkbox" id="modeToggle" /> Light mode</label>
                     </div>
                 </div>
 
@@ -253,6 +265,9 @@ export const BreakerSelection: React.FC = () => {
                                         It considers system phase, voltage and power factor to ensure accurate
                                         sizing for safety and efficiency.
                                     </p>
+                                    <div className="contact">
+                                        <p>For further assistance, contact <a href="mailto:eniola.abdulqodir@gmail.com">eniola.abdulqodir@gmail.com</a></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

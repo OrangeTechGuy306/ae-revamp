@@ -144,6 +144,36 @@
 }
 
 /* SIDEVIEW */
+.solar-toolbox-container .sideView h5 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* TOGGLE / PILL */
+.solar-toolbox-container .pill {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .12);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--sub);
+}
+
+.solar-toolbox-container .toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.solar-toolbox-container .toggle input {
+  width: auto;
+}
+
+/* SIDEVIEW */
 .solar-toolbox-container .hamburger {
   background: none;
   border: none;
@@ -469,10 +499,14 @@
   border-color: #e2e8f0;
 }
 
-.solar-toolbox-container input:focus,
-.solar-toolbox-container select:focus {
+.solar-toolbox-container input:focus {
   box-shadow: 0 0 0 2px #00FF00;
   border-color: #00FF00;
+}
+
+.solar-toolbox-container select:focus {
+  box-shadow: none;
+  border-color: #0f1422;
 }
 
 /* BUTTON */
