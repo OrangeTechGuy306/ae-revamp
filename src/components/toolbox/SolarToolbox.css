@@ -547,6 +547,24 @@
     font-size: 12px;
     min-width: 50px;
   }
+
+  /* Compact header for mobile */
+  .solar-toolbox-container h1 {
+    font-size: clamp(18px, 5vw, 24px);
+  }
+
+  .solar-toolbox-container .badge {
+    font-size: 9px;
+    padding: 3px 6px;
+  }
+
+  .solar-toolbox-container .subtitle {
+    font-size: 12px;
+  }
+
+  .solar-toolbox-container .sideView h5 {
+    font-size: 12px;
+  }
 }
 
 .solar-toolbox-container .primary-action {
@@ -1026,6 +1044,18 @@
     left: 18px;
     top: 18px;
   }
+
+  /* Make title section responsive */
+  .solar-toolbox-container .title {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .solar-toolbox-container .toggle {
+    width: 100%;
+    justify-content: flex-start;
+  }
 }
 
 /* CAMERA SCANNER STYLES */
@@ -1056,6 +1086,11 @@
   .solar-toolbox-container .cardContainer {
     border-radius: 4px;
     overflow: hidden;
+  }
+
+  /* Make grid single column on tablets */
+  .solar-toolbox-container .grid-layout {
+    grid-template-columns: 1fr;
   }
 
   /* Compact Header */
