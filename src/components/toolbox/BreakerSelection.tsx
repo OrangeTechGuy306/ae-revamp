@@ -127,7 +127,7 @@ export const BreakerSelection: React.FC = () => {
             <div className="container">
 
                 {/* Header */}
-                <div className="title">
+                <div className="title p-5">
                     <div>
                         {/* SIDEVIEW */}
                         <div className="sideView">
@@ -140,10 +140,7 @@ export const BreakerSelection: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* LIGHT MODE TOGGLE */}
-                    <div className="toggle">
-                        <label className="pill"><input type="checkbox" id="modeToggle" /> Light mode</label>
-                    </div>
+                 
                 </div>
 
                 {/* Main grid */}
