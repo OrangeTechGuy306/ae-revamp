@@ -123,29 +123,19 @@ export const BreakerSelection: React.FC = () => {
     };
 
     return (
-        <div className="solar-toolbox-container">
-            <div className="container">
-
+        <div className="solar-toolbox-container pb-20">
+            <div className="max-w-[1000px] mx-auto mb-4 mt-6 flex flex-col px-4" style={{ minHeight: 'calc(100vh - 48px)' }}>
                 {/* Header */}
-                <div className="title p-5">
+                <div className="title">
                     <div>
-                        {/* SIDEVIEW */}
-                        <div className="sideView">
-                            <h5 style={{ textDecoration: 'underline' }}> A.E RENEWABLE LTD</h5>
-                        </div>
-
                         <div>
                             <h1>Installer Tool Kit <span className="badge">100% Accuracy.</span></h1>
                             <div className="subtitle">Complete Electrical Design &amp; Breaker Sizing by A.E RENEWABLE.</div>
                         </div>
                     </div>
-
-                 
                 </div>
-
                 {/* Main grid */}
-                <div className="grid-layout">
-
+                <div className="grid-layout" style={{ flex: 1 }}>
                     {/* LEFT — Inputs */}
                     <div className="card">
                         <div className="card-header">
@@ -154,9 +144,7 @@ export const BreakerSelection: React.FC = () => {
                                 {mainMode === 'AC' ? 'Switch to DC' : 'Switch to AC'}
                             </button>
                         </div>
-
                         {error && <div className="error-message">{error}</div>}
-
                         <div className="card mt-14">
                             <h3>
                                 {mainMode === 'AC' ? 'AC Input' : 'DC Input'}
