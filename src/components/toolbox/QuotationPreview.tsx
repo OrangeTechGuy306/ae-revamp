@@ -133,8 +133,10 @@ const QuotationPreview = () => {
                     quotationRef={quotationRef}
                     quoteFormData={quoteFormData}
                 />
-                <QuotationCompanyProfile />
-                <QuotationBankDetails />
+                <div className="hidden sm:block">
+                    <QuotationCompanyProfile />
+                    <QuotationBankDetails />
+                </div>
             </div>
 
             {/* Hidden PDF Template - EXACT REPLICA using real components */}
