@@ -500,8 +500,8 @@
 }
 
 .solar-toolbox-container input:focus {
-  box-shadow: 0 0 0 2px #00FF00;
-  border-color: #00FF00;
+  /* box-shadow: 0 0 0 2px #00FF00;
+  border-color: #00FF00; */
 }
 
 .solar-toolbox-container select:focus {

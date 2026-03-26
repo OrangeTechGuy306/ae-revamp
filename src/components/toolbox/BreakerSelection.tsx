@@ -62,7 +62,7 @@ export const BreakerSelection: React.FC = () => {
                 return;
             }
             const maxCurrent = peakLoad / acVoltage;
-            const breaker = Math.ceil(maxCurrent * engFactor);
+            const breaker = (maxCurrent * engFactor);
             setResult({
                 designVoltage: acVoltage,
                 maxVoltage: acVoltage,
@@ -81,7 +81,7 @@ export const BreakerSelection: React.FC = () => {
                 }
                 const maxPower = systemCapacity * 1000;
                 const maxCurrent = maxPower / batteryVolt;
-                const breaker = Math.ceil(maxCurrent * engFactor);
+                const breaker = (maxCurrent * engFactor);
                 setResult({
                     designVoltage: batteryVolt,
                     maxVoltage: batteryVolt,
@@ -181,18 +181,19 @@ export const BreakerSelection: React.FC = () => {
 
                                 {/* AC fields */}
                                 {mainMode === 'AC' && (<>
+                                  <div className="col-6">
+                                        <label htmlFor="peak-load">Peak Load <span className="unit">(W)</span></label>
+                                        <input type="number" id="peak-load" min={10} max={200000} step={1}
+                                            placeholder="e.g., 5000" value={peakLoad}
+                                            onChange={e => setPeakLoad(parseFloat(e.target.value))} />
+                                    </div>
                                     <div className="col-6">
                                         <label htmlFor="ac-voltage">Voltage <span className="unit">(V)</span></label>
                                         <input type="number" id="ac-voltage" min={110} max={415} step={1}
                                             placeholder="e.g., 230" value={acVoltage}
                                             onChange={e => setAcVoltage(parseFloat(e.target.value))} />
                                     </div>
-                                    <div className="col-6">
-                                        <label htmlFor="peak-load">Peak Load <span className="unit">(W)</span></label>
-                                        <input type="number" id="peak-load" min={10} max={200000} step={1}
-                                            placeholder="e.g., 5000" value={peakLoad}
-                                            onChange={e => setPeakLoad(parseFloat(e.target.value))} />
-                                    </div>
+                                  
                                 </>)}
 
                                 {/* DC Battery fields */}
