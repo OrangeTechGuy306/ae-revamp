@@ -102,7 +102,7 @@ const QuotationPreview = () => {
                     Generating your PDF document...
                 </div>
             )}
-            <div className="max-w-[1000px] mx-auto mb-4 mt-6 flex justify-between items-center px-4">
+            <div className="max-w-[1000px] mx-auto mb-4 mt-6 hidden sm:flex justify-between items-center px-4">
                 <button
                     onClick={() => navigate('/')}
                     className="flex text-sm font-semibold items-center gap-2 text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm transition-all"
