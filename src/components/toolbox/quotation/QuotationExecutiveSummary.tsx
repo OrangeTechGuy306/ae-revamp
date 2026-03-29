@@ -108,16 +108,37 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                                 </tbody>
                             </table>
 
-
-                            <div className="termsContainer">
-                                <h4 style={{ margin: '0 0 8px 0' }}>Terms & Conditions</h4>
-                                <ul>
-                                    <li>Payment terms: 70% upfront, 30% on completion.</li>
-                                    <li>Delivery timeframe: Max 2 working days after deposit.</li>
-                                    <li>Cable sizes & Mounting Structure will be determined during site assessment.</li>
-                                    <li>Quotation valid for 30 days from the date of issue.</li>
-                                </ul>
+                      
+                        <div className="paymentDetailsBox" style={{ background: '#f7fafc', borderRadius: '8px', padding: '1.5rem 1.5rem 1.5rem 2rem', margin: '1.5rem 0', minHeight: '140px', boxShadow: '0 1px 4px rgba(0,0,0,0.03)', maxWidth: '480px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                                <div style={{ width: '6px', height: '32px', background: '#1ca12d', borderRadius: '2px', marginRight: '12px' }}></div>
+                                <span style={{ fontWeight: 700, fontSize: '1.5rem', color: '#1ca12d', letterSpacing: '0.5px' }}>Payment Details</span>
                             </div>
+                            <div style={{ fontSize: '1.1rem', lineHeight: 1.7 }}>
+                                <div style={{ marginBottom: '0.5rem' }}>
+                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Bank Name:</span> <span style={{ fontWeight: 600, color: '#2d3748' }}>GTBank</span>
+                                </div>
+                                <div style={{ marginBottom: '0.5rem' }}>
+                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Account Name:</span> <span style={{ fontWeight: 600, color: '#2d3748' }}>Tamtam Energy Resources Limited</span>
+                                </div>
+                                <div>
+                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Account Number:</span> <span style={{ fontWeight: 600, color: '#2d3748' }}>0511224602</span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                     
+
+
+                        {/* <div className="warrantyContainer">
+                            <h4 style={{ marginTop: 0 }}>WARRANTY & SUPPORT</h4>
+                            <ul>
+                                <li>Panels: 15-year performance warranty</li>
+                                <li>Inverter: 5-year manufacturer warranty</li>
+                                <li>A.E RENEWABLE LTD: 6-months complimentary maintenance</li>
+                            </ul>
+                        </div> */}
                         </div>
                     </div>
 
@@ -163,14 +184,32 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                             </ul>
                         </div>
 
+                            <div className="termsContainer">
+                                <h4 style={{ color:"#f4a600" }}>Terms & Conditions</h4>
+                                <ul>
+                                    <li>Payment terms: 90% upfront, 10% on completion.</li>
+                                    <li>Delivery timeframe: Max 2 working days after deposit.</li>
+                                    {/* <li>Cable sizes & Mounting Structure will be determined during site assessment.</li> */}
+                                    <li>Quotation valid for 30 days from the date of issue.</li>
+                                </ul>
+                            </div>
+
                         <div className="warrantyContainer">
+                            <h4 style={{ marginTop: 0 }}>WARRANTY & SUPPORT</h4>
+                            <ul>
+                                <li>Panels: 15-year performance warranty</li>
+                                <li>Inverter: 5-year manufacturer warranty</li>
+                                <li>A.E RENEWABLE LTD: 6-months complimentary maintenance</li>
+                            </ul>
+                        </div>
+                        {/* <div className="warrantyContainer">
                             <h4 style={{ marginTop: 0 }}>WARRANTY & SUPPORT</h4>
                             <ul>
                                 <li>Panels: 25-year performance warranty</li>
                                 <li>Inverter: 5-year manufacturer warranty</li>
                                 <li>A.E RENEWABLE LTD: 1-year complimentary maintenance</li>
                             </ul>
-                        </div>
+                        </div> */}
 
                         <div className="quotationPriceCont">
                             <h2>Total Investment</h2>

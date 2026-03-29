@@ -994,7 +994,7 @@ export function SolarToolbox() {
                                 </p>
                                 <div>
                                     <hr className='mb-3' />
-                                    <p> Developed by <Link to={''} className='text-blue-600 underline'>Abdulrazaq Eniola</Link> </p>
+                                    <p> Developed by <Link to={''} className='text-blue-600 underline'>Abdulrasaq Eniola</Link> </p>
                                 </div>
                             </div>
 

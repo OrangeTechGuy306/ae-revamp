@@ -607,14 +607,14 @@ body{
 
     .termsContainer{
       margin-top:18px;
-      padding:16px;
+      /* padding:16px; */
       background: #044381;
       border-radius:6px;
       border: 1px solid rgba(244,166,0,.3);
     }
     .termsContainer ul{
       margin:0;
-      padding-left:18px;
+      /* padding-left:18px; */
       color:#fdfeff;
       line-height:1.6
     }
