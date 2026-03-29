@@ -588,15 +588,19 @@ export function SolarToolbox() {
 
             const totalEnergyWEff = totalEnergyKw / systemLosses;
 
+            console.log("totalEnergyWEff", totalEnergyWEff);
+            
+
             // Battery bank sizing (kWh)
             const batteryBank = ((totalEnergyWEff * (selectedLoadValue / 100)) * (usageHr));
-
+            console.log("batteryBank", batteryBank);
+            
             let checkingVolt = 12;
-            if (batteryBank <= 2) checkingVolt = 12;
-            else if (batteryBank <= 5) checkingVolt = 24;
-            else if (batteryBank <= 100) checkingVolt = 48;
-            else if (batteryBank <= 250) checkingVolt = 48;
-            else checkingVolt = 96;
+            if (batteryBank <= 3 ) checkingVolt = 12;
+            else if (batteryBank <= 8) checkingVolt = 24;
+            else if (batteryBank <= 160) checkingVolt = 48;
+            else if (batteryBank <= 600) checkingVolt = 96;
+            else checkingVolt = 360;
 
             // Panel for load and panel for battery
             const panelForLoad = totalEnergyWEff;
@@ -625,9 +629,13 @@ export function SolarToolbox() {
             if (has50kW) standardCaps.push(50);
             standardCaps.push(100);
 
+            // console.log("before the batteryBank ", batteryBank);
+            
             // Find nearest higher standard capacity
-            const finalBatteryCap = standardCaps.find(cap => cap >= batteryBank) || standardCaps[standardCaps.length - 1];
-
+            const finalBatteryCap = batteryBank;
+            //standardCaps.find(cap => cap >= batteryBank) || standardCaps[standardCaps.length - 1];
+            // console.log("finalBatteryCap", finalBatteryCap);
+            
             // Advanced Calculations (Mounting, Cabling, Protection, Installation)
             const inverterCount = invertNos;
             const panelCount = Math.round(pvArrayNos);
