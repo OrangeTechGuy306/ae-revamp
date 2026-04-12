@@ -31,14 +31,7 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
 
                     <div className="logo-badge">
                         <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1 }}>
-                            <svg className="logo-sun" viewBox="0 0 64 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <rect x="0" y="8" width="48" height="24" rx="2" fill="#044381" opacity="0.08" />
-                                <path d="M6 22c0-1.1.9-2 2-2h30v8H8c-1.1 0-2-.9-2-2v-4z" fill="#fff" opacity="0.06" />
-                                <g transform="translate(4,4)">
-                                    <circle cx="8" cy="6" r="6" fill="#f4a600" />
-                                    <rect x="18" y="2" width="16" height="10" rx="1" fill="#0aa80f" transform="rotate(-12 26 7)" />
-                                </g>
-                            </svg>
+                            <img src="/logo.png" alt="AE Renewable Logo" style={{ width: '60px', objectFit: 'contain' }} />
                         </div>
                         <div style={{ flex: 1 }}>
                             <div style={{ fontWeight: 800, fontSize: '18px' }}>A.E<br />RENEWABLE LTD</div>
@@ -194,7 +187,7 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                             </svg>
                         </div>
 
-                        <div className="estimatesContainer">
+                        <div className="estimatesContainer" style={{ marginLeft: '9px' }}>
                             {/* <h4>PERFORMANCE ESTIMATES</h4> */}
                             <ul>
                                 <b style={{ fontSize: '20px', color: '#0b4a7b' }}>System Analysis</b>
