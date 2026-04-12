@@ -16,6 +16,16 @@ interface Props {
 export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef, quoteFormData }: Props) => {
     return (
         <div className="quotation show" style={{ position: 'relative', height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            <style>{`
+                @keyframes blueToRed {
+                    0%, 100% { color: #0b5ed7; }
+                    50% { color: #dc2626; }
+                }
+                .blink-blue-red {
+                    animation: blueToRed 1.2s ease-in-out infinite;
+                    text-decoration: underline;
+                }
+            `}</style>
             <div className="cardContainer" style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <div className="hero overflow-hidden" style={{ backgroundImage: "url(/solar-header.jpeg)", backgroundSize: 'cover', backgroundPosition: 'center' }}>
 
@@ -132,7 +142,7 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                                 </div>
 
                                 <div style={{ marginTop: '3px', fontSize: '9px', color: '#555' }}>
-                                    For additional details or inquiries, please contact our support team: 08033615132 or via email: <a href="mailto:support@ae-renewable.com" style={{ color: '#0b5ed7', textDecoration: 'underline' }}>support@ae-renewable.com</a>.
+                                    For additional details or inquiries, please contact our support team: 08033615132 or via email: <a href="mailto:support@ae-renewable.com" className="blink-blue-red">support@ae-renewable.com</a>.
                                 </div>
                             </div>
                         </div>
