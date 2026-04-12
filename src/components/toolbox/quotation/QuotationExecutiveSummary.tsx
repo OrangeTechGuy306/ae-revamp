@@ -109,44 +109,30 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                             </table>
 
                       
-                        <div className="paymentDetailsBox quotationPriceCont" style={{ background: '#f7fafc', borderRadius: '8px', padding: '0.5rem 0.7rem 0.5rem 0.9rem', margin: '0.7rem 0', minHeight: '60px', boxShadow: '0 1px 4px rgba(0,0,0,0.03)', maxWidth: '260px' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.35rem' }}>
-                                <div style={{ width: '3px', height: '15px', background: '#1ca12d', borderRadius: '2px', marginRight: '6px' }}></div>
-                                <span style={{ fontWeight: 700, fontSize: '0.85rem', color: '#1ca12d', letterSpacing: '0.5px' }}>Payment Details</span>
+                        <div className="mt-8" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif", maxWidth: '300px', border: '2px dashed #0b5ed7', borderRadius: '10px', padding: '10px 14px', marginTop:"6px" }}>
+                            <div style={{ textAlign: 'center', marginBottom: '1px' }}>
+                                <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#0b5ed7', letterSpacing: '1px' }}>AE RENEWABLE LTD</h4>
+                                <span style={{ fontSize: '12px', color: '#555' }}>Payment Information</span>
                             </div>
-                            {/* <div style={{ fontSize: '0.8rem', lineHeight: 1.3 }}>
-                                <div style={{ marginBottom: '0.18rem' }}>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Account Name:</span> <span style={{ fontWeight: 600, color: '#2d3748' }}>A.E RENEWABLE LTD</span>
-                                </div>
-                                <div style={{ marginBottom: '0.18rem' }}>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Account Number:</span> <span style={{ fontWeight: 600, color: '#2d3748' }}>0123456789</span>
-                                </div>
-                                <div style={{ marginBottom: '0.18rem' }}>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Bank:</span> <span style={{ fontWeight: 600, color: '#f4a600' }}>Example Bank PLC</span>
-                                </div>
-                                <div>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Branch:</span> <span style={{ fontWeight: 600, color: '#2d3748' }}>Abuja Branch</span>
-                                </div>
-                            </div> */}
 
-                             <div style={{ fontSize: '0.82rem', lineHeight: 1.6 }}>
-                                <div>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Bank: </span>
-                                    <span style={{ fontWeight: 600, color: '#ff0000' }}>UBA</span>
-                                </div>
-                                <div>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Account Name: </span>
-                                    <span style={{ fontWeight: 700 }}>A.E RENEWABLE LTD</span>
+                            <div style={{ marginTop: '0px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0', borderBottom: '1px dashed #ccc' }}>
+                                    <div style={{ fontWeight: 600, color: '#333' }}>Bank Name:</div>
+                                    <div style={{ color: 'rgb(180, 2, 2)', fontWeight: 750 }}>UNITED BANK OF AFRICA</div>
                                 </div>
 
-                                <div>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Account Number: </span>
-                                    <span style={{ fontWeight: 600 }}>1029827207</span>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1px 0', borderBottom: '1px dashed #ccc' }}>
+                                    <div style={{ fontWeight: 600, color: '#333' }}>Account Name:</div>
+                                    <div style={{ fontWeight: 600 }}>AE RENEWABLE LTD</div>
                                 </div>
 
-                                <div>
-                                    <span style={{ color: '#1ca12d', fontWeight: 700 }}>Branch: </span>
-                                    <span style={{ fontWeight: 600 }}>Abuja Branch</span>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', padding: '1px 0' }}>
+                                    <div style={{ fontWeight: 600, color: '#333' }}>Account Number:</div>
+                                    <div style={{ letterSpacing: '5px', color: '#0b5ed7', fontWeight: 750 }}>1029827207</div>
+                                </div>
+
+                                <div style={{ marginTop: '3px', fontSize: '9px', color: '#555' }}>
+                                    For additional details or inquiries, please contact our support team: 08033615132 or via email: <a href="mailto:support@ae-renewable.com" style={{ color: '#0b5ed7', textDecoration: 'underline' }}>support@ae-renewable.com</a>.
                                 </div>
                             </div>
                         </div>
