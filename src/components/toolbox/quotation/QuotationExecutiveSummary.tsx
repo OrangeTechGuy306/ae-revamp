@@ -119,13 +119,13 @@ export const QuotationExecutiveSummary = ({ result, quotationDate, quotationRef,
                             </table>
 
                       
-                        <div className="mt-8" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif", maxWidth: '300px', border: '2px dashed #0b5ed7', borderRadius: '10px', padding: '10px 14px', marginTop:"6px" }}>
+                        <div className="mt-12" style={{ fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif", maxWidth: '300px', border: '2px dashed #0b5ed7', borderRadius: '10px', padding: '10px 14px', marginTop:"17px" }}>
                             <div style={{ textAlign: 'center', marginBottom: '1px' }}>
                                 <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#0b5ed7', letterSpacing: '1px' }}>AE RENEWABLE LTD</h4>
                                 <span style={{ fontSize: '12px', color: '#555' }}>Payment Information</span>
                             </div>
 
-                            <div style={{ marginTop: '0px' }}>
+                            <div style={{ marginTop: '2px' }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', padding: '2px 0', borderBottom: '1px dashed #ccc' }}>
                                     <div style={{ fontWeight: 600, color: '#333' }}>Bank Name:</div>
                                     <div style={{ color: 'rgb(180, 2, 2)', fontWeight: 750 }}>UNITED BANK OF AFRICA</div>
